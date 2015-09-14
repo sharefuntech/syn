@@ -1,0 +1,22 @@
+#popup {
+	position: absolute;
+	height: 130px;
+	width: 200px;
+	background: white;
+	box-shadow: 2px 2px 0px #888;
+	border: 1px #888 solid;
+	left: -300px;
+	top: -300px;
+}
+
+#popup > p {
+	margin: 2px;
+	padding: 2px;
+}
+
+div.list {
+	float: left;
+	height: 90%;
+	width: 18%;
+	overflow: auto;
+}

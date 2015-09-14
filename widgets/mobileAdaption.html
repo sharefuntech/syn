@@ -2,64 +2,97 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="initial-scale = 1">
 	<title>适配移动设备屏幕</title>
 	<script src = "lib/d3.js"></script>
+	<style>
+		html, body {
+			margin: 0;
+			padding: 0;
+		}
+
+		#popup {
+			position: absolute;
+			height: 130px;
+			width: 200px;
+			background: white;
+			box-shadow: 2px 2px 0px #888;
+			border: 1px #888 solid;
+			left: -300px;
+			top: -300px;
+		}
+
+		#popup > p {
+			margin: 2px;
+			padding: 2px;
+		}
+
+		div.list {
+			float: left;
+			height: 90%;
+			width: 18%;
+			overflow: auto;
+		}
+	</style>
 </head>
 <body>
+	<div id="vizContainer">
+		<svg></svg>
+	</div>
 	<script>
-	var svg = d3.select('body')
-			.append('svg')
-			.attr('width', 300)
-			.attr('height', 300);
-
-	var viewContainer = svg
-			.append('g')
-			.attr('id', 'viewContainer');
-
+	
+	//=============================================================
 	//测试设备屏幕大小 ===============================================
-	var screenWidth = screen.width;
+	/*var screenWidth = screen.width;
 	var screenHeight = screen.height;
 	// console.log('screen width: ' + screenWidth, ',screen width: ' + screenHeight);
+
 	if (screenWidth < 400) {
-		// console.log('phone');
-		phoneView();
+		followWidthImage(screenWidth, 'red');
 	}
 	else if (screenWidth < 1000) {
-		// console.log('tablet');
-		tabletView();
+		followWidthImage(screenWidth, 'green');
 	}
 	else {
-		// console.log('pc');
-		pcView();
+		followWidthImage(screenWidth, 'blue');
 	}
 
-	function phoneView () {
-		d3.select('#viewContainer')	
-			.append('circle')
-			.attr('cx', 150)
-			.attr('cy', 150)
-			.attr('r', 30)
-			.attr('fill', '#ccc');
+	function createImage (width, height, color) {
+		var svg = d3.select('body')
+			.append('svg')
+			.attr('width', width)
+			.attr('height', height)
+			.attr("viewBox", function () {
+		    	return "0 0 " + width + " " + height;
+		    });
+
+		var r = d3.min([width, height]) / 2;
+
+		svg.append('circle')
+			.attr('cx', 0)
+			.attr('cy', 0)
+			.attr('r', r)
+			.attr('transform', 'translate(' + (width / 2) + ',' + (height / 2) + ')')
+			.attr('fill', color);
 	}
 
-	function tabletView () {
-		d3.select('#viewContainer')	
-			.append('circle')
-			.attr('cx', 150)
-			.attr('cy', 150)
-			.attr('r', 60)
-			.attr('fill', 'red');
-	}
+	function followWidthImage (width, color) {
+		var svg = d3.select('body')
+			.append('svg')
+			.attr('width', width)
+			.attr('height', 300)
+			.attr("viewBox", function () {
+		    	return "0 0 " + width + " 300";
+		    });
 
-	function pcView () {
-		d3.select('#viewContainer')	
-			.append('circle')
-			.attr('cx', 150)
-			.attr('cy', 150)
-			.attr('r', 100)
-			.attr('fill', 'blue');
-	}
+		svg.append('rect')
+			.attr('width', width)
+			.attr('height', 300)
+			.attr('x', 0)
+			.attr('y', 0)
+			.attr('fill', color);
+	}*/
 	//==============================================================
 	</script>
 </body>
