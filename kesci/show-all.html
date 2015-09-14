@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>这些地方要小心！上海最危险马路排行榜</title>
+        <script src = "../../../../lib/d3/d3.js"></script>
+        <script src = "../../../../lib/queue/queue.js"></script>
+        <script src = "../../../../lib/leaflet/leaflet.js"></script>
+        <script src = "../../../../lib/leafletMarkerCluster/leaflet.markercluster-src.js"></script>
+        <link rel="stylesheet" href="../../../../lib/leaflet/leaflet.css">
+        <link rel="stylesheet" href="../../../../lib/leafletMarkerCluster/MarkerCluster.Default.css">
+        <link rel="stylesheet" href="../../../../lib/leafletMarkerCluster/MarkerCluster.css">
+        <link rel="stylesheet" href="css/jiuye-MarkerCluster.css">
+        <style media="screen">
+            #map {
+                height: 700px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="map"></div>
+        <script type="text/javascript">
+        var viewCenter = [31.213301496814,121.38761610866];
+        var mapScale = 10;
+        var maxZoom = 13;
+        // var mapStyle = 'http://{s}.www.toolserver.org/tiles/bw-mapnik/{z}/{x}/{y}.png';
+        var mapStyle = 'http://{s}.tile.osm.org/{z}/{x}/{y}.png';
+        var mapAttribution = '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors';
+
+        var map = L.map('map').setView(viewCenter, mapScale);
+            L.tileLayer(mapStyle, {attribution: mapAttribution, maxZoom: maxZoom}).addTo(map);
+
+        d3.csv('data/geo_google_accident.csv', function(data) {
+            data.forEach(function(d) {
+                var viewGeo = [d.lat, d.lng];
+                // console.log(viewGeo);
+                var markerPop = d.place;
+                L.marker(viewGeo)
+                    .addTo(map)
+                    .bindPopup(markerPop);
+            });
+        });
+        // L.marker(viewCenter)
+        //     .addTo(map)
+        //     .bindPopup('本尊: 虹口道场');
+
+        // for (var i = 0; i < 5; i++) {
+        //     viewGeo = [Math.random() * 100, Math.random() * 100];
+        //     L.marker(viewGeo)
+        //         .addTo(map)
+        //         .bindPopup(viewGeo.toString());
+        // }
+
+
+        </script>
+    </body>
+</html>

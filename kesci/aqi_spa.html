@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>aqi spa cubes</title>
+	<script src = "../../../../lib/d3/d3.js"></script>
+</head>
+<body>
+	<script>
+	var width = 800,
+		height = 600;
+	var dateParser = d3.time.format("%Y/%m/%d %H:%M").parse;
+
+	var columnNumber = 24;
+	var cubeSizeScale = d3.scale.linear()
+			.range([5, 80]);
+	var colorScale = d3.scale.linear()
+				.range(["#B1D042", "#FDD431"])
+				.interpolate(d3.interpolateHsl);
+
+	var svg = d3.select('body')
+			.append('svg')
+			.attr('width', width)
+			.attr('height', height)
+			.append('g');
+
+
+
+	d3.csv('data/stockChina.csv', function(data) {
+		// console.log(data);
+		data.forEach(function(d) {
+			// d.AQI = +d.AQI;
+			d.trend = +d.trend;
+			if (d.trend < 0) {
+				d.trend *= -1;
+			}
+		});
+
+		var aqiExtent = d3.extent(data, function(d) {
+			return d.trend;
+		});
+		// console.log(ext);
+		cubeSizeScale.domain(aqiExtent);
+		colorScale.domain(aqiExtent);
+
+		// var randomWalk = (Math.random() - 0.5) * 10;
+		// for (var i = 0; i < 5; i++) {
+		// 	console.log((Math.random() - 0.5) * 20);
+		// };
+		svg.selectAll('rect.cube')
+			.data(data)
+			.enter()
+			.append('rect')
+			.attr('class', 'cube')
+			.attr('width', function(d) {
+				return cubeSizeScale(d.trend);
+			})
+			.attr('height', function(d) {
+				return cubeSizeScale(d.trend);
+			})
+			.attr('x', function(d, i) {
+				return (i % columnNumber + 1) * 30; 
+			})
+			.attr('y', function(d, i) {
+				return Math.floor((i / columnNumber) + 1) * 30;
+			})
+			.attr('fill', function(d) {
+				return colorScale(d.trend);
+			})
+			.attr('fill-opacity', .5);
+	});
+	</script>
+</body>
+</html>

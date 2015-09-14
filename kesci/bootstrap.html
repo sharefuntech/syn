@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+	<script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+	<link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+	<title>explore bootstrap</title>
+	<script src = "../../../../lib/d3/d3.js"></script>
+    <script src = "../../../../lib/queue/queue.js"></script>
+    <script src = "../../../../lib/leaflet/leaflet.js"></script>
+    <script src = "../../../../lib/leafletMarkerCluster/leaflet.markercluster-src.js"></script>
+    <link rel="stylesheet" href="../../../../lib/leaflet/leaflet.css">
+    <link rel="stylesheet" href="../../../../lib/leafletMarkerCluster/MarkerCluster.Default.css">
+    <link rel="stylesheet" href="../../../../lib/leafletMarkerCluster/MarkerCluster.css">
+    <link rel="stylesheet" href="css/accidentMarkerCluster.css">
+    <style media="screen">
+        body {
+        	margin: 0;
+        	padding: 0;
+        }
+        #map {
+            height: 700px;
+        }
+    </style>
+</head>
+<body>
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button class="navbar-toggle collapsed" tpye='button' data-toggle='collapse' data-target='#the-menu'>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="/index.html" class="navbar-brand brand">郭不耐</a>
+			</div>
+			<div class="collapse navbar-collapse" id='the-menu'>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="index.html"><span class="glyphicon glyphicon-tasks"></span>&nbsp; Works</a></li>
+					<li><a href="about.html"><span class="glyphicon glyphicon-user"></span>&nbsp; About</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	
+	<div class="container-fluid">
+		<div id="map"></div>
+	</div>
+
+
+		<div class="container">
+			<div class='row'>
+
+					<div class="panel panel-default">
+						<div class="panel-body">panel-body</div>
+					</div>
+
+			</div>
+		</div>
+
+	<!-- =========================================================== -->
+	<script type="text/javascript">
+    var viewCenter = [31.213301496814,121.38761610866];
+    var mapScale = 10;
+    var maxZoom = 14;
+    // var mapStyle = 'http://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png';
+    // var mapStyle = 'https://{s}.tiles.mapbox.com/v3/arm5077.cid4pldi/{z}/{x}/{y}.png';
+    var mapStyle = 'http://{s}.tile.osm.org/{z}/{x}/{y}.png';
+    // var mapStyle = 'http://{s}.www.toolserver.org/tiles/bw-mapnik/{z}/{x}/{y}.png';
+    
+    var mapAttribution = '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors';
+
+    var map = L.map('map').setView(viewCenter, mapScale);
+    L.tileLayer(mapStyle, {attribution: mapAttribution,  maxZoom: maxZoom}).addTo(map);
+
+    d3.csv('data/geo_google_accident.csv', function(data) {
+            // 自定义图标
+            var LeafIcon = L.Icon.extend({
+                    options: {
+                        iconSize:     [30, 40],
+                        iconAnchor:   [15, 20],
+                        popupAnchor:  [0, -30]
+                    }
+                });
+            var iconSet = [];
+            iconSet['dead'] = new LeafIcon({iconUrl: 'image/dead.png'});
+            iconSet['hurt'] = new LeafIcon({iconUrl: 'image/hurt.png'});
+            iconSet['damage'] = new LeafIcon({iconUrl: 'image/damage.png'});
+            //以省份为索引，折叠数据
+            var nestData = d3.nest()
+                .key(function(d) { return d.accident; })
+                .entries(data);
+            // console.log(nestData);
+
+            var markersClusters = [];
+            //创建分组函数
+            function defineCluster(clusterCss) {
+                var clusterObj = {};
+                clusterObj.maxClusterRadius = 100;
+                clusterObj.iconCreateFunction = function (cluster) {
+                    var childCount = cluster.getChildCount();
+
+                    var c = clusterCss;
+                    if (childCount < 10) {
+                        c += '-small';
+                    } else if (childCount < 70) {
+                        c += '-medium';
+                    } else {
+                        c += '-large';
+                    }
+
+                    return new L.DivIcon({ html: '<div><span>' + childCount + '</span></div>', className:'marker-cluster ' + c, iconSize: new L.Point(40, 40) });
+                }
+
+                return L.markerClusterGroup(clusterObj);
+            }
+            //定义单个标点函数
+            function defineMarker(d, cluster, markerIcon) {
+                var title = '事故时间：' + d.time + '<br>' + '事故地点：' + d.place;
+                var marker = L.marker(new L.LatLng(d.lat, d.lng), { title: title,  icon: markerIcon});
+                
+                marker.bindPopup(title);
+                cluster.addLayer(marker);
+            }
+
+            nestData.forEach(function(d, i) {
+                // 定义每组的坐标组
+                markersClusters[i] = defineCluster(d.key);
+                // console.log(markersClusters[i]);
+                d.values.forEach(function(k) {
+                    // console.log(k.time);
+                    // 根据坐标类型选择图片
+                    var iconPath = iconSet[k.accident];
+                    // console.log(k);
+                    // 定义每个坐标
+                    defineMarker(k, markersClusters[i], iconPath);
+                });
+                // 添加一组坐标
+                map.addLayer(markersClusters[i]);
+            });           
+            
+        });
+
+    
+    </script>
+</body>
+</html>

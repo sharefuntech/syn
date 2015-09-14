@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>layout copy from bikedistric.org</title>
+	<script src = "../../../../lib/d3/d3.js"></script>
+    <script src = "../../../../lib/queue/queue.js"></script>
+    <script src = "../../../../lib/leaflet/leaflet.js"></script>
+    <script src = "../../../../lib/leafletMarkerCluster/leaflet.markercluster-src.js"></script>
+    <link rel="stylesheet" href="../../../../lib/leaflet/leaflet.css">
+    <link rel="stylesheet" href="../../../../lib/leafletMarkerCluster/MarkerCluster.Default.css">
+    <link rel="stylesheet" href="../../../../lib/leafletMarkerCluster/MarkerCluster.css">
+    <link rel="stylesheet" href="css/accidentMarkerCluster.css">
+	<link rel="stylesheet" href="css/layout.css">
+</head>
+<body>
+	<div id="menu">
+		<a href="#" id="logoLink">
+			<img src="image/logo-new.png" alt="" id="logo" width='178' height='41' name='logo'>
+		</a>
+		<div id="menubuttons">
+			<a href="#" class="button toggled" id="mapButton">
+				<span>地图</span>
+			</a>
+			<a href="#" class="button secondary" id="aboutButton">
+				<span>关于</span>
+			</a>
+			<a href="#" class="button secondary" id="helpButton">
+				<span>帮助</span>
+			</a>
+		</div>
+		<div id="userbox" class="slidemenu">
+			<a class="button" style='background-color:rgb(66,107,131);'>
+				<span id="email">作者</span>
+			</a>
+		</div>
+		<div id="langbox" class="slidemenu">
+			<a class="button secondary">
+				<span id="language">主页</span>
+			</a>
+		</div>
+	</div>
+	<div id="mappage" class="page" style='display: block; height: 597px;'>
+		<div id="mapnavigation" class="navigation">
+			<div class="slimScrollDiv" style='position:relative; overflow:hidden; width:auto; height:100%;'>
+				<div id="content" style='overflow:hidden; width:auto; height:100%;'>
+					<div id="scroller">
+						<div id="header">
+							<form action="">
+								<div class="stopInput">
+									<input type="text">
+								</div>
+								<button id="reverse" title='reverse direction'></button>
+								<div class="stopInput">
+									<input type="text">
+								</div>
+								<a href="" id="adddestination">Add Destination</a>
+								<a class="button" id="search">
+									<span class="icon"></span>
+									<span>search</span>
+								</a>
+							</form>
+							<div id="tabs">
+								<div class="btn-group">
+									<button class="btn active" id="routingt">Cycle</button>
+									<button class="btn" id="routingm">Direct</button>
+									<button class="btn" id="routings">Safe</button>
+								</div>
+								<div id="options">
+									<div id="stats">
+										<div id="extratext"></div>
+										<div id="bartext"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div id="directions">
+
+						</div>
+					</div>	
+				</div>				
+			</div>
+			<div id="copy">
+				copyright@Guo Wei 2015 <br>
+				Data: Statistics Department of China
+			</div>
+		</div>
+		<div id="mapcanvas" class="leaflet-container leaflet-fade-anim" tabindex='0' style='position:relative;'>
+			<div id="map"></div>
+		</div>
+		<!-- <div id="layersmenu" style='width:1016px;'>
+			<div id="mapmenu" class="slidemenu"></div>
+		</div> -->
+	</div>
+
+	<!-- =========================================================== -->
+	<script type="text/javascript">
+    var viewCenter = [31.213301496814,121.38761610866];
+    var mapScale = 10;
+    var maxZoom = 14;
+    // var mapStyle = 'http://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png';
+    // var mapStyle = 'https://{s}.tiles.mapbox.com/v3/arm5077.cid4pldi/{z}/{x}/{y}.png';
+    var mapStyle = 'http://{s}.tile.osm.org/{z}/{x}/{y}.png';
+    // var mapStyle = 'http://{s}.www.toolserver.org/tiles/bw-mapnik/{z}/{x}/{y}.png';
+    
+    var mapAttribution = '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors';
+
+    var map = L.map('map').setView(viewCenter, mapScale);
+    L.tileLayer(mapStyle, {attribution: mapAttribution,  maxZoom: maxZoom}).addTo(map);
+
+    d3.csv('data/geo_google_accident.csv', function(data) {
+            // 自定义图标
+            var LeafIcon = L.Icon.extend({
+                    options: {
+                        iconSize:     [30, 40],
+                        iconAnchor:   [15, 20],
+                        popupAnchor:  [0, -30]
+                    }
+                });
+            var iconSet = [];
+            iconSet['dead'] = new LeafIcon({iconUrl: 'image/dead.png'});
+            iconSet['hurt'] = new LeafIcon({iconUrl: 'image/hurt.png'});
+            iconSet['damage'] = new LeafIcon({iconUrl: 'image/damage.png'});
+            //以省份为索引，折叠数据
+            var nestData = d3.nest()
+                .key(function(d) { return d.accident; })
+                .entries(data);
+            // console.log(nestData);
+
+            var markersClusters = [];
+            //创建分组函数
+            function defineCluster(clusterCss) {
+                var clusterObj = {};
+                clusterObj.maxClusterRadius = 100;
+                clusterObj.iconCreateFunction = function (cluster) {
+                    var childCount = cluster.getChildCount();
+
+                    var c = clusterCss;
+                    if (childCount < 10) {
+                        c += '-small';
+                    } else if (childCount < 70) {
+                        c += '-medium';
+                    } else {
+                        c += '-large';
+                    }
+
+                    return new L.DivIcon({ html: '<div><span>' + childCount + '</span></div>', className:'marker-cluster ' + c, iconSize: new L.Point(40, 40) });
+                }
+
+                return L.markerClusterGroup(clusterObj);
+            }
+            //定义单个标点函数
+            function defineMarker(d, cluster, markerIcon) {
+                var title = '事故时间：' + d.time + '<br>' + '事故地点：' + d.place;
+                var marker = L.marker(new L.LatLng(d.lat, d.lng), { title: title,  icon: markerIcon});
+                
+                marker.bindPopup(title);
+                cluster.addLayer(marker);
+            }
+
+            nestData.forEach(function(d, i) {
+                // 定义每组的坐标组
+                markersClusters[i] = defineCluster(d.key);
+                // console.log(markersClusters[i]);
+                d.values.forEach(function(k) {
+                    // console.log(k.time);
+                    // 根据坐标类型选择图片
+                    var iconPath = iconSet[k.accident];
+                    // console.log(k);
+                    // 定义每个坐标
+                    defineMarker(k, markersClusters[i], iconPath);
+                });
+                // 添加一组坐标
+                map.addLayer(markersClusters[i]);
+            });           
+            
+        });
+
+    
+    </script>
+</body>
+</html>
