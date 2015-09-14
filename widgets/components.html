@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>各类形式的坐标轴、图例</title>
+	<script src = "lib/d3.js"></script>
+	<style>
+		.axis path {
+			fill: none;
+			stroke: #000;
+			shape-rendering: crispEdges;
+		}
+
+		.axis line {
+			fill: none;
+			stroke: teal;
+			shape-rendering: crispEdges;
+		}
+		
+		.axis_no_path path {
+			fill: none;
+			stroke: none;
+		}
+
+		.axis_no_path line {
+			fill: none;
+			stroke: teal;
+			stroke-width: 2;
+			shape-rendering: crispEdges;
+		}
+		
+		.axis_no_ticks path {
+			fill: none;
+			stroke: #000;
+			shape-rendering: crispEdges;
+		}
+
+		.axis_no_ticks line {
+			fill: none;
+			stroke: none;
+		}
+		
+	</style>
+</head>
+<body>
+	<script src='src/components.js'></script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>适配移动设备屏幕</title>
+	<script src = "lib/d3.js"></script>
+</head>
+<body>
+	<script>
+	var svg = d3.select('body')
+			.append('svg')
+			.attr('width', 300)
+			.attr('height', 300);
+
+	var viewContainer = svg
+			.append('g')
+			.attr('id', 'viewContainer');
+
+	//测试设备屏幕大小 ===============================================
+	var screenWidth = screen.width;
+	var screenHeight = screen.height;
+	// console.log('screen width: ' + screenWidth, ',screen width: ' + screenHeight);
+	if (screenWidth < 400) {
+		// console.log('phone');
+		phoneView();
+	}
+	else if (screenWidth < 1000) {
+		// console.log('tablet');
+		tabletView();
+	}
+	else {
+		// console.log('pc');
+		pcView();
+	}
+
+	function phoneView () {
+		d3.select('#viewContainer')	
+			.append('circle')
+			.attr('cx', 150)
+			.attr('cy', 150)
+			.attr('r', 30)
+			.attr('fill', '#ccc');
+	}
+
+	function tabletView () {
+		d3.select('#viewContainer')	
+			.append('circle')
+			.attr('cx', 150)
+			.attr('cy', 150)
+			.attr('r', 60)
+			.attr('fill', 'red');
+	}
+
+	function pcView () {
+		d3.select('#viewContainer')	
+			.append('circle')
+			.attr('cx', 150)
+			.attr('cy', 150)
+			.attr('r', 100)
+			.attr('fill', 'blue');
+	}
+	//==============================================================
+	</script>
+</body>
+</html>

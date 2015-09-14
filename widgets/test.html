@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>test</title>
+	<script src = "lib/d3.js"></script>
+</head>
+<body>
+	<div id="id_circle"></div>
+	<script>
+		/*var rangeData = d3.range(10).map(function(i) {
+			return [(i + 1), (9 - i)];
+		});
+		// console.log(rangeData);
+
+		var svg = d3.select('body')
+			.append('svg')
+			.attr('width', 800)
+			.attr('height', 600);
+
+		var color = ['steelblue','#ccc'];
+
+		rangeData.forEach(function(d, i) {
+			// console.log(d);
+			var pieChart = d3.layout.pie().sort(function(k) {
+					return k.id;
+				})
+				.startAngle(- Math.PI / 2)
+				.endAngle(Math.PI / 2);
+
+			var newPie = pieChart(d);
+			var pieArc = d3.svg.arc();
+			pieArc.outerRadius(30)
+				.innerRadius(25);
+
+			svg.append('g')
+				.attr('transform', 'translate(' + (80 * i + 50) + ', 50)' )
+				.selectAll('path')
+				.data(newPie)
+				.enter()
+				.append('path')
+				.attr('d', pieArc)
+				.style('fill', function(d, j) {
+				return color[j];
+			});
+
+			svg.append('text')
+				.attr('transform', 'translate(' + (80 * i + 37) + ', 55)' )
+				.attr('font-family', 'Arial Narrow')
+				.attr('font-weight', 600)
+				.text(d[0]/(d[0] + d[1])*100 + '%');
+
+		});
+*/
+	var svg_1 = d3.select('body')
+			.append('svg')
+			.attr('width', 200)
+			.attr('height', 100)
+			.attr('fill', 'teal')
+			.append('text')
+			.text('hello')
+			.attr('transform', 'translate(50, 50)');
+
+	var svg_2 = d3.select('body')
+			.append('svg')
+			.attr('width', 200)
+			.attr('height', 100)
+			.append('text')
+			.text('world')
+			.attr('transform', 'translate(50, 50)');
+
+	</script>
+</body>
+</html>
