@@ -16,22 +16,22 @@
 		}
 
 		/*div容器设置为必要条件*/
-		#vizContainer {
+		/*#vizContainer {
 			width: 100%;
 			height: 100%;
-		}
+		}*/
 		
 		/*svg容器设置为必要条件*/
-		svg {
+		/*svg {
 			width: 100%;
 			height: 100%;
-		}
+		}*/
 	</style>
 </head>
 <body>
-	<div id="vizContainer">
+	<!-- <div id="vizContainer">
 		<svg></svg>
-	</div>
+	</div> -->
 	<script>
 	// *********************************************************
 	// *********************************************************
@@ -40,21 +40,41 @@
 	// 2、svg的viewbox设置为svg大小
 	// *********************************************************
 	// *********************************************************
+
 	//=============================================================
 	//测试设备屏幕大小 ===============================================
-	var svg = d3.select('svg');
+	// 动态生成div容器和svg画布，效果和预设一致
+
+	var vizContainer = d3.select('body')
+			.append('div')
+			.attr('id', 'vizContainer')
+			.style('width', '100%')
+			.style('height', '100%');
+
+	var svg = d3.select('#vizContainer')
+			.append('svg')
+			.style('width', '100%')
+			.style('height', '100%');
+
 	var svgNode = d3.select('svg').node();
 
+	//screen.width = 设备屏幕大小
 	var deviceWidth = screen.width;
 	var deviceHeight = screen.height;
+
 	// 不直接用screen.width是因为设备屏幕大小，还包括浏览器菜单栏地址栏等尺寸，和浏览器可用显示区域不一致，而包裹在div中的svg，正好表示为浏览器可用尺寸
 	var screenWidth = parseFloat(svgNode.clientWidth || svgNode.parent.clientWidth);
 	var screenHeight = parseFloat(svgNode.clientHeight || svgNode.parent.clientHeight);
-	
-	// 设置viewbox才能保证旋转屏幕弹性调整svg图片
-	svg.attr('viewBox', '0 0 ' + screenWidth + ' ' + screenHeight);
+
+	d3.select('body')
+		.append('text')
+		.attr('transform', 'translate(10, 10)')
+		.text('browser screen width: ' + screenWidth + ',browser screen height: ' + screenHeight);
 	// console.log('device screen width: ' + deviceWidth, ',device screen height: ' + deviceHeight);
 	// console.log('browser screen width: ' + screenWidth, ',browser screen height: ' + screenHeight);
+
+	// 设置viewbox才能保证旋转屏幕弹性调整svg图片
+	svg.attr('viewBox', '0 0 ' + screenWidth + ' ' + screenHeight);
 
 	//这里需要根据设备屏幕而不是浏览器可用屏幕进行判断
 	if (deviceWidth < 400) { 
