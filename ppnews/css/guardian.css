@@ -1,0 +1,7 @@
+html, body {
+	margin: 0;
+	padding: 0;
+	/*html body 100%是在移动设备中完全拉伸svg的关键！！！*/
+	width: 100%;
+	height: 100%;
+}
