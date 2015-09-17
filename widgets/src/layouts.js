@@ -28,7 +28,7 @@ var no_1 = svg.append('g')
 		.attr('id', 'no_1')
 		.attr('transform', 'translate(50, 50)');
 
-no_1.append('text').text('tree from simple csv links');
+no_1.append('text').text('No.1 tree:csv links');
 
 var no_1_treeWidth = 300;
 var no_1_treeheight = 300;
@@ -49,7 +49,15 @@ d3.json('data/tweets.json', function(data) {
 			.entries(data.tweets);
 	// console.log(nestedTweets);
 	var packableTweets = {id: 'Tweets', values: nestedTweets};
-	console.log(packableTweets);
+	// console.log(packableTweets);
+
+	var depthScale = d3.scale.ordinal()
+			.domain([0, 1, 2])
+			.range([15, 10, 5]);
+
+	function setNodeClass(d) {
+			return 'node_level_' + d.depth;
+	}
 
 	no_1.append('g')
 		.attr('id', 'treeG')
@@ -59,12 +67,19 @@ d3.json('data/tweets.json', function(data) {
 		.append('g')
 		.attr('class', 'node')
 		.attr('transform', function(d) {
+			// console.log(d.depth);
 			return 'translate(' + d.x + ',' + d.y + ')';
 		});
 
 	d3.selectAll('g.node')
 		.append('circle')
-		.attr('r', 10)
+		// .attr('class', function(d) {
+		// 	return 'node_level_' + d.depth;
+		// })
+		// .classed(setNodeClass(d), true)
+		.attr('r', function(d) {
+			return depthScale(d.depth);
+		})
 		.attr('fill', 'teal')
 		.attr('stroke', 'gray');
 
@@ -75,7 +90,8 @@ d3.json('data/tweets.json', function(data) {
 		.insert('path', 'g')
 		.attr('d', linkGenerator)
 		.style('fill', 'none')
-		.style('stroke', 'black');
+		.style('stroke', 'gray')
+		.style('stroke-width', 5);
 });
 
 

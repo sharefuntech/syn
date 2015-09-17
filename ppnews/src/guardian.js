@@ -26,19 +26,33 @@ svg.attr('viewBox', '0 0 ' + screenWidth + ' ' + screenHeight);
 
 //这里需要根据设备屏幕而不是浏览器可用屏幕进行判断
 if (deviceWidth < 400) { 
-	// createImage(screenWidth, screenHeight, 'red');
-	// phoneView();
-	// dragPrototype();
-	dragGroupItems();
+	
 }
 else if (deviceWidth < 1000) {
-	// createImage(screenWidth, screenHeight, 'green');
+	
 }
 else {
-	// createImage(screenWidth, screenHeight, 'blue');
-	// phoneView();
-	// dragPrototype();
-	dragGroupItems();
+	phoneView();
+}
+//================================================
+
+function callDrag(targetObject, originPosition) {
+	var originPosition = originPosition;
+
+	d3.select(targetObject)
+		.call(dragObject(dragMove, endMove));
+
+	function dragObject(dragHandler, dragEndHandler) {
+		var drag = d3.svg.drag()
+				.on('drag', dragHandler)
+				.on('dragend', dragEndHandler);
+
+		return drag;
+	}
+
+	function dragMove(d) {
+		d.x += d3.event.dx;
+	}
 }
 
 function dragGroupItems() {
@@ -136,22 +150,37 @@ function dragPrototype() {
 
 function phoneView() {
 	var drag = d3.behavior.drag()
-			.on('drag', dragMoveVertical);
+			.on('drag', dragMoveFree);
 
-	svg.append('circle')
+	/*svg.append('circle')
 		.attr('id', 'ball')
 		.attr('r', 50)
 		.attr('cx', 50)
 		.attr('cy', 50)
-		.attr('fill', 'teal')
-		// .call(drag);
-
-	console.log();
+		.attr('fill', 'teal');
 
 	var ball = d3.select('#ball')
-			.call(drag);
+			.call(drag);*/
 
-	// drag(ball);
+	var itemsGroup = svg.append('g')
+			.attr('id', 'ig');
+	
+	itemsGroup.append('circle')
+		.attr('id', 'ball')
+		.attr('r', 50)
+		.attr('cx', 50)
+		.attr('cy', 50)
+		.attr('fill', 'teal');
+
+	itemsGroup.append('rect')
+		.attr('id', 'cube')
+		.attr('width', 50)
+		.attr('height', 50)
+		.attr('x', 150)
+		.attr('y', 50)
+		.attr('fill', 'teal');
+
+	itemsGroup.call(drag);
 }
 
 function dragMoveVertical() {
