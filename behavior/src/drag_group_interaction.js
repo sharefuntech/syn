@@ -39,8 +39,8 @@ else {
 //**********************************************************
 
 
-/*// dragGroupItems();
-var groupPosition = [{x: 0, y: 0}]; //容器itemgroup的原始位置
+// dragGroupItems();
+var groupPosition = [{x: 50, y: 250}]; //容器itemgroup的原始位置
 
 var itemGroup = svg.selectAll('g')
 		.data(groupPosition)
@@ -56,13 +56,20 @@ itemGroup.append('circle')
 		.attr('r', 50)
 		.attr('cx', 0) //圆形在容器itemgroup里的相对原始位置
 		.attr('cy', 0)
-		.attr('fill', 'teal');
+		.attr('fill', 'darkred');
 
 itemGroup.append('text')
 		.attr('x', 0) //文本在容器itemgroup里的相对原始位置
-		.attr('y', 0)
-		.text('hello');
-*/
+		.attr('y', 60)
+		.attr('text-anchor', 'middle')
+		.text('Together');
+
+svg.append('circle')
+	.attr('id', 'wheel_together')
+	.attr('r', 30)
+	.attr('cx', 250)
+	.attr('cy', 250)
+	.attr('fill', 'darkred');
 
 var dragFree = d3.behavior.drag()
 			.on('drag', dragMoveFree);
@@ -136,8 +143,11 @@ function dragGroup(dragHandler) {
 
 function onDragGroup(d) {
 		d.x += d3.event.dx;  //移动之前，先将容器里的物体的坐标加上容器的位置坐标
-		d.y += d3.event.dy;
+		// d.y += d3.event.dy; //keep y position orininal, move horizontal
 		
 		d3.select(this)
 			.attr('transform', 'translate(' + d.x + ',' + d.y + ')');
+
+		d3.select('#wheel_together')
+			.attr('transform', 'translate(' + d3.event.x/2 + ',0)');
 }

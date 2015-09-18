@@ -37,10 +37,62 @@ else {
 }
 //==========================================================
 //**********************************************************
+var drag = d3.behavior.drag()
+		.on('dragstart', function() {
+			d3.event.sourceEvent.stopPropagation();
+		})
+		.on('drag', dragmove);
 
+var line = svg.append('line')
+		.attr('x1', 50)
+		.attr('y1', 50)
+		.attr('x2', 350)
+		.attr('y2', 350)
+		.style('stroke', 'orange')
+		.style('stroke-width', 5);
 
-/*// dragGroupItems();
-var groupPosition = [{x: 0, y: 0}]; //容器itemgroup的原始位置
+var circle_1 = svg.append('g')
+		.attr('transform', 'translate(50,50)')
+		.attr('class', 'first')
+		.call(drag)
+		.append('circle')
+		.attr('r', 30)
+		.style('fill', 'teal');
+
+var circle_2 = svg.append('g')
+		.attr('transform', 'translate(350,350)')
+		.attr('class', 'second')
+		.call(drag)
+		.append('circle')
+		.attr('r', 30)
+		.style('fill', 'teal');
+
+function dragmove(d) {
+	var x = d3.event.x;
+	var y = d3.event.y;
+
+	d3.select(this)
+		.attr('transform', 'translate(' + x + ',' + y + ')');
+
+	if (d3.select(this).attr('class') == 'first') {
+		line.attr('x1', x)
+			.attr('y1', y);
+	} 
+	else{
+		line.attr('x2', x)
+			.attr('y2', y);
+	}
+}
+
+/*var curve = new Bezier(150,40 , 80,30 , 105,150);
+var draw = function() {
+	drawSkeleton(curve);
+	drawCurve(curve);
+}
+
+//========================================================
+// dragGroupItems();
+var groupPosition = [{x: 50, y: 250}]; //容器itemgroup的原始位置
 
 var itemGroup = svg.selectAll('g')
 		.data(groupPosition)
@@ -56,13 +108,20 @@ itemGroup.append('circle')
 		.attr('r', 50)
 		.attr('cx', 0) //圆形在容器itemgroup里的相对原始位置
 		.attr('cy', 0)
-		.attr('fill', 'teal');
+		.attr('fill', 'darkred');
 
 itemGroup.append('text')
 		.attr('x', 0) //文本在容器itemgroup里的相对原始位置
-		.attr('y', 0)
-		.text('hello');
-*/
+		.attr('y', 60)
+		.attr('text-anchor', 'middle')
+		.text('Together');
+
+svg.append('circle')
+	.attr('id', 'wheel_together')
+	.attr('r', 30)
+	.attr('cx', 250)
+	.attr('cy', 250)
+	.attr('fill', 'darkred');
 
 var dragFree = d3.behavior.drag()
 			.on('drag', dragMoveFree);
@@ -136,8 +195,11 @@ function dragGroup(dragHandler) {
 
 function onDragGroup(d) {
 		d.x += d3.event.dx;  //移动之前，先将容器里的物体的坐标加上容器的位置坐标
-		d.y += d3.event.dy;
+		// d.y += d3.event.dy; //keep y position orininal, move horizontal
 		
 		d3.select(this)
 			.attr('transform', 'translate(' + d.x + ',' + d.y + ')');
-}
+
+		d3.select('#wheel_together')
+			.attr('transform', 'translate(' + d3.event.x/2 + ',0)');
+}*/
