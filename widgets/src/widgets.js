@@ -504,6 +504,156 @@ data_r_no_7.forEach(function(d, i) {
 		.text('No.' + (i + 1));
 });
 
+//no.8 ==============================================================
+// 灰色方块叠放
+//===================================================================
+var no_8 = svg.append('g')
+		.attr('id', 'no_8')
+		.attr('transform', 'translate(450, 850)');
+
+var data_no_8 = d3.range(10);
+// console.log(data_no_8);
+var fillColorScale_no_8 = d3.scale.linear()
+		.domain([0, 9])
+		.range(['#eee', '#000']);
+var strokeColorScale_no_8 = d3.scale.linear()
+		.domain([0, 9])
+		.range(['#ddd', '#111']);
+
+no_8.append('g')
+	.selectAll('rect.no_8')
+	.data(data_no_8)
+	.enter()
+	.append('rect')
+	.attr('class', 'no_8')
+	.attr('width', 150)
+	.attr('height', 150)
+	.attr('x', function(d, i) {
+		return 75+ (Math.random() - 0.5) * 50;
+	})
+	.attr('y', function(d, i) {
+		return 100 - i * 15;
+	})
+	.attr('transform', function(d, i) {
+		return 'rotate(' + (Math.random()) * 30 + '), skewX(' + (Math.random() - .5) * 10 + ')';
+	})
+	.attr('fill', function(d, i) {
+		return fillColorScale_no_8(i);
+	})
+	.attr('fill-opacity', .4)
+	.attr('stroke', function(d, i) {
+		return strokeColorScale_no_8(i);
+	})
+	.attr('stroke-opacity', .6)
+	.attr('stroke-width', 1);
+
+
+//no.9 ==============================================================
+// 彩色半圆叠放
+//===================================================================
+var no_9 = svg.append('g')
+		.attr('id', 'no_9')
+		.attr('transform', 'translate(850, 850)');
+// 上半部分半圆个数
+var num_pie_9 = 6;
+// 半圆绑定的数据，创建半圆
+var data_pie_no_9 = [1, 0];
+// 上半部分半圆各自半径
+var data_r_no_9 = d3.range(num_pie_9).map(function(i) { return 150 - (i * 25);});
+
+// 绘制上半部分半圆
+var fillColorScale_no_9 = d3.scale.linear()
+		.domain([0, 5])
+		.range(['#E1C5C0', '#740515'])
+		.interpolate(d3.interpolateHsl);
+
+var fillColorScale_no_9_2 = d3.scale.linear()
+		.domain([0, 5])
+		.range(['#8FA1C5', '#052137'])
+		.interpolate(d3.interpolateHsl);
+
+//上半部分半圆
+data_r_no_9.forEach(function(d, j) {
+	var pieLayout = d3.layout.pie().sort(function(k) {
+			return k.id; //根据id排序，保持扇型按数据先后顺序排列
+		})
+		.startAngle(- Math.PI / 2)
+		.endAngle(Math.PI / 2);
+	var pieData = pieLayout(data_pie_no_9);
+	var pieArc = d3.svg.arc();
+	pieArc.outerRadius(d);
+
+	no_9.append('g')
+		.attr('transform', 'translate(' + d + ', 150)' )
+		.selectAll('path')
+		.data(pieData)
+		.enter()
+		.append('path')
+		.attr('d', pieArc)
+		.style('fill', function() {
+			// console.log(j); //j是外圈data_r_no_9的计数
+			return fillColorScale_no_9(j);
+		})
+		.style('fill-opacity', .7);
+});
+
+//下半部分半圆，左边
+data_r_no_9.forEach(function(d, j) {
+	var pieLayout = d3.layout.pie().sort(function(k) {
+			return k.id; //根据id排序，保持扇型按数据先后顺序排列
+		})
+		.startAngle(Math.PI / 2)
+		.endAngle(Math.PI / 2 * 3);
+	var pieData = pieLayout(data_pie_no_9);
+	var pieArc = d3.svg.arc();
+	pieArc.outerRadius(d);
+
+	no_9.append('g')
+		.attr('transform', 'translate(' + d + ', 150)' )
+		.selectAll('path')
+		.data(pieData)
+		.enter()
+		.append('path')
+		.attr('d', pieArc)
+		.style('fill', function() {
+			// console.log(j); //j是外圈data_r_no_9的计数
+			return fillColorScale_no_9_2(j);
+		})
+		.style('fill-opacity', .8);
+});
+
+//下半部分半圆，右边
+data_r_no_9.forEach(function(d, j) {
+	var pieLayout = d3.layout.pie().sort(function(k) {
+			return k.id; //根据id排序，保持扇型按数据先后顺序排列
+		})
+		.startAngle(Math.PI / 2)
+		.endAngle(Math.PI / 2 * 3);
+	var pieData = pieLayout(data_pie_no_9);
+	var pieArc = d3.svg.arc();
+	pieArc.outerRadius(d);
+
+	no_9.append('g')
+		.attr('transform', 'translate(' + (300 - d) + ', 150)' )
+		.selectAll('path')
+		.data(pieData)
+		.enter()
+		.append('path')
+		.attr('d', pieArc)
+		.style('fill', function() {
+			// console.log(j); //j是外圈data_r_no_9的计数
+			return fillColorScale_no_9_2(j);
+		})
+		.style('fill-opacity', .2);
+});
+
+
+
+
+
+
+
+
 
 
 

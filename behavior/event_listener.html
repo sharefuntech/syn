@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>event listener</title>
+</head>
+<body>
+	<button id="my_button">Click</button>
+	<script>
+	var button = document.getElementById('my_button');
+	button.onclick = function() { console.log('on click');};
+	button.addEventListener('click', function() { console.log('on event listener');}, false);
+	</script>
+</body>
+</html>
