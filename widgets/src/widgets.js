@@ -526,6 +526,8 @@ no_8.append('g')
 	.enter()
 	.append('rect')
 	.attr('class', 'no_8')
+	.transition()
+	.duration(2000)
 	.attr('width', 150)
 	.attr('height', 150)
 	.attr('x', function(d, i) {
@@ -590,6 +592,10 @@ data_r_no_9.forEach(function(d, j) {
 		.enter()
 		.append('path')
 		.attr('d', pieArc)
+		.attr('fill', '#fff')
+		.transition()
+		.delay(j * 100)
+		.duration(1000)
 		.style('fill', function() {
 			// console.log(j); //j是外圈data_r_no_9的计数
 			return fillColorScale_no_9(j);
@@ -615,6 +621,10 @@ data_r_no_9.forEach(function(d, j) {
 		.enter()
 		.append('path')
 		.attr('d', pieArc)
+		.attr('fill', '#fff')
+		.transition()
+		.delay(j * 100)
+		.duration(1000)
 		.style('fill', function() {
 			// console.log(j); //j是外圈data_r_no_9的计数
 			return fillColorScale_no_9_2(j);
@@ -640,6 +650,10 @@ data_r_no_9.forEach(function(d, j) {
 		.enter()
 		.append('path')
 		.attr('d', pieArc)
+		.attr('fill', '#fff')
+		.transition()
+		.delay(j * 100)
+		.duration(1000)
 		.style('fill', function() {
 			// console.log(j); //j是外圈data_r_no_9的计数
 			return fillColorScale_no_9_2(j);
@@ -647,11 +661,124 @@ data_r_no_9.forEach(function(d, j) {
 		.style('fill-opacity', .2);
 });
 
+//no.10 ==============================================================
+// 灰色半圆嵌套
+//===================================================================
+var no_10 = svg.append('g')
+		.attr('id', 'no_10')
+		.attr('transform', 'translate(50, 1250)');
+// 上半部分半圆个数
+var num_pie_10 = 8;
+// 半圆绑定的数据，创建半圆
+var data_pie_no_10 = [1, 0];
+// 上半部分半圆各自半径
+var data_r_no_10 = d3.range(num_pie_10).map(function(i) { return 70 + (i * 10);});
 
+data_r_no_10.forEach(function(d, j) {
+	var pieLayout = d3.layout.pie().sort(function(k) {
+			return k.id; //根据id排序，保持扇型按数据先后顺序排列
+		})
+		.startAngle(- Math.PI / 2 -(Math.PI/10)*j)
+		.endAngle(Math.PI / 2 -(Math.PI/10)*j);
+	var pieData = pieLayout(data_pie_no_9);
+	var pieArc = d3.svg.arc();
+	pieArc.outerRadius(d);
 
+	no_10.append('g')
+		.attr('transform', 'translate(150, 150)' )
+		.selectAll('path')
+		.data(pieData)
+		.enter()
+		.append('path')
+		.attr('d', pieArc)
+		.attr('fill', '#fff')
+		.transition()
+		.delay(j * 100)
+		.duration(1000)
+		.style('fill', '#000')
+		.style('fill-opacity', .2);
+});
 
+//no.11 ==============================================================
+// 彩色圆形堆叠
+//===================================================================
+var no_11 = svg.append('g')
+		.attr('id', 'no_11')
+		.attr('transform', 'translate(450, 1250)');
 
+var num_circle_11 = 10;
 
+var data_no_11 = d3.range(10).map(function(i) {
+	return Math.random() * 75;
+});
+
+var fillColorScale_no_11 = d3.scale.linear()
+		.domain([0, (num_circle_11 - 1)])
+		.range(['#27AFB0', '#0B3366'])
+		.interpolate(d3.interpolateHsl);
+
+var fillColorScale_no_11_2 = d3.scale.linear()
+		.domain([0, (num_circle_11 - 1)])
+		.range(['#A12A7C', '#0B3366'])
+		.interpolate(d3.interpolateHsl);
+
+function randomSeed() {
+	return Math.random() - 0.5;
+}
+
+no_11.selectAll('circle.no_11')
+	.data(data_no_11)
+	.enter()
+	.append('circle')
+	.attr('class', 'no_11')
+	.attr('cx', function() {
+		return 150 + randomSeed() * 150;
+	})
+	.attr('cy', function() {
+		return 150 + randomSeed() * 150;
+	})
+	.attr('r', 0)
+	.attr('fill', '#fff')
+	.transition()
+	.delay(function(d, i) {
+		return i * 100;
+	})
+	.duration(1000)
+	.attr('r', function(d) {
+		return d;
+	})
+	// .style('fill', '#C4D6DC')
+	.style('fill', function(d, i) {
+		return fillColorScale_no_11(i);
+	})
+	.style('fill-opacity', .3);
+
+no_11.selectAll('circle.no_11_2')
+	.data(data_no_11)
+	.enter()
+	.append('circle')
+	.attr('class', 'no_11_2')
+	.attr('cx', function() {
+		return 150 + randomSeed() * 200;
+	})
+	.attr('cy', function() {
+		return 150 + randomSeed() * 200;
+	})
+	.attr('r', 0)
+	.attr('fill', '#fff')
+	.transition()
+	.delay(function(d, i) {
+		return i * 100;
+	})
+	.duration(1000)
+	.attr('r', function(d) {
+		return d;
+	})
+	// .attr('fill', '#EACFDE')
+	.style('fill', function(d, i) {
+		return fillColorScale_no_11_2(i);
+	})
+	.style('fill-opacity', .3);
 
 
 
