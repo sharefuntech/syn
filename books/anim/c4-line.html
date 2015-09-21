@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>c4 Trigonometry for Animation: draw line</title>
+	<link rel="stylesheet" href="src/style.css">
+	<script src='src/utils.js'></script>
+	<script src='src/ball.js'></script>
+	<style>
+	html, body {
+		/*margin: 0;
+		padding: 0;*/
+	}
+	</style>
+</head>
+<body>
+	<!-- <canvas id="canvas_1" width="400" height="100"></canvas> -->
+	<canvas id="canvas" width="400" height="400"></canvas>
+	<script>
+	window.onload = function() {
+		var canvas = document.getElementById('canvas');
+		var context = canvas.getContext('2d');
+		var mouse = utils.captureMouse(canvas);
+
+		function onMouseMove() {
+			context.lineTo(mouse.x, mouse.y);
+			context.stroke();
+		}
+
+		canvas.addEventListener('mousedown', function() {
+			context.beginPath();
+			context.moveTo(mouse.x, mouse.y);
+			canvas.addEventListener('mousemove', onMouseMove, false);
+		}, false);
+
+		canvas.addEventListener('mouseup', function() {
+			canvas.removeEventListener('mousemove', onMouseMove, false);
+		}, false);
+	};
+	</script>
+</body>
+</html>

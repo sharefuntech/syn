@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>c4 Trigonometry for Animation: draw line</title>
+	<link rel="stylesheet" href="src/style.css">
+	<script src='src/utils.js'></script>
+	<script src='src/ball.js'></script>
+	<style>
+	html, body {
+		/*margin: 0;
+		padding: 0;*/
+	}
+	</style>
+</head>
+<body>
+	<!-- <canvas id="canvas_1" width="400" height="100"></canvas> -->
+	<canvas id="canvas" width="400" height="400"></canvas>
+	<script>
+	window.onload = function() {
+		var canvas = document.getElementById('canvas');
+		var context = canvas.getContext('2d');
+		var mouse = utils.captureMouse(canvas);
+
+		context.strokeStyle = 'teal';
+		context.strokeWidth = 5;
+
+		var x0 = 100,
+			y0 = 200,
+			x2 = 300,
+			y2 = 200;
+
+		canvas.addEventListener('mousemove', function() {
+			context.clearRect(0, 0, canvas.width, canvas.height);
+
+			// var x1 = mouse.x,
+			// 	y1 = mouse.y;
+			var x1 = mouse.x*2 - (x0 + x2)/2,
+				y1 = mouse.y*2 - (y0 + y2)/2;
+
+			context.beginPath();
+			context.moveTo(x0, y0);
+			context.quadraticCurveTo(x1, y1, x2, y2);
+			context.stroke();
+		},false);
+		// function onMouseMove() {
+		// 	context.lineTo(mouse.x, mouse.y);
+		// 	context.stroke();
+		// }
+
+		// canvas.addEventListener('mousedown', function() {
+		// 	context.beginPath();
+		// 	context.moveTo(mouse.x, mouse.y);
+		// 	canvas.addEventListener('mousemove', onMouseMove, false);
+		// }, false);
+
+		// canvas.addEventListener('mouseup', function() {
+		// 	canvas.removeEventListener('mousemove', onMouseMove, false);
+		// }, false);
+	};
+	</script>
+</body>
+</html>
