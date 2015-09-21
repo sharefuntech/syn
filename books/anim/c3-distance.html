@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>trigonometry: wave-elliptical movement</title>
+	<link rel="stylesheet" href="src/style.css">
+	<script src='src/utils.js'></script>
+	<script src='src/ball.js'></script>
+	<style>
+	html, body {
+		/*margin: 0;
+		padding: 0;*/
+	}
+	</style>
+</head>
+<body>
+	<!-- <canvas id="canvas_1" width="400" height="100"></canvas> -->
+	<canvas id="canvas" width="400" height="400"></canvas>
+	<script>
+	window.onload = function() {
+
+		var canvas = document.getElementById('canvas');
+		var context = canvas.getContext('2d');
+		
+		var rect_1 = {
+			x: Math.random() * canvas.width,
+			y: Math.random() * canvas.height
+		};
+		context.fillStyle = 'teal';
+		context.fillRect(rect_1.x-2, rect_1.y-2, 4, 4);
+
+		var rect_2 = {
+			x: Math.random() * canvas.width,
+			y: Math.random() * canvas.height
+		};
+		context.fillStyle = 'orange';
+		context.fillRect(rect_2.x-2, rect_2.y-2, 4, 4);
+
+		var dx = rect_1.x - rect_2.x;
+		var dy = rect_1.y - rect_2.y;
+		var dist = Math.sqrt(dx*dx + dy*dy);
+
+		console.log(dist);
+	};
+	</script>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>trigonometry</title>
+	<link rel="stylesheet" href="src/style.css">
+	<style>
+	html, body {
+		/*margin: 0;
+		padding: 0;*/
+	}
+	</style>
+</head>
+<body>
+	<!-- <canvas id="canvas_1" width="400" height="100"></canvas> -->
+	<canvas id="canvas" width="400" height="400"></canvas>
+	<script>
+	window.onload = function() {
+		var canvas = document.getElementById('canvas');
+
+		var context = canvas.getContext('2d');
+		var mouse = captureMouse(canvas);
+		var arrow = new Arrow();
+
+		arrow.x = canvas.width /2;
+		arrow.y = canvas.height /2;
+
+		
+
+		function Arrow() {
+			this.x = 0;
+			this.y = 0;
+			this.color = '#ffff00';
+			this.rotation = 0;
+		}
+		//通过原型申明的函数，必须在调用之前；不像函数可以变量申明自动提升
+		Arrow.prototype.draw = function(context) {
+			context.save();
+			context.translate(this.x, this.y);
+			context.rotate(this.rotation);
+			context.lineWidth = 2;
+			context.fillStyle = this.color;
+			context.beginPath();
+			context.moveTo(-50, -25);
+			context.lineTo(0, -25);
+			context.lineTo(0, -50);
+			context.lineTo(50, 0);
+			context.lineTo(0, 50);
+			context.lineTo(0, 25);
+			context.lineTo(-50, 25);
+			context.lineTo(-50, -25);
+			context.closePath();
+			context.fill();
+			context.stroke();
+			context.restore();
+		};
+
+		(function drawFrame(){
+			window.requestAnimationFrame(drawFrame, canvas);
+			context.clearRect(0, 0, canvas.width, canvas.height);
+
+			var dx = mouse.x - arrow.x;
+			var dy = mouse.y - arrow.y;
+
+			arrow.rotation = Math.atan2(dy, dx);
+			arrow.draw(context);
+		}());
+
+
+		// console.log(Math.sin(30 / 180 * Math.PI));
+		// console.log(Math.cos(30 / 180 * Math.PI));
+		// console.log(Math.tan(30 / 180 * Math.PI));
+		// console.log(Math.tan(60 / 180 * Math.PI));
+		// console.log(Math.acos(0.5)/Math.PI*180);
+		// console.log(Math.atan(1.73)/Math.PI*180);
+
+		function onKeyboardEvent(event) {
+			// console.log(event.type);
+			switch(event.keyCode) {
+				case 38:
+					console.log('up');
+					break;
+				case 40:
+					console.log('down');
+					break;
+				case 37:
+					console.log('left');
+					break;
+				case 39:
+					console.log('right');
+					break;
+				default:
+					console.log(event.keyCode);
+			}
+		}
+
+		function captureTouch(element) {
+			var touch = {x: null, y:null, isPressed:false};
+
+			element.addEventListener('touchstart', function(event) {
+				touch.isPressed = true;
+				// console.log('touchstart');
+			}, false);
+
+			element.addEventListener('touchend', function(event) {
+				// console.log('touchend');
+				touch.isPressed = false;
+				touch.x = null;
+				touch.y = null;
+			}, false);
+
+			element.addEventListener('touchmove', function(event) {
+				// console.log('touchmove');
+				var x, y; 
+				var touch_event = event.touches[0];
+				// console.log(touch_event);
+
+				if (touch_event.pageX || touch_event.pageY) {
+					x = touch_event.pageX;
+					y = touch_event.pageY;
+					// console.log(x);
+				} else{
+					x = touch_event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+					y = touch_event.clientY + document.body.scrollLeft + document.documentElement.scrollLeft;
+				}
+				x -= element.offsetLeft;
+				y -= element.offsetTop;
+
+				touch.x = x;
+				touch.y = y;
+			}, false);
+
+			return touch;
+		}
+
+		function onTouchEvent(event) {
+			console.log(event.type);
+		}
+		//获取的是在element内部相对的鼠标坐标
+		function captureMouse(element) {
+			var mouse = {x:0, y:0};
+
+			element.addEventListener('mousemove', function(event) {
+				var x, y;
+				if (event.pageX || event.pageY) {
+					x = event.pageX;
+					y = event.pageY;
+				} else{
+					// 下列偏移是由html body的margin padding造成的默认偏移，可以用css去除
+					x = event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+					y = event.clientY + document.body.scrollLeft + document.documentElement.scrollLeft;
+				}
+				//减去element.offsetLeft 实现的是element内部相对鼠标位置, offsetLeft是元素本身在文档内的位置
+				x -= element.offsetLeft;
+				y -= element.offsetTop;
+
+				// console.log('element.offsetLeft:' + element.offsetLeft + ', element.offsetTop:' + element.offsetTop + ', document.body.scrollLeft:' + document.body.scrollLeft + ', document.documentElement.scrollLeft:' + document.documentElement.scrollLeft)
+
+				mouse.x = x;
+				mouse.y = y;
+			}, false);
+
+			return mouse;
+		}
+
+		function onMouseEvent(event) {
+			console.log(event.type);
+		}
+
+		// canvas.addEventListener('mousedown', onMouseEvent, false);
+		// canvas.addEventListener('mouseup', onMouseEvent, false);
+		// canvas.addEventListener('mousewheel', onMouseEvent, false);
+		// canvas.addEventListener('mousemove', onMouseEvent, false);
+		// canvas.addEventListener('mouseover', onMouseEvent, false);
+		// canvas.addEventListener('mouseout', onMouseEvent, false);
+		// canvas.addEventListener('click', onMouseEvent, false);
+		// canvas.addEventListener('dblclick', onMouseEvent, false);
+
+		// canvas.addEventListener('mousedown', function(event) {
+		// 	console.log('mouse down');
+		// }, false);
+
+		// canvas.addEventListener('mouseup', function(event) {
+		// 	console.log('mouse up');
+		// }, false);
+	};
+	</script>
+</body>
+</html>

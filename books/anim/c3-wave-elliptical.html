@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>trigonometry: wave-elliptical movement</title>
+	<link rel="stylesheet" href="src/style.css">
+	<script src='src/utils.js'></script>
+	<script src='src/ball.js'></script>
+	<style>
+	html, body {
+		/*margin: 0;
+		padding: 0;*/
+	}
+	</style>
+</head>
+<body>
+	<!-- <canvas id="canvas_1" width="400" height="100"></canvas> -->
+	<canvas id="canvas" width="400" height="400"></canvas>
+	<script>
+	window.onload = function() {
+
+		var canvas = document.getElementById('canvas');
+		var context = canvas.getContext('2d');
+		var ball = new Ball();
+	
+		var angle = 0;
+		var centerX = canvas.width /2;
+		var centerY = canvas.height /2;
+
+		var radiusX = 150;
+		var radiusY = 100;
+		var speed = 0.05;
+
+		
+
+		(function drawFrame(){
+			window.requestAnimationFrame(drawFrame, canvas);
+			context.clearRect(0, 0, canvas.width, canvas.height);
+
+			ball.x = centerX + Math.sin(angle) * radiusX;
+			ball.y = centerY + Math.cos(angle) * radiusY;
+
+			angle += speed;
+
+			ball.draw(context);
+		}());
+	};
+	</script>
+</body>
+</html>
