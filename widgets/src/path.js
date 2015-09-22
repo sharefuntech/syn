@@ -203,7 +203,7 @@ var no_7 = svg.append('g')
 		.attr('transform', 'translate(50, 850)');
 no_7.append('text').text('No_7 鼠标绘制直线');
 
-//不可行，因为g没有探测鼠标等event的边界，无法侦测mousedown等行为
+//不可行，因为g没有探测鼠标等event的边界，无法侦测 mousedown等行为
 /*var line_no_7;
 var vis_no_7 = no_7.append('g')
 	.on('mousedown', mousedown)
@@ -261,4 +261,178 @@ function mousemove() {
 	var m = d3.mouse(this);
 	line_no_7.attr('x2', m[0])
 		.attr('y2', m[1]);
+}
+
+// ==================================================
+// no_8 动画绘制贝塞尔曲线 ==========================
+// ==================================================
+var no_8 = svg.append('g')
+		.attr('id', 'no_8')
+		.attr('transform', 'translate(450, 850)');
+no_8.append('text').text('No_8 动态绘制贝塞尔曲线');
+
+var data_no_8 = d3.range(7).map(function(i) {
+	return [randomSeed()*70*(i+1), randomSeed()*30*(i+1) + 100];
+});
+
+var data_no_8_2 = d3.range(7).map(function(i) {
+	return [randomSeed()*70*(i+1), randomSeed()*30*(i+1) + 100];
+});
+// console.log(data_no_8);
+
+var line_no_8 = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("basis");
+
+no_8.append('path')
+	.attr('id', 'curve_no_8')
+    .attr("d", line_no_8(data_no_8))
+    .attr("stroke", "teal")
+    .attr("stroke-width", 5)
+    .attr("fill", "none");
+
+// setTimeout(updateCurve_2, 1000);
+setInterval(updateCurve_2, 1000);
+function show() {
+	console.log('show');
+}
+
+function randomSeed() {
+	var rSeed = Math.random();
+	return rSeed;
+}
+
+function updateCurve_2() {
+	var newData = d3.range(7).map(function(i) {
+		return [randomSeed()*70*(i+1), randomSeed()*30*(i+1) + 100];
+	});
+
+	d3.select('#curve_no_8')
+		.data(newData)
+		.exit();
+
+	d3.select('#curve_no_8')
+		.data(newData)
+		.attr("d", line_no_8(newData))
+	    .attr("stroke", "teal")
+	    .attr("stroke-width", 5)
+	    .attr("fill", "none");
+}
+
+// ==================================================
+// no_9 半固定动态绘制贝塞尔 ======
+// ==================================================
+var no_9 = svg.append('g')
+		.attr('id', 'no_9')
+		.attr('transform', 'translate(850, 850)');
+no_9.append('text').text('No_9 半固定动态绘制贝塞尔曲线');
+
+var data_no_9 = [[0, 300], [150, 300], [150, 100], [150, 0]]; 
+var data_count_9 = 0;
+
+var line_no_9 = d3.svg.line()
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; })
+    .interpolate("basis");
+
+no_9.append('path')
+	.attr('id', 'curve_no_9')
+    .attr("d", line_no_9(data_no_9))
+    .attr("stroke", "teal")
+    .attr("stroke-width", 5)
+    .attr("fill", "none");
+
+setInterval(updateCurve_no_9, 1000);
+
+function updateCurve_no_9() {
+
+	if(data_count_9 <= 7) {
+		data_count_9 ++;
+
+		data_no_9[2][0] += data_count_9*5;
+		data_no_9[3][0] += data_count_9*5;
+	} 
+	else if (data_count_9 >= 8) {
+		data_count_9 = 0;
+
+		data_no_9[2][0] = 150;
+		data_no_9[3][0] = 150;
+	}
+	
+	d3.select('#curve_no_9')
+		.data(data_no_9)
+		.exit();
+
+	d3.select('#curve_no_9')
+		.data(data_no_9)
+		.attr("d", line_no_9(data_no_9))
+	    .attr("stroke", "teal")
+	    .attr("stroke-width", 5)
+	    .attr("fill", "none");	
+}
+
+// ==================================================
+// no_10 改进版，半固定动态绘制贝塞尔 ======
+// ==================================================
+var no_10 = svg.append('g')
+		.attr('id', 'no_10')
+		.attr('transform', 'translate(50, 1250)');
+no_10.append('text').text('No_10 三控制点改进版，半固定动态绘制贝塞尔');
+
+var start_point_no_10 = [0, 300];
+var end_point_no_10 = [150, 0];
+
+var mid_point_no_10 = [(end_point_no_10[0] - start_point_no_10[0])/2, (start_point_no_10[1] - end_point_no_10[1])/6*5];
+
+var data_no_10 = []; 
+	data_no_10.push(start_point_no_10);
+	data_no_10.push(mid_point_no_10);
+	data_no_10.push(end_point_no_10);
+
+var data_count_10 = 0;
+// console.log(data_no_10);
+
+// var data_no_10 = [[0, 300], [150, 300], [300, 0]];
+
+var line_no_10 = d3.svg.line()
+	    .x(function(d) { return d[0]; })
+	    .y(function(d) { return d[1]; })
+	    .interpolate("basis");
+
+no_10.append('path')
+	.attr('id', 'curve_no_10')
+    .attr("d", line_no_10(data_no_10))
+    .attr("stroke", "teal")
+    .attr("stroke-width", 5)
+    .attr("fill", "none");
+
+setInterval(updateCurve_no_10, 1000);
+
+function updateCurve_no_10() {
+
+	if(data_count_10 <= 7) {
+		data_count_10 ++;
+
+		data_no_10[2][0] += 10;
+		data_no_10[1] = [(data_no_10[2][0] - data_no_10[0][0])/2, (data_no_10[0][1] - data_no_10[2][1])/6*5];
+		// data_no_10[2][0] += data_count_10*5;
+	} 
+	else if (data_count_10 >= 8) {
+		data_count_10 = 0;
+
+		data_no_10[2][0] = 150;
+
+	}
+	
+	d3.select('#curve_no_10')
+		.data(data_no_10)
+		.exit();
+
+	d3.select('#curve_no_10')
+		.data(data_no_10)
+		.attr("d", line_no_10(data_no_10))
+	    .attr("stroke", "teal")
+	    .attr("stroke-width", 5)
+	    .attr("fill", "none");	
 }
