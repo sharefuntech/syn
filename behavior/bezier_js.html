@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>bezier js framework</title>
+	<script src='lib/bezier.js'></script>
+	<script src='lib/draw.js'></script>
+</head>
+<body>
+	<script>
+	var curve = new Bezier(150,40 , 80,30 , 105,150);
+	console.log(curve);
+	draw.drawCurve(curve);
+	// var draw = function() {
+	//   drawSkeleton(curve);
+	//   drawCurve(curve);
+	// }
+	</script>
+</body>
+</html>

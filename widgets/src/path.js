@@ -147,12 +147,12 @@ no_4.selectAll('path.line_no_4_2')
 	.attr('stroke-width', 5);
 
 // ==================================================
-// no_5 手工绘制单条贝塞尔曲线 ==========================
+// no_5 手工绘制单条贝塞尔曲线，非控制点句柄 ==============
 // ==================================================
 var no_5 = svg.append('g')
 		.attr('id', 'no_5')
 		.attr('transform', 'translate(450, 450)');
-no_5.append('text').text('No.5 手工绘制单条贝塞尔曲线');
+no_5.append('text').text('No.5 手工绘制单条贝塞尔曲线，非控制点句柄');
 
 //jsBezier framework
 /*var point_no_5 = {x:150, y:150};
@@ -435,4 +435,34 @@ function updateCurve_no_10() {
 	    .attr("stroke", "teal")
 	    .attr("stroke-width", 5)
 	    .attr("fill", "none");	
+}
+
+
+// ==================================================
+// no_11 手工绘制单条贝塞尔曲线，控制点句柄 ==============
+// ==================================================
+var no_11 = svg.append('g')
+		.attr('id', 'no_11')
+		.attr('transform', 'translate(450, 1250)');
+no_11.append('text').text('No.11 利用控制点句柄，更加平滑');
+
+var curve_data_no_11 = "M0,300 Q150,300 200,50"; //这些点是控制句柄点
+ 
+no_11.append("path")
+	.attr('id', 'curve_no_11')
+	.attr("d",curve_data_no_11)
+	.attr("fill","none")
+	.attr("stroke","teal")
+	.attr("stroke-width", 5);
+
+setTimeout(update_no_11, 1000);
+
+function update_no_11() {
+	var newCurve = "M0,300 Q150,300 300,50"; 
+
+	d3.select('#curve_no_11')
+		.attr("d",newCurve)
+		.attr("fill","none")
+		.attr("stroke","darkred")
+		.attr("stroke-width", 5);
 }
