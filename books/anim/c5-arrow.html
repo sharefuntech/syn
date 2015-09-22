@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>c5 velocity: angular</title>
+	<link rel="stylesheet" href="src/style.css">
+	<script src='src/utils.js'></script>
+	<script src='src/ball.js'></script>
+	<script src='src/arrow.js'></script>
+	<style>
+	html, body {
+		/*margin: 0;
+		padding: 0;*/
+	}
+	</style>
+</head>
+<body>
+	<!-- <canvas id="canvas_1" width="400" height="100"></canvas> -->
+	<canvas id="canvas" width="400" height="400"></canvas>
+	<script>
+	window.onload = function() {
+
+		var canvas = document.getElementById('canvas');
+		var context = canvas.getContext('2d');
+
+		var mouse = utils.captureMouse(canvas);
+		var arrow = new Arrow();
+		var speed = 3;
+
+		(function drawFrame(){
+			window.requestAnimationFrame(drawFrame, canvas);
+			context.clearRect(0, 0, canvas.width, canvas.height);
+
+			var dx = mouse.x - arrow.x;
+			var dy = mouse.y - arrow.y;
+
+			var angle = Math.atan2(dy, dx);
+
+			var vx = Math.cos(angle) * speed;
+			var vy = Math.sin(angle) * speed;
+
+			arrow.rotation = angle;
+			arrow.x += vx;
+			arrow.y += vy;
+
+			arrow.draw(context);
+		}());
+	};
+	</script>
+</body>
+</html>
