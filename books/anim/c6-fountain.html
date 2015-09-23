@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>c6 fountain</title>
+	<link rel="stylesheet" href="src/style.css">
+	<script src='src/utils.js'></script>
+	<script src='src/ball.js'></script>
+	<script src='src/arrow.js'></script>
+	<style>
+	html, body {
+		/*margin: 0;
+		padding: 0;*/
+	}
+	#canvas {
+		background-color: #000;
+	}
+	</style>
+</head>
+<body>
+	<!-- <canvas id="canvas_1" width="400" height="100"></canvas> -->
+	<canvas id="canvas" width="400" height="400"></canvas>
+	<script>
+	window.onload = function() {
+
+		var canvas = document.getElementById('canvas');
+		var context = canvas.getContext('2d');
+
+		var balls = [];
+		var numBalls = 500;
+		var gravity = 0.5;
+
+		for (var ball,i = 0; i < numBalls; i++) {
+			ball = new Ball(2, Math.random() * 0xffffff);
+			// ball.id = 'ball' + i;
+			ball.x = canvas.width/2;
+			ball.y =canvas.height;
+			ball.vx = Math.random() * 2 - 1;
+			ball.vy = Math.random() * -10 - 5;
+			balls.push(ball);
+		}
+
+		function draw (ball, position) {
+			ball.vy += gravity;
+			ball.x += ball.vx;
+			ball.y += ball.vy;
+			if (ball.x - ball.radius > canvas.width || ball.x + ball.radius <0 || ball.y - ball.radius > canvas.height || ball.y + ball.radius < 0) {
+				//出界之后，初始化复位
+				ball.x = canvas.width/2;
+				ball.y =canvas.height;
+				ball.vx = (Math.random() * 2 - 1) * 3;
+				ball.vy = Math.random() * -10 - 15;
+				// balls.splice(position, 1);
+				// if (balls.length > 0) {
+				// 	console.log('Removed: ' + ball.id);
+				// } else{
+				// 	console.log('clear!');
+				// }
+			}
+			ball.draw(context);
+		}
+
+		(function drawFrame(){
+			window.requestAnimationFrame(drawFrame, canvas);
+			context.clearRect(0, 0, canvas.width, canvas.height);
+
+			balls.forEach(draw);
+			// var i = balls.length;
+			// while(i--) {
+			// 	draw(balls[i], i);
+			// }
+		}());
+	};
+	</script>
+</body>
+</html>

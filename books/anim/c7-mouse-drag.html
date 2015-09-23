@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name = "viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+	<title>c7 mouse drag</title>
+	<link rel="stylesheet" href="src/style.css">
+	<script src='src/utils.js'></script>
+	<script src='src/ball.js'></script>
+	<style>
+	html, body {
+		/*margin: 0;
+		padding: 0;*/
+	}
+	/*#canvas {
+			background-color: #000;
+	}*/
+	</style>
+</head>
+<body>
+	<!-- <canvas id="canvas_1" width="400" height="100"></canvas> -->
+	<canvas id="canvas" width="400" height="400"></canvas>
+	<script>
+	window.onload = function() {
+
+		var canvas = document.getElementById('canvas');
+		var context = canvas.getContext('2d');
+		// var touch = utils.captureTouch(canvas);
+		var mouse = utils.captureMouse(canvas);
+		var ball = new Ball(30);
+
+		ball.x = canvas.width / 2;
+		ball.y = canvas.height / 2;
+
+		canvas.addEventListener('mousedown', function() {
+			if (utils.containsPoint(ball.getBounds(), mouse.x, mouse.y)) {
+				canvas.addEventListener('mouseup', onMouseUp, false);
+				canvas.addEventListener('mousemove', onMouseMove, false);
+			} 
+		}, false);
+
+		function onMouseUp() {
+			canvas.removeEventListener('mouseup', onMouseUp, false);
+			canvas.removeEventListener('mousemove', onMouseMove, false);
+		}
+
+		function onMouseMove(event) {
+			ball.x = mouse.x;
+			ball.y = mouse.y;
+		}
+
+		(function drawFrame() {
+			window.requestAnimationFrame(drawFrame, canvas);
+			context.clearRect(0, 0, canvas.width, canvas.height);
+
+			ball.draw(context);
+		}());
+		
+		// canvas.addEventListener('mouseup', function() {
+		// 	if (utils.containsPoint(ball.getBounds(), mouse.x, mouse.y)) {
+		// 		console.log('in ball: mouse up');
+		// 	} else{
+		// 		console.log('canvas: mouse up');
+		// 	}
+		// }, false);
+
+		// canvas.addEventListener('mousemove', function() {
+		// 	if (utils.containsPoint(ball.getBounds(), mouse.x, mouse.y)) {
+		// 		console.log('in ball: mouse move');
+		// 	} else{
+		// 		console.log('canvas: mouse move');
+		// 	}
+		// }, false);
+	};
+	</script>
+</body>
+</html>
