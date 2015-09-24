@@ -444,7 +444,7 @@ function updateCurve_no_10() {
 var no_11 = svg.append('g')
 		.attr('id', 'no_11')
 		.attr('transform', 'translate(450, 1250)');
-no_11.append('text').text('No.11 利用控制点句柄，更加平滑');
+no_11.append('text').text('No.11 3个控制点句柄手工绘制单条，更加平滑');
 
 var curve_data_no_11 = "M0,300 Q150,300 200,50"; //这些点是控制句柄点
  
@@ -466,3 +466,32 @@ function update_no_11() {
 		.attr("stroke","darkred")
 		.attr("stroke-width", 5);
 }
+
+// ==================================================
+// no_12 手工绘制单条贝塞尔曲线，控制点句柄 ==============
+// ==================================================
+var no_12 = svg.append('g')
+		.attr('id', 'no_12')
+		.attr('transform', 'translate(850, 1250)');
+no_12.append('text').text('No.12 4个控制点句柄手工绘制单条，更加平滑');
+
+var curve_data_no_12 = "M0,300 C0,175 200,175 200,50"; //这些点是控制句柄点
+ 
+no_12.append("path")
+	.attr('id', 'curve_no_12')
+	.attr("d",curve_data_no_12)
+	.attr("fill","none")
+	.attr("stroke","teal")
+	.attr("stroke-width", 5);
+
+// setTimeout(update_no_12, 1000);
+
+// function update_no_12() {
+// 	var newCurve = "M0,300 Q150,300 300,50"; 
+
+// 	d3.select('#curve_no_11')
+// 		.attr("d",newCurve)
+// 		.attr("fill","none")
+// 		.attr("stroke","darkred")
+// 		.attr("stroke-width", 5);
+// }

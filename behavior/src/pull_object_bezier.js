@@ -37,120 +37,29 @@ else {
 }
 //==========================================================
 //**********************************************************
-// function Ball(radius, id, color) {
-// 	if(radius == undefined) { radius = 30}
-// 	if(id == undefined) { id = null}
-// 	if(color == undefined) { color = 'teal'}
-// 	this.cx = 0;
-// 	this.cy = 0;
-// 	this.radius = radius;
-// 	this.id = id;
-// 	this.color = color;
-// }
 
-// Ball.prototype.draw = function(svg) {
-// 	svg.append('circle')
-// 		.attr('id', this.id)
-// 		.attr('r', this.radius)
-// 		.attr('cx', this.cx)
-// 		.attr('cy', this.cy)
-// 		.attr('fill', this.color);
-// };
+//定义大圆初始位置
+var downPoint = [200, 200];
 
-// Ball.prototype.getBounds = function() {
-// 	return {
-// 		x: this.cx - this.radius,
-// 		y: this.cy - this.radius,
-// 		width: this.radius * 2,
-// 		height: this.radius * 2
-// 	};
-// }
+//生成一组圆形的原始位置点
+var upPointGroup = d3.range(4).map(function(i) {
+	return [(50 + i * 100), 50, (Math.random()*15 + 15)];
+});
+// console.log(upPointGroup);
 
-// var drag = d3.behavior.drag()
-// 		.on('dragstart', function() {
-// 			d3.event.sourceEvent.stopPropagation();
-// 		})
-// 		.on('drag', dragmove);
+//生成一组连线贝塞尔曲线数据
+var curvePathGroup = [];
+upPointGroup.forEach(function(d) {
+	var yDistance = downPoint[1] - d[1];
 
-// var ball_drive_position = [400,400];
-// var ball_up_position = [500,100];
+	var m_1 = [d[0], (d[1] + yDistance/2)];
+	var m_2 = [downPoint[0], (downPoint[1] - yDistance/2)];
 
-// var ball_drive = new Ball(50, 'ball_drive');
-// ball_drive.cx = ball_drive_position[0];
-// ball_drive.cy = ball_drive_position[1];
-// ball_drive.draw(svg);
+	var curveElement = curveJoin([d[0], d[1]], m_1, m_2, downPoint);
 
-// // d3.select('#ball_drive').call(drag);
-
-// var ball_up = new Ball(30, 'ball_up');
-// ball_up.cx = ball_up_position[0];
-// ball_up.cy = ball_up_position[1];
-// ball_up.draw(svg);
-
-// // var mouse = utils.captureMouse;
-
-// addEventListener('mousedown', function() {
-// 	if (utils.containsPoint(ball_drive.getBounds(), d3.event.x, d3.event.y)) {
-// 		addEventListener('mouseup', onMouseUp, false);
-// 		addEventListener('mousemove', onMouseMove, false);
-// 	} 
-// 	// console.log('listener added')
-// }, false);
-
-// function onMouseUp() {
-// 	removeEventListener('mouseup', onMouseUp, false);
-// 	removeEventListener('mousemove', onMouseMove, false);
-// }
-
-// function onMouseMove(event) {
-// 	// ball_drive.cx = mouse.x;
-// 	// ball_drive.cy = mouse.y;
-// 	d3.select('#ball_drive')
-// 		.attr('transform', 'translate(' + d3.event.x + ',' + d3.event.y + ')')
-// }
-
-// function dragmove(d) {
-// 	var x = d3.event.x;
-// 	var y = d3.event.y;
-
-// 	d3.select(this)
-// 		.attr('transform', 'translate(' + x + ',' + y + ')')
-// 		.attr('fill', 'orange');
-
-// 	// if (d3.select(this).attr('class') == 'first') {
-// 	// 	//line munipulation
-// 	// 	data[0] = [x, y];
-// 	// 	data[1] = [(data[2][0] - data[0][0])/3*2,data[0][1]];
-
-// 	// 	d3.select('#bezier')
-// 	// 		.data(data)
-// 	// 		.exit();
-
-// 	// 	d3.select('#bezier')
-// 	// 		.data(data)
-// 	// 		.attr("d", bezier(data))
-// 	// 	    .attr("stroke", "teal")
-// 	// 	    .attr("stroke-width", 5)
-// 	// 	    .attr("fill", "none");	
-
-// 	// 	//push another object
-// 	// 	var step = (start_point[1] - y)/4;
-// 	// 	d3.select('.second')
-// 	// 		.attr('transform', 'translate(250,' + (50 - step) +')');
-
-// 	// } 
-// }
-
-var start_point = [50, 300];
-var end_point = [250, 50];
-
-var mid_point = [(end_point[0] - start_point[0])/3*2, start_point[1]];
-
-var data = []; 
-	data.push(start_point);
-	data.push(mid_point);
-	data.push(end_point);
-
+	curvePathGroup.push(curveElement);
+});
+// console.log(curvePathGroup);
 
 var drag = d3.behavior.drag()
 		.on('dragstart', function() {
@@ -158,89 +67,131 @@ var drag = d3.behavior.drag()
 		})
 		.on('drag', dragmove);
 
-// var line = svg.append('line')
-// 		.attr('x1', 50)
-// 		.attr('y1', 50)
-// 		.attr('x2', 350)
-// 		.attr('y2', 350)
-// 		.style('stroke', 'orange')
-// 		.style('stroke-width', 5);
+//绘制一组贝塞尔曲线
+var curveWidth = 3;
 
-var bezier = d3.svg.line()
-	    .x(function(d) { return d[0]; })
-	    .y(function(d) { return d[1]; })
-	    .interpolate("basis");
+curvePathGroup.forEach(function(d, i) {
+	svg.append('path')
+		.attr('id', 'bezier_' + i)
+	    .attr("d", d)
+	    .attr("stroke", "lightgray")
+	    .attr("stroke-width", curveWidth)
+	    .attr("fill", "none");
+});
 
-svg.append('path')
-	.attr('id', 'bezier')
-    .attr("d", bezier(data))
-    .attr("stroke", "teal")
-    .attr("stroke-width", 5)
-    .attr("fill", "none");
+//绘制上半组圆形
+createCircle(svg, upPointGroup);
 
-var circle_1 = svg.append('g')
-		.attr('transform', 'translate(' + start_point[0] + ',' + start_point[1] + ')')
-		.attr('class', 'first')
+//绘制下半部分可拖动圆球
+var downCircle = svg.append('g')
+		.attr('transform', 'translate(' + downPoint[0] + ',' + downPoint[1] + ')')
+		// .attr('id', 'downCircle')
 		.call(drag)
 		.append('circle')
-		.attr('r', 30)
-		.style('fill', 'teal');
-
-var circle_2 = svg.append('g')
-		.attr('transform', 'translate(' + end_point[0] + ',' + end_point[1] + ')')
-		.attr('class', 'second')
-		.call(drag)
-		.append('circle')
-		.attr('r', 30)
+		.attr('id', 'downCircle')
+		.attr('r', 50)
 		.style('fill', 'teal');
 
 function dragmove(d) {
-	var x = d3.event.x;
+	// var x = d3.event.x;
+	var pullRatio = 4; //上球移动下球的1/4
+	var x = downPoint[0];
 	var y = d3.event.y;
 
-	d3.select(this)
-		.attr('transform', 'translate(' + x + ',' + y + ')');
+	// 判断是否在可移动距离内
+	var maxPullDistance = 200,
+		minPullDistance = 0;
+	var pulledDistance = y - downPoint[1];
 
-	if (d3.select(this).attr('class') == 'first') {
-		//push another object
-		var step = (start_point[1] - y)/4;
-		d3.select('.second')
-			.attr('transform', 'translate(250,' + (50 - step) +')');
+	if (pulledDistance > minPullDistance && pulledDistance < maxPullDistance) {
+		//移动下方大圆
+		d3.select(this)
+			.attr('transform', 'translate(' + x + ',' + y + ')');
 
-		//line munipulation
-		data[0] = [x, y];
-		data[2] = [250, (50 - step)];
-		data[1] = [(data[2][0] - data[0][0])/3*2,data[0][1]];
+		//单个被动圆的移动比例尺
+		var rExtent = d3.extent(upPointGroup, function(d) {
+			return d[2];
+		});
+		// console.log(rExtent);
+		var distanceScale = d3.scale.linear()
+				.domain(rExtent)
+				.range([2,4]);
 
-		d3.select('#bezier')
-			.data(data)
-			.exit();
+		var colorScale = d3.scale.linear()
+				.domain([0, maxPullDistance/2])
+				.range(['lightgray', 'steelblue']);
 
-		d3.select('#bezier')
-			.data(data)
-			.attr("d", bezier(data))
-		    .attr("stroke", "teal")
-		    .attr("stroke-width", 5)
-		    .attr("fill", "none");	
+		//定义填充曲线渐变方式
+		function fillCurveColor(i) {
+			return colorScale(pulledDistance/distanceScale(upPointGroup[i][2]));
+		}
 
-		
+		//移动一组圆形 ============================
+		upPointGroup.forEach(function(d, i) {
+			d3.select('#upCircle_' + i)
+				.attr('transform', 'translate(' + d[0] + ',' + (d[1] + pulledDistance/distanceScale(d[2])) +')')
+				.attr('fill', colorScale(pulledDistance/distanceScale(d[2])));
+		});
 
-	} 
-	else {
-		//line munipulation
-		data[2] = [x, y];
-		data[1] = [(data[2][0] - data[0][0])/3*2,data[0][1]];
+		//计算新的曲线数据
+		var newCurvePathGroup = [];
+		// var newUpPointGroup = [];
 
-		d3.select('#bezier')
-			.data(data)
-			.exit();
+		upPointGroup.forEach(function(d, i) {
+			var newUpPoint = [d[0], (d[1] + pulledDistance/distanceScale(d[2]))];
+			var newDownPoint = [downPoint[0], y];
 
-		d3.select('#bezier')
-			.data(data)
-			.attr("d", bezier(data))
-		    .attr("stroke", "teal")
-		    .attr("stroke-width", 5)
-		    .attr("fill", "none");	
+			// var newMiddlePoint = [(newUpPoint[0] + newDownPoint[0])/2, newDownPoint[1]];
+			var newYDistance = newDownPoint[1] - newUpPoint[1];
+			var newM_1 = [newUpPoint[0], (newUpPoint[1] + newYDistance/2)];
+			var newM_2 = [newDownPoint[0], (newDownPoint[1] - newYDistance/2)];
+
+			var newCurvePath = curveJoin(newUpPoint, newM_1, newM_2, newDownPoint);
+
+			newCurvePathGroup.push(newCurvePath);
+			// newUpPointGroup.push(newUpPoint);
+		});
+		// console.log(newCurvePathGroup);
+
+		//更新曲线数据============================
+		newCurvePathGroup.forEach(function(d, i) {
+			d3.select('#bezier_' + i)
+				.attr("d", d)
+			    // .attr("stroke", "lightgray")
+			    .attr("stroke", fillCurveColor(i))
+			    .attr("stroke-width", curveWidth)
+			    .attr("fill", "none");
+		});	
+
 	}
 }
 
+
+//将4个点连接成贝塞尔曲线数据
+function curveJoin(start, m_1, m_2, end) {
+	var newStart = 'M' + start.join(',');
+	var newM_1 = 'C' + m_1.join(',');
+	var newM_2 = m_2.join(',');
+	var newEnd = end.join(',');
+
+	return newStart + ' ' + newM_1 + ' ' + newM_2 + ' ' + newEnd;
+}
+
+//绘制上班部分圆形
+function createCircle(svg,data) {
+	svg.selectAll('circle.up')
+		.data(data)
+		.enter()
+		.append('circle')
+		.attr('class', 'up')
+		.attr('id', function(d, i) {
+			return 'upCircle_' + i;
+		})
+		.attr('transform', function(d) {
+			return 'translate(' + d[0] + ',' + d[1] + ')';
+		})
+		.attr('r', function(d) {
+			return d[2];
+		})
+		.attr('fill', 'lightgray');
+}
