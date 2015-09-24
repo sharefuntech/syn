@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>c8 ease off</title>
+	<link rel="stylesheet" href="src/style.css">
+	<script src='src/utils.js'></script>
+	<script src='src/ball.js'></script>
+	<script src='src/arrow.js'></script>
+	<style>
+	html, body {
+		/*margin: 0;
+		padding: 0;*/
+	}
+	/*#canvas {
+			background-color: #000;
+	}*/
+	</style>
+</head>
+<body>
+	<!-- <canvas id="canvas_1" width="400" height="100"></canvas> -->
+	<canvas id="canvas" width="400" height="400"></canvas>
+	<script>
+	window.onload = function() {
+
+		var canvas = document.getElementById('canvas');
+		var context = canvas.getContext('2d');
+		var mouse = utils.captureMouse(canvas);
+
+		var ball = new Ball();
+
+		var easing = 0.01;
+		var targetX = canvas.width / 2;
+			// targetY = canvas.height / 2;
+		var animRequest;
+
+		ball.y = canvas.height / 2;
+
+		// canvas.addEventListener('mousedown', function(argument) {
+		// 	if (utils.containsPoint(ball.getBounds(), mouse.x, mouse.y)) {
+		// 		isMouseDown = true;
+
+		// 		canvas.addEventListener('mouseup', onMouseUp, false);
+		// 		canvas.addEventListener('mousemove', onMouseMove, false);
+		// 	};
+		// }, false);
+
+		// function onMouseUp() {
+		// 	isMouseDown = false;
+
+		// 	canvas.removeEventListener('mouseup', onMouseUp, false);
+		// 	canvas.removeEventListener('mousemove', onMouseMove, false);
+		// }
+
+		// function onMouseMove() {
+		// 	ball.x = mouse.x;
+		// 	ball.y = mouse.y;
+		// }
+
+		(function drawFrame(){
+			animRequest = window.requestAnimationFrame(drawFrame, canvas);
+			context.clearRect(0, 0, canvas.width, canvas.height);
+
+			var dx = targetX - ball.x;
+
+			if (Math.abs(dx) < 1) {
+				ball.x = targetX;
+				window.cancelRequestAnimationFrame(animRequest);	
+				console.log('anim done');			
+			} else{
+				var vx = dx * easing;
+				ball.x += vx;
+			}
+
+			ball.draw(context);
+		}());
+	};
+	</script>
+</body>
+</html>
