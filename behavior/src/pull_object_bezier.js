@@ -39,11 +39,16 @@ else {
 //**********************************************************
 
 //定义大圆初始位置
-var downPoint = [200, 200];
+var downPoint = [screenWidth/2, 400];
 
 //生成一组圆形的原始位置点
-var upPointGroup = d3.range(4).map(function(i) {
-	return [(50 + i * 100), 50, (Math.random()*15 + 15)];
+var numUpPoint = 18; //上部圆球个数
+var sideGap = 100; //上部圆球最左最右的留白宽度
+var stepPosition = (screenWidth - sideGap*2) / (numUpPoint - 1); //每个上部元球数据点间隔
+var yPositionUpPoint = 120;
+
+var upPointGroup = d3.range(18).map(function(i) {
+	return [(sideGap + i * stepPosition), yPositionUpPoint, (Math.random()*50 + 15)];
 });
 // console.log(upPointGroup);
 
@@ -52,8 +57,8 @@ var curvePathGroup = [];
 upPointGroup.forEach(function(d) {
 	var yDistance = downPoint[1] - d[1];
 
-	var m_1 = [d[0], (d[1] + yDistance/2)];
-	var m_2 = [downPoint[0], (downPoint[1] - yDistance/2)];
+	var m_1 = [d[0], (d[1] + yDistance/3*2)];
+	var m_2 = [downPoint[0], (downPoint[1] - yDistance/3*2)];
 
 	var curveElement = curveJoin([d[0], d[1]], m_1, m_2, downPoint);
 
@@ -74,9 +79,15 @@ curvePathGroup.forEach(function(d, i) {
 	svg.append('path')
 		.attr('id', 'bezier_' + i)
 	    .attr("d", d)
-	    .attr("stroke", "lightgray")
+	    .attr("stroke", "#FEEEF1")
 	    .attr("stroke-width", curveWidth)
-	    .attr("fill", "none");
+	    .attr("fill", "none")
+	    .on('mouseover', function() {
+	    	return highlightElement(d, i);
+	    })
+		.on('mouseout', function() {
+	    	return unHighlightElement(d, i);
+	    });
 });
 
 //绘制上半组圆形
@@ -89,8 +100,14 @@ var downCircle = svg.append('g')
 		.call(drag)
 		.append('circle')
 		.attr('id', 'downCircle')
-		.attr('r', 50)
-		.style('fill', 'teal');
+		.attr('r', 100) //下半部分控制球大小
+		.style('fill', '#AA001E');
+
+// 浮动工具栏
+var tooltipMap = d3.select("body")
+        .append("div")
+        .attr("class", "tooltipMap")
+        .style("opacity", 0);
 
 function dragmove(d) {
 	// var x = d3.event.x;
@@ -99,7 +116,7 @@ function dragmove(d) {
 	var y = d3.event.y;
 
 	// 判断是否在可移动距离内
-	var maxPullDistance = 200,
+	var maxPullDistance = 150,
 		minPullDistance = 0;
 	var pulledDistance = y - downPoint[1];
 
@@ -119,7 +136,7 @@ function dragmove(d) {
 
 		var colorScale = d3.scale.linear()
 				.domain([0, maxPullDistance/2])
-				.range(['lightgray', 'steelblue']);
+				.range(['#FEEEF1', '#AA001E']);
 
 		//定义填充曲线渐变方式
 		function fillCurveColor(i) {
@@ -128,8 +145,10 @@ function dragmove(d) {
 
 		//移动一组圆形 ============================
 		upPointGroup.forEach(function(d, i) {
-			d3.select('#upCircle_' + i)
-				.attr('transform', 'translate(' + d[0] + ',' + (d[1] + pulledDistance/distanceScale(d[2])) +')')
+			d3.select('#upG_' + i)
+				.attr('transform', 'translate(' + d[0] + ',' + (d[1] + pulledDistance/distanceScale(d[2])) +')');
+
+			d3.select('#upCircle_' + i)	
 				.attr('fill', colorScale(pulledDistance/distanceScale(d[2])));
 		});
 
@@ -143,8 +162,8 @@ function dragmove(d) {
 
 			// var newMiddlePoint = [(newUpPoint[0] + newDownPoint[0])/2, newDownPoint[1]];
 			var newYDistance = newDownPoint[1] - newUpPoint[1];
-			var newM_1 = [newUpPoint[0], (newUpPoint[1] + newYDistance/2)];
-			var newM_2 = [newDownPoint[0], (newDownPoint[1] - newYDistance/2)];
+			var newM_1 = [newUpPoint[0], (newUpPoint[1] + newYDistance/3*2)];
+			var newM_2 = [newDownPoint[0], (newDownPoint[1] - newYDistance/3*2)];
 
 			var newCurvePath = curveJoin(newUpPoint, newM_1, newM_2, newDownPoint);
 
@@ -179,19 +198,110 @@ function curveJoin(start, m_1, m_2, end) {
 
 //绘制上班部分圆形
 function createCircle(svg,data) {
-	svg.selectAll('circle.up')
+	svg.selectAll('g.up')
 		.data(data)
 		.enter()
-		.append('circle')
+		.append('g')
 		.attr('class', 'up')
+		.attr('id', function(d, i) {
+			return 'upG_' + i;
+		})
+		.attr('transform', function(d) {
+			return 'translate(' + d[0] + ',' + d[1] + ')';
+		});
+
+	svg.selectAll('g.up')
+		.append('circle')
 		.attr('id', function(d, i) {
 			return 'upCircle_' + i;
 		})
 		.attr('transform', function(d) {
-			return 'translate(' + d[0] + ',' + d[1] + ')';
+			return 'translate(0,' + (-d[2] - 40) + ')'; //为说明文字上移20空出白底
 		})
 		.attr('r', function(d) {
 			return d[2];
 		})
-		.attr('fill', 'lightgray');
+		.attr('fill', '#FEEEF1')
+		.on('mouseover', function(d, i) { //高亮选中的圆球和曲线
+			highlightElement(d, i);
+		})
+		.on('mouseout', function(d, i) {
+			unHighlightElement(d, i);
+		});
+
+	// 每个圆球的说明文字后面白色方块(能否通过球形上移 文字上移 形成自然空白？)
+	// svg.selectAll('g.up')
+	// 	.append('rect')
+	// 	.attr('class', 'text-bk')
+	// 	.attr('width', function(d) {
+	// 		// return d[2] * 2;
+	// 		return 40;
+	// 	})
+	// 	.attr('height', function(d) {
+	// 		// return d[2];
+	// 		return 20;
+	// 	})
+	// 	.attr('transform', function(d) {
+	// 		// return 'translate(' + -d[2] + ',' + d[2] + ')';
+	// 		return 'translate(-20, 0)';
+	// 	});
+
+	// 每个圆球的说明文字
+	svg.selectAll('g.up')
+		.append('text')
+		.attr('text-anchor', 'middle')
+		.attr('transform', function(d) {
+			return 'translate(0,' + (-25) + ')';
+		})
+		.text(function(d,i) {
+			return 'C-' + i;
+		})
+		.style('pointer-event', 'none');
+}
+
+// 高亮选中元素
+function highlightElement(d, i) {
+	// console.log('highlight ' + d);
+	// 鼠标划过，Z轴第一
+	// this.parentElement.appendChild(this); 
+	var thisFlag = d3.select('#upG_' + i);
+	// console.log(thisFlag[0][0]);
+	// console.log(thisFlag[0][0].parentElement);
+	// 为何是数组，原因不明，原理是将目标svg元素摘下来之后再装回去，使之达到z轴最顶端，形成最前层显示效果
+	var targetElement = thisFlag[0][0]; 
+	targetElement.parentElement.appendChild(targetElement);
+	// thisFlag.parentElement.appendChild(thisFlag);
+
+	d3.select('#upCircle_' + i)
+		.classed('circleHighlight', true);
+
+	d3.select('#bezier_' + i)
+		.classed('curveHighlight', true);
+
+	// 显示提示框
+	tooltipMap.style("opacity", .9).style('z-index', 10);
+	tooltipMap.html(d)
+        .style("left", function() {
+        	if (d3.event.pageX < screenWidth/2) {
+        		return d3.event.pageX + "px";
+        	} else{
+        		return (d3.event.pageX - 140) + "px";
+        	}
+        	
+        })
+        .style("top", (d3.event.pageY + 20) + "px");
+
+
+}
+
+function unHighlightElement(d, i) {
+	// console.log('un highlight ' + d);
+	d3.select('#upCircle_' + i)
+		.classed('circleHighlight', false);
+
+	d3.select('#bezier_' + i)
+		.classed('curveHighlight', false);
+
+	// 隐藏提示框
+	tooltipMap.style("opacity", 0);
 }

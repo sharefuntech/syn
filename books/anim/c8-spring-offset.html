@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>c8 ease spring offset</title>
+	<link rel="stylesheet" href="src/style.css">
+	<script src='src/utils.js'></script>
+	<script src='src/ball.js'></script>
+	<script src='src/arrow.js'></script>
+	<style>
+	html, body {
+		/*margin: 0;
+		padding: 0;*/
+	}
+	/*#canvas {
+			background-color: #000;
+	}*/
+	</style>
+</head>
+<body>
+	<!-- <canvas id="canvas_1" width="400" height="100"></canvas> -->
+	<canvas id="canvas" width="400" height="400"></canvas>
+	<script>
+	window.onload = function() {
+
+		var canvas = document.getElementById('canvas');
+		var context = canvas.getContext('2d');
+		var mouse = utils.captureMouse(canvas);
+
+		var ball = new Ball();
+
+		var spring = 0.03;
+		var friction = 0.9;
+		var springLength = 100;
+
+		var vx = 0,
+			vy = 0;
+
+		(function drawFrame(){
+			window.requestAnimationFrame(drawFrame, canvas);
+			context.clearRect(0, 0, canvas.width, canvas.height);
+
+			var dx = ball.x - mouse.x,
+				dy = ball.y - mouse.y,
+				angle = Math.atan2(dy, dx),
+				targetX = mouse.x + Math.cos(angle) * springLength,
+				targetY = mouse.y + Math.sin(angle) * springLength;
+
+			vx += (targetX - ball.x) * spring;
+			vy += (targetY - ball.y) * spring;
+			vx *= friction;
+			vy *= friction;
+
+			ball.x += vx;
+			ball.y += vy;
+
+			context.beginPath();
+			context.moveTo(ball.x, ball.y);
+			context.lineTo(mouse.x, mouse.y);
+			context.stroke();
+
+			ball.draw(context);
+
+			// move(ball_0, mouse.x, mouse.y);
+			// move(ball_1, ball_0.x, ball_0.y);
+			// move(ball_2, ball_1.x, ball_1.y);
+
+			// //draw spring
+			// context.beginPath();
+			// context.moveTo(mouse.x, mouse.y);
+			// context.lineTo(ball_0.x, ball_0.y);
+			// context.lineTo(ball_1.x, ball_1.y);
+			// context.lineTo(ball_2.x, ball_2.y);
+			// context.stroke();
+
+			// ball_0.draw(context);
+			// ball_1.draw(context);
+			// ball_2.draw(context);
+		}());
+	};
+	</script>
+</body>
+</html>
