@@ -32,8 +32,43 @@ else if (deviceWidth < 1000) {
 	
 }
 else {
-	phoneView();
+	// phoneView();
 }
+//================================================
+var itemsGroup = svg.append('g')
+			.attr('id', 'ig');
+	
+itemsGroup.append('circle')
+	.attr('id', 'ball')
+	.attr('r', 50)
+	.attr('cx', 50)
+	.attr('cy', 50)
+	.attr('fill', 'teal')
+	.attr('visibility', 'hidden')
+	.on('mouseover', highlightItem)
+	.on('mouseout', unHighlightItem);
+
+itemsGroup.append('rect')
+	.attr('id', 'cube')
+	.attr('width', 50)
+	.attr('height', 50)
+	.attr('x', 150)
+	.attr('y', 50)
+	.attr('fill', 'teal')
+	.on('mouseover', highlightItem)
+	.on('mouseout', unHighlightItem);
+
+function highlightItem () {
+	d3.select(this)
+		.attr('stroke', 'black')
+		.attr('stroke-width', 5);
+}
+
+function unHighlightItem () {
+	d3.select(this)
+		.attr('stroke', 'none');
+}
+
 //================================================
 
 function callDrag(targetObject, originPosition) {
