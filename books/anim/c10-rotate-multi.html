@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>c10 rotate multi</title>
+	<link rel="stylesheet" href="src/style.css">
+	<script src='src/utils.js'></script>
+	<script src='src/ball.js'></script>
+	<style>
+	html, body {
+		/*margin: 0;
+		padding: 0;*/
+	}
+	/*#canvas {
+			background-color: #000;
+	}*/
+	</style>
+</head>
+<body>
+	<!-- <canvas id="canvas_1" width="400" height="100"></canvas> -->
+	<canvas id="canvas" width="400" height="400"></canvas>
+	<script>
+	window.onload = function() {
+
+		var canvas = document.getElementById('canvas');
+		var context = canvas.getContext('2d');
+		var mouse = utils.captureMouse(canvas);
+
+		var balls = [];
+		var numBalls = 10;
+		var vr = 0.05;
+		// var radius = 150;
+		var centerX= canvas.width / 2;
+		var centerY = canvas.height / 2;	
+		var cos;
+		var sin;
+
+		for (var ball, i = 0; i < numBalls; i++) {
+			ball = new Ball();
+			ball.x = Math.random() * canvas.width;
+			ball.y = Math.random() * canvas.height;
+			balls.push(ball);
+		}
+
+		function move(ball) {
+			var x1 = ball.x -centerX;
+			var y1 = ball.y -centerY;
+			var x2 = x1 * cos - y1 * sin;
+			var y2 = y1 * cos + x1 * sin;
+
+			ball.x = centerX + x2;
+			ball.y = centerY + y2;
+		}
+
+		function draw(ball) {
+			ball.draw(context);
+		}
+
+		(function drawFrame(){
+			window.requestAnimationFrame(drawFrame, canvas);
+			context.clearRect(0, 0, canvas.width, canvas.height);
+
+			var angle = (mouse.x - centerX) * 0.0005;
+			cos = Math.cos(angle);
+			sin = Math.sin(angle);
+
+			balls.forEach(move);
+			balls.forEach(draw);
+		}());
+	};
+	</script>
+</body>
+</html>

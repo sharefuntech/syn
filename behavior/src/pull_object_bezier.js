@@ -42,12 +42,13 @@ else {
 var downPoint = [screenWidth/2, 400];
 
 //生成一组圆形的原始位置点
-var numUpPoint = 18; //上部圆球个数
-var sideGap = 100; //上部圆球最左最右的留白宽度
+var numUpPoint = 8; //上部圆球个数
+// var sideGap = 100; //上部圆球最左最右的留白宽度
+var sideGap = screenWidth * 0.1; //上部圆球最左最右的留白宽度，固定像素不如比例能在移动设备实现弹性布局
 var stepPosition = (screenWidth - sideGap*2) / (numUpPoint - 1); //每个上部元球数据点间隔
 var yPositionUpPoint = 120;
 
-var upPointGroup = d3.range(18).map(function(i) {
+var upPointGroup = d3.range(numUpPoint).map(function(i) {
 	return [(sideGap + i * stepPosition), yPositionUpPoint, (Math.random()*50 + 15)];
 });
 // console.log(upPointGroup);
@@ -93,15 +94,31 @@ curvePathGroup.forEach(function(d, i) {
 //绘制上半组圆形
 createCircle(svg, upPointGroup);
 
+
+//=======================================================
 //绘制下半部分可拖动圆球
 var downCircle = svg.append('g')
+		.attr('id', 'pullHandler')
 		.attr('transform', 'translate(' + downPoint[0] + ',' + downPoint[1] + ')')
 		// .attr('id', 'downCircle')
-		.call(drag)
-		.append('circle')
+		.call(drag);
+
+
+downCircle.append('circle')
 		.attr('id', 'downCircle')
 		.attr('r', 100) //下半部分控制球大小
 		.style('fill', '#AA001E');
+
+downCircle.append('circle')
+	.attr('transform', 'translate(0, -50)')
+	.attr('id', 'downCircle-center')
+	.attr('r', 50) 
+	.style('fill', '#BA324A')
+	.style('stroke', 'white')
+	.style('stroke-width', 1.5)
+	.style("stroke-dasharray", ("2, 2"));
+	
+//=======================================================
 
 // 浮动工具栏
 var tooltipMap = d3.select("body")
@@ -185,7 +202,6 @@ function dragmove(d) {
 	}
 }
 
-
 //将4个点连接成贝塞尔曲线数据
 function curveJoin(start, m_1, m_2, end) {
 	var newStart = 'M' + start.join(',');
@@ -229,22 +245,6 @@ function createCircle(svg,data) {
 			unHighlightElement(d, i);
 		});
 
-	// 每个圆球的说明文字后面白色方块(能否通过球形上移 文字上移 形成自然空白？)
-	// svg.selectAll('g.up')
-	// 	.append('rect')
-	// 	.attr('class', 'text-bk')
-	// 	.attr('width', function(d) {
-	// 		// return d[2] * 2;
-	// 		return 40;
-	// 	})
-	// 	.attr('height', function(d) {
-	// 		// return d[2];
-	// 		return 20;
-	// 	})
-	// 	.attr('transform', function(d) {
-	// 		// return 'translate(' + -d[2] + ',' + d[2] + ')';
-	// 		return 'translate(-20, 0)';
-	// 	});
 
 	// 每个圆球的说明文字
 	svg.selectAll('g.up')
@@ -280,7 +280,7 @@ function highlightElement(d, i) {
 
 	// 显示提示框
 	tooltipMap.style("opacity", .9).style('z-index', 10);
-	tooltipMap.html(d)
+	tooltipMap.html(fixNumber(d[0]))
         .style("left", function() {
         	if (d3.event.pageX < screenWidth/2) {
         		return d3.event.pageX + "px";
@@ -304,4 +304,9 @@ function unHighlightElement(d, i) {
 
 	// 隐藏提示框
 	tooltipMap.style("opacity", 0);
+}
+
+// 将小数点保留2位
+function fixNumber(numObj) {
+	return numObj.toFixed(2);
 }
