@@ -1,0 +1,24 @@
+html, body {
+	margin: 0;
+	padding: 0;
+	/*html body 100%是在移动设备中完全拉伸svg的关键！！！*/
+	width: 100%;
+	height: 100%;
+}
+
+/*setting for cluster*/
+.node circle {
+	fill: #fff;
+	stroke: steelblue;
+	stroke-width: 1.5px;
+}
+
+.node {
+	font: 10px sans-serif;
+}
+
+.link {
+	fill: none;
+	stroke: #ccc;
+	stroke-width: 1.5px;
+}
