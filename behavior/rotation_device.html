@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>device rotation test</title>
+</head>
+<body>
+	<script>
+	var previousOrientation = window.orientation;
+	var checkOrientation = function(){
+		console.log('rotation');
+		console.log('screen.width: ' + screen.width);
+		console.log('screen.height: ' + screen.height);
+	    if(window.orientation !== previousOrientation){
+	        previousOrientation = window.orientation;
+	        // orientation changed, do your magic here
+	        console.log(screen.width);
+	    }
+	};
+
+	window.addEventListener("resize", checkOrientation, false);
+	window.addEventListener("orientationchange", checkOrientation, false);
+
+	// (optional) Android doesn't always fire orientationChange on 180 degree turns
+	// setInterval(checkOrientation, 2000);
+	</script>
+</body>
+</html>
