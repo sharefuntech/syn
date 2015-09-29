@@ -26,25 +26,60 @@ var screenHeight = parseFloat(svgNode.clientHeight || svgNode.parent.clientHeigh
 svg.attr('viewBox', '0 0 ' + screenWidth + ' ' + screenHeight);
 //==========================================================
 //这里需要根据设备屏幕而不是浏览器可用屏幕进行判断
-if (deviceWidth < 400) { 
-	//手机视图
-}
-else if (deviceWidth < 1000) {
-	//平板视图
-}
-else {
-	//桌面视图
-}
+// if (deviceWidth < 400) { 
+// 	//手机视图
+// }
+// else if (deviceWidth < 1000) {
+// 	//平板视图
+// }
+// else {
+// 	//桌面视图
+// }
 
 //==========================================================
 //**********************************************************
 d3.csv('data/country.csv', function(data) {
+	// console.log(data);
 	// console.log(data.length);
 	// console.log(data.filter(function(d) {
 	// 	return d.cate == 'asia';
 	// }));
+
+	var downPoint; //定义大圆初始位置
+	var toggleButtonVisible = 'hidden'; //移动设备按钮默认隐藏
+	var bubbleVisible = 'visible'; //气泡默认显示
+
+	if (deviceWidth < 400) { 
+		phoneView();
+	}
+	else if (deviceWidth < 1000) {
+		tabletView();
+	}
+	else {
+		desktopView();
+	}
+
 	//定义大圆初始位置
-	var downPoint = [screenWidth/2, 400];
+	// var downPoint = [screenWidth/2, screenHeight * 0.8];
+	var downCircleRadius = screenWidth * 0.08; //设定下方圆球半径为窗口宽度的20%
+
+	function phoneView() {//手机视图
+		downPoint = [screenWidth/2, screenHeight * 0.4];
+		d3.selectAll('.toggle')
+				.style('visibility', 'visible');
+	}
+
+	function tabletView() {//平板视图
+		downPoint = [screenWidth/2, screenHeight * 0.8];
+		d3.selectAll('.toggle')
+				.style('visibility', 'hidden');
+	}
+
+	function desktopView() {//桌面视图
+		downPoint = [screenWidth/2, screenHeight * 0.8];
+		d3.selectAll('.toggle')
+				.style('visibility', 'hidden');
+	}
 
 	//生成一组圆形的原始位置点
 	// var numUpPoint = 8; //上部圆球个数
@@ -52,13 +87,22 @@ d3.csv('data/country.csv', function(data) {
 	// var sideGap = 100; //上部圆球最左最右的留白宽度
 	var sideGap = screenWidth * 0.1; //上部圆球最左最右的留白宽度，固定像素不如比例能在移动设备实现弹性布局
 	var stepPosition = (screenWidth - sideGap*2) / (numUpPoint - 1); //每个上部元球数据点间隔
-	var yPositionUpPoint = 120;
+	// var yPositionUpPoint = 120; //上部圆球位置
+	var yPositionUpPoint = screenWidth * 0.2 + 20; //上部圆球位置应该是弹性的，确保最大的球在显示区域
+	// var extentDataTotal = d3.extent(data, function(d) {
+	// 	return d.total;
+	// });
+	// // console.log(yPositionUpPointResp);
+	// var yUpPositionScale = d3.scale.linear()
+	// 		.domain(extentDataTotal)
+	// 		.range([10,screenWidth * 0.1]);
+
 
 	// var upPointGroup = d3.range(numUpPoint).map(function(i) {
 	// 	return [(sideGap + i * stepPosition), yPositionUpPoint, (Math.random()*50 + 15)];
 	// });
 	var upPointGroup = d3.range(numUpPoint).map(function(i) {
-		return [(sideGap + i * stepPosition), yPositionUpPoint, +data[i].total];
+		return [(sideGap + i * stepPosition), yPositionUpPoint, +data[i].total, data[i].cate];
 	});
 	// console.log(upPointGroup);
 
@@ -77,17 +121,17 @@ d3.csv('data/country.csv', function(data) {
 	// console.log(curvePathGroup);
 
 	//单个被动圆的移动比例尺
-			var rExtent = d3.extent(upPointGroup, function(d) {
-				return d[2];
-			});
-			// console.log(rExtent);
-			var radiusScale = d3.scale.linear()
-					.domain(rExtent)
-					.range([10,70]);
+	var rExtent = d3.extent(upPointGroup, function(d) {
+		return d[2];
+	});
+	// console.log(rExtent);
+	var radiusScale = d3.scale.linear()
+			.domain(rExtent)
+			.range([10,screenWidth * 0.1]); //上部气球最大直径不超过下部圆球
 
-			var distanceScale = d3.scale.linear()
-					.domain(rExtent)
-					.range([2,4]);
+	var distanceScale = d3.scale.linear()
+			.domain(rExtent)
+			.range([2,4]);
 
 	var drag = d3.behavior.drag()
 			.on('dragstart', function() {
@@ -101,6 +145,7 @@ d3.csv('data/country.csv', function(data) {
 	curvePathGroup.forEach(function(d, i) {
 		svg.append('path')
 			.attr('id', 'bezier_' + i)
+			.attr('class', upPointGroup[i][3]) //class定义为数据点类型，方便弹性布局操控
 		    .attr("d", d)
 		    .attr("stroke", "#FEEEF1")
 		    .attr("stroke-width", curveWidth)
@@ -128,13 +173,13 @@ d3.csv('data/country.csv', function(data) {
 
 	downCircle.append('circle')
 			.attr('id', 'downCircle')
-			.attr('r', 100) //下半部分控制球大小
+			.attr('r', downCircleRadius) //下半部分控制球大小
 			.style('fill', '#AA001E');
 
 	downCircle.append('circle')
-		.attr('transform', 'translate(0, -50)')
+		.attr('transform', 'translate(0,' + (-downCircleRadius/2) + ')')
 		.attr('id', 'downCircle-center')
-		.attr('r', 50) 
+		.attr('r', downCircleRadius/2) //下半部分控制球内部小球大小设定一半
 		.style('fill', '#BA324A')
 		.style('stroke', 'white')
 		.style('stroke-width', 1.5)
@@ -148,19 +193,50 @@ d3.csv('data/country.csv', function(data) {
 	        .attr("class", "tooltipMap")
 	        .style("opacity", 0);
 
+	// 列表和计数变量不能跟随window resize每次恢复原始值
+	var targetList = ['asia', 'africa', 'america'];
+	var countState = 1;
+
 	//自适应布局测试===============================================
-	window.onresize = function() {
+	window.onresize = function() { //window.onresize 适用于desktop的窗口缩放，不适用于mobile
 		var resizeWindow = parseFloat(svgNode.clientWidth || svgNode.parent.clientWidth);
+
+		var isVisible = 'visible';
 		// console.log(resizeWindow);
 		if (resizeWindow > 1000) {
-			console.log('pc');
+			// console.log('pc');
+			d3.select('#toggleButton')
+				.style('visibility', 'hidden');
+
+			isVisible = 'visible';
+			initialBubbleVisibility('.asia', isVisible);
 		} 
 		else if (resizeWindow >= 400 && resizeWindow <= 1000) {
-			console.log('tablet');
+			// console.log('tablet');
+			d3.select('#toggleButton')
+				.style('visibility', 'hidden');
+
+			isVisible = 'visible';
+			initialBubbleVisibility('.asia', isVisible);
 		} else {
-			console.log('phone');
+			// console.log('phone');
+			isVisible = 'hidden';
+			initialBubbleVisibility('.asia', isVisible);
+
+			// d3.select('#toggleButton')
+			// 	.on('click', toogleVisible(countState, targetList));
+
+			d3.select('#toggleButton')
+				.style('visibility', 'visible');
+
 		}
 	}
+
+	d3.select('#toggleButton')
+		// .on('click', clickTest('hello'));
+		.on('click', toogleVisible(countState, targetList));
+	// document.getElementById('toggleButton').addEventListener('onclick', clickTest, false);
+	// console.log(document.getElementById('toggleButton'));
 
 	function dragmove(d) {
 		// var x = d3.event.x;
@@ -271,8 +347,11 @@ d3.csv('data/country.csv', function(data) {
 			.attr('id', function(d, i) {
 				return 'upCircle_' + i;
 			})
+			.attr('class', function(d, i) {
+				return d[3]; //将class定义为数据的cate类别，以便弹性布局操控
+			})
 			.attr('transform', function(d) {
-				return 'translate(0,' + (-radiusScale(d[2]) - 40) + ')'; //为说明文字上移20空出白底
+				return 'translate(0,' + (-radiusScale(d[2]) - 20) + ')'; //为说明文字上移20空出白底
 			})
 			.attr('r', function(d) {
 				return radiusScale(d[2]);
@@ -289,9 +368,12 @@ d3.csv('data/country.csv', function(data) {
 		// 每个圆球的说明文字
 		svg.selectAll('g.up')
 			.append('text')
+			.attr('class', function(d, i) {
+				return d[3]; //将class定义为数据的cate类别，以便弹性布局操控
+			})
 			.attr('text-anchor', 'middle')
 			.attr('transform', function(d) {
-				return 'translate(0,' + (-25) + ')';
+				return 'translate(0,' + (-5) + ')';
 			})
 			.text(function(d,i) {
 				return 'C-' + i;
@@ -320,7 +402,7 @@ d3.csv('data/country.csv', function(data) {
 
 		// 显示提示框
 		tooltipMap.style("opacity", .9).style('z-index', 10);
-		tooltipMap.html(d[0])
+		tooltipMap.html(d[3])
 	        .style("left", function() {
 	        	if (d3.event.pageX < screenWidth/2) {
 	        		return d3.event.pageX + "px";
@@ -350,6 +432,78 @@ d3.csv('data/country.csv', function(data) {
 	function fixNumber(numObj) {
 		return numObj.toFixed(2);
 	}
+
+	function initialBubbleVisibility (targetList, isVisible) {
+		// console.log(d3.selectAll(targetList));
+
+		d3.selectAll(targetList)
+			.transition()
+			.duration(1000)
+			.style('visibility', isVisible);
+	}
+
+	function toogleVisible(countState, targetList) {
+		// var targetList = ['asia', 'africa', 'america'];
+		return function() {
+			console.log('countState: ' + countState);
+
+			d3.selectAll('.' + targetList[countState])
+				.transition()
+				.duration(1000)
+				.style('visibility', 'hidden');
+
+			if ((countState-1) >= 0) {
+				d3.selectAll('.' + targetList[countState-1]) //如果当前对象不是第一个，那么将上一个对象恢复为可见
+					.transition()
+					.duration(1000)
+					.style('visibility', 'visible');
+			} else {
+				//如果当前对象是第一个，那么将队尾的对象恢复为可见
+				d3.selectAll('.' + targetList[targetList.length-1])
+					.transition()
+					.duration(1000)
+					.style('visibility', 'visible');
+			}
+
+			countState++;
+			if (countState > 2) { countState = 0}
+		}	
+	}
+
+	function clickTest (words) {
+		return function() {
+			console.log(words);
+		}
+	}
+
+	// 判断屏幕是否旋转
+
+	function orientationChange() {
+	    switch(window.orientation) {
+	    　　case 0: 
+	            console.log("肖像模式 0,screen-width: " + screen.width + "; screen-height:" + screen.height);
+	            break;
+
+	    　　case -90: 
+	            console.log("左旋 -90,screen-width: " + screen.width + "; screen-height:" + screen.height);
+	            break;
+
+	    　　case 90:   
+	            console.log("右旋 90,screen-width: " + screen.width + "; screen-height:" + screen.height);
+	            break;
+
+	    　　case 180:   
+	        　　console.log("风景模式 180,screen-width: " + screen.width + "; screen-height:" + screen.height);
+	        　　break;
+	    };
+	}
+
+	// 添加事件监听
+	addEventListener('load', function(){
+	    orientationChange();
+	    window.onorientationchange = orientationChange;
+	});
+	console.log(window.orientation);
 
 });
 

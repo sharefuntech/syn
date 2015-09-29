@@ -27,7 +27,8 @@
 /*tooltip*/
 div.tooltipMap {
     position: absolute;
-    width: 140px;
+    /*width: 140px;*/
+    width: auto;
     height: auto;
     padding: 10px;
     font-family: 'Microsoft Yahei', SimHei, STHeiti, Arial, sans-serif;
@@ -44,4 +45,15 @@ div.tooltipMap {
     -moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
     box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);*/
     pointer-events: none;
+}
+
+/*弹性布局的按钮*/
+a:link {color: #ccc}     /* 未访问的链接 */
+a:visited {color:  #ccc}  /* 已访问的链接 */
+a:hover {color:  #ccc}    /* 鼠标移动到链接上 */
+a:active {color:  #ccc}
+
+#countrolButton {
+    float: right;
+    padding-right: 20px;
 }
