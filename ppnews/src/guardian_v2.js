@@ -1,6 +1,7 @@
 //**********************************************************
 //==========================================================
-// 设置viz顶层div容器
+// start 设置viz顶层div容器
+//==========================================================
 var vizContainer = d3.select('body')
 		.append('div')
 		.attr('id', 'vizContainer')
@@ -25,35 +26,13 @@ var screenHeight = parseFloat(svgNode.clientHeight || svgNode.parent.clientHeigh
 // 设置viewbox才能保证旋转屏幕弹性调整svg图片
 svg.attr('viewBox', '0 0 ' + screenWidth + ' ' + screenHeight);
 //==========================================================
-//这里需要根据设备屏幕而不是浏览器可用屏幕进行判断
-// if (deviceWidth < 400) { 
-// 	//手机视图
-// }
-// else if (deviceWidth < 1000) {
-// 	//平板视图
-// }
-// else {
-// 	//桌面视图
-// }
-// d3.csv('data/poor.csv', function(data) {
-// 	// console.log(data);
-// 	data.forEach(function(d) {
-// 		d.poorPopulation = + d.poorPopulation;
-// 		d.totalPopulation = + d.totalPopulation;
-// 		d.theRatio = +(d.poorPopulation / d.totalPopulation).toFixed(2);
-// 	});
-
-// 	console.log(data);
-// });
-
+//end 设置viz顶层div容器
 //==========================================================
 //**********************************************************
+
+
 d3.csv('data/poor.csv', function(data) {
-	// console.log(data);
-	// console.log(data.length);
-	// console.log(data.filter(function(d) {
-	// 	return d.cate == 'asia';
-	// }));
+	//预处理数据
 	data.forEach(function(d) {
 		d.poorPopulation = + d.poorPopulation;
 		d.totalPopulation = + d.totalPopulation;
@@ -69,9 +48,64 @@ d3.csv('data/poor.csv', function(data) {
 	});
 	// console.log(data);
 
+	// 浮动工具栏
+	var tooltipMap = d3.select("body")
+	        .append("div")
+	        .attr("class", "tooltipMap")
+	        .style("opacity", 0);
+
+	// 列表和计数变量不能跟随window resize每次恢复原始值
+	//根据数据定义气泡和弧线的类别
+	var targetList = ['eastChina', 'centerChina', 'westChina'];
+	var countState = 1;
+	d3.select('#toggleButton')
+		.on('click', toogleVisible(countState, targetList));
+
 	var downPoint; //定义大圆初始位置
+	var upPointGroup;
+	var curvePathGroup;
+	var downCircle; //定义下部大圆
+
 	var toggleButtonVisible = 'hidden'; //移动设备按钮默认隐藏
 	var bubbleVisible = 'visible'; //气泡默认显示
+
+	
+
+	//定义大圆初始位置
+	// var downPoint = [screenWidth/2, screenHeight * 0.8];
+	var downCircleRadius = screenWidth * 0.08; //设定下方圆球半径为窗口宽度的20%
+
+	//生成一组圆形的原始位置点
+	// var numUpPoint = 8; //上部圆球个数
+	var numUpPoint = data.length;
+	// var sideGap = 100; //上部圆球最左最右的留白宽度
+	var sideGap = screenWidth * 0.1; //上部圆球最左最右的留白宽度，固定像素不如比例能在移动设备实现弹性布局
+	var stepPosition = (screenWidth - sideGap*2) / (numUpPoint - 1); //每个上部元球数据点间隔
+	//上部圆球位置不小于最大圆球的半径，确保最大的球在显示区域，因此最大圆球半径为screenWidth * 0.1（因为圆球实际上移半径的距离，离开连接线）
+	var yPositionUpPoint = screenWidth * 0.2 + 20; 
+
+	//定义拖拽工具
+	var drag = d3.behavior.drag()
+		.on('dragstart', function() {
+			d3.event.sourceEvent.stopPropagation();
+		})
+		.on('drag', dragmove);
+
+	//贝塞尔曲线宽度
+	var curveWidth = 3;
+
+	//单个被动圆的移动比例尺
+	var rExtent = d3.extent(data, function(d) {
+		return d.poorPopulation;
+	});
+	// console.log(rExtent);
+	var radiusScale = d3.scale.linear()
+			.domain(rExtent)
+			.range([10,screenWidth * 0.1]); //上部气球最大直径不超过下部圆球
+
+	var distanceScale = d3.scale.linear()
+			.domain(rExtent)
+			.range([2,4]);
 
 	if (deviceWidth < 400) { 
 		phoneView();
@@ -83,145 +117,141 @@ d3.csv('data/poor.csv', function(data) {
 		desktopView();
 	}
 
-	//定义大圆初始位置
-	// var downPoint = [screenWidth/2, screenHeight * 0.8];
-	var downCircleRadius = screenWidth * 0.08; //设定下方圆球半径为窗口宽度的20%
 
 	function phoneView() {//手机视图
 		downPoint = [screenWidth/2, screenHeight * 0.4];
 		d3.selectAll('.toggle')
 				.style('visibility', 'visible');
+		//生成上部圆球数据
+		upPointGroup = generateUpPointData(numUpPoint, sideGap, stepPosition, yPositionUpPoint, data);
+		//生成一组连线贝塞尔曲线数据
+		curvePathGroup = generateCurveData(upPointGroup, downPoint);
+
+		//绘制贝塞尔曲线		
+		drawCurve(curvePathGroup, svg, upPointGroup, curveWidth, highlightElement, unHighlightElement);
+
+		//绘制上半组圆形
+		createCircle(svg, upPointGroup);
+
+		//绘制下半部分可拖动圆球
+		drawDownCircle(svg, downPoint, drag, downCircleRadius);
 	}
 
 	function tabletView() {//平板视图
 		downPoint = [screenWidth/2, screenHeight * 0.8];
 		d3.selectAll('.toggle')
 				.style('visibility', 'hidden');
+
+		//生成上部圆球数据
+		upPointGroup = generateUpPointData(numUpPoint, sideGap, stepPosition, yPositionUpPoint, data);
+		//生成一组连线贝塞尔曲线数据
+		curvePathGroup = generateCurveData(upPointGroup, downPoint);
+		
+
+		//绘制贝塞尔曲线		
+		drawCurve(curvePathGroup, svg, upPointGroup, curveWidth, highlightElement, unHighlightElement);
+
+		//绘制上半组圆形
+		createCircle(svg, upPointGroup);
+
+		//绘制下半部分可拖动圆球
+		drawDownCircle(svg, downPoint, drag, downCircleRadius);
 	}
 
 	function desktopView() {//桌面视图
 		downPoint = [screenWidth/2, screenHeight * 0.8];
 		d3.selectAll('.toggle')
 				.style('visibility', 'hidden');
+
+		//生成上部圆球数据
+		upPointGroup = generateUpPointData(numUpPoint, sideGap, stepPosition, yPositionUpPoint, data);
+		//生成一组连线贝塞尔曲线数据
+		curvePathGroup = generateCurveData(upPointGroup, downPoint);	
+
+		//绘制贝塞尔曲线		
+		drawCurve(curvePathGroup, svg, upPointGroup, curveWidth, highlightElement, unHighlightElement);
+
+		//绘制上半组圆形
+		createCircle(svg, upPointGroup);
+
+		//绘制下半部分可拖动圆球
+		downCircle = drawDownCircle(svg, downPoint, drag, downCircleRadius);
+	}
+	
+	
+	//生成上部圆球数据
+	function generateUpPointData(numUpPoint, sideGap, stepPosition, yPositionUpPoint, data) {
+		var upPointGroup = d3.range(numUpPoint).map(function(i) {
+			return [(sideGap + i * stepPosition), yPositionUpPoint, data[i].poorPopulation, data[i].provinceClass, data[i].poorPercent, data[i].province];
+		});
+
+		return upPointGroup;
 	}
 
-	//生成一组圆形的原始位置点
-	// var numUpPoint = 8; //上部圆球个数
-	var numUpPoint = data.length;
-	// var sideGap = 100; //上部圆球最左最右的留白宽度
-	var sideGap = screenWidth * 0.1; //上部圆球最左最右的留白宽度，固定像素不如比例能在移动设备实现弹性布局
-	var stepPosition = (screenWidth - sideGap*2) / (numUpPoint - 1); //每个上部元球数据点间隔
-	// var yPositionUpPoint = 120; //上部圆球位置
-	var yPositionUpPoint = screenWidth * 0.2 + 20; //上部圆球位置应该是弹性的，确保最大的球在显示区域
-	// var extentDataTotal = d3.extent(data, function(d) {
-	// 	return d.total;
-	// });
-	// // console.log(yPositionUpPointResp);
-	// var yUpPositionScale = d3.scale.linear()
-	// 		.domain(extentDataTotal)
-	// 		.range([10,screenWidth * 0.1]);
-
-
-	// var upPointGroup = d3.range(numUpPoint).map(function(i) {
-	// 	return [(sideGap + i * stepPosition), yPositionUpPoint, (Math.random()*50 + 15)];
-	// });
-	var upPointGroup = d3.range(numUpPoint).map(function(i) {
-		return [(sideGap + i * stepPosition), yPositionUpPoint, data[i].poorPopulation, data[i].provinceClass, data[i].poorPercent, data[i].province];
-	});
-	// console.log(upPointGroup);
-
 	//生成一组连线贝塞尔曲线数据
-	var curvePathGroup = [];
-	upPointGroup.forEach(function(d) {
-		var yDistance = downPoint[1] - d[1];
+	function generateCurveData(upPointGroup, downPoint) {
+		var curvePathGroup = [];
+		upPointGroup.forEach(function(d) {
+			var yDistance = downPoint[1] - d[1];
 
-		var m_1 = [d[0], (d[1] + yDistance/3*2)];
-		var m_2 = [downPoint[0], (downPoint[1] - yDistance/3*2)];
+			var m_1 = [d[0], (d[1] + yDistance/3*2)];
+			var m_2 = [downPoint[0], (downPoint[1] - yDistance/3*2)];
 
-		var curveElement = curveJoin([d[0], d[1]], m_1, m_2, downPoint);
+			var curveElement = curveJoin([d[0], d[1]], m_1, m_2, downPoint);
 
-		curvePathGroup.push(curveElement);
-	});
-	// console.log(curvePathGroup);
+			curvePathGroup.push(curveElement);
+		});
 
-	//单个被动圆的移动比例尺
-	var rExtent = d3.extent(upPointGroup, function(d) {
-		return d[2];
-	});
-	// console.log(rExtent);
-	var radiusScale = d3.scale.linear()
-			.domain(rExtent)
-			.range([10,screenWidth * 0.1]); //上部气球最大直径不超过下部圆球
-
-	var distanceScale = d3.scale.linear()
-			.domain(rExtent)
-			.range([2,4]);
-
-	var drag = d3.behavior.drag()
-			.on('dragstart', function() {
-				d3.event.sourceEvent.stopPropagation();
-			})
-			.on('drag', dragmove);
-
-	//绘制一组贝塞尔曲线
-	var curveWidth = 3;
-
-	curvePathGroup.forEach(function(d, i) {
-		svg.append('path')
-			.attr('id', 'bezier_' + i)
-			.attr('class', upPointGroup[i][3]) //class定义为数据点类型，方便弹性布局操控
-		    .attr("d", d)
-		    .attr("stroke", "#FEEEF1")
-		    .attr("stroke-width", curveWidth)
-		    .attr("fill", "none")
-		    .on('mouseover', function() {
-		    	return highlightElement(d, i);
-		    })
-			.on('mouseout', function() {
-		    	return unHighlightElement(d, i);
-		    });
-	});
-
-	//绘制上半组圆形
-	createCircle(svg, upPointGroup);
+		return curvePathGroup;
+	}
+	
+	//绘制贝塞尔曲线
+	function drawCurve(curvePathGroup, svg, upPointGroup, curveWidth, highlightElement, unHighlightElement) {
+		curvePathGroup.forEach(function(d, i) {
+			svg.append('path')
+				.attr('id', 'bezier_' + i)
+				.attr('class', upPointGroup[i][3]) //class定义为数据点类型，方便弹性布局操控
+			    .attr("d", d)
+			    .attr("stroke", "#FEEEF1")
+			    .attr("stroke-width", curveWidth)
+			    .attr("fill", "none")
+			    .on('mouseover', function() {
+			    	return highlightElement(d, i);
+			    })
+				.on('mouseout', function() {
+			    	return unHighlightElement(d, i);
+			    });
+		});
+	}
 
 
-	//=======================================================
-	//绘制下半部分可拖动圆球
-	var downCircle = svg.append('g')
-			.attr('id', 'pullHandler')
-			.attr('transform', 'translate(' + downPoint[0] + ',' + downPoint[1] + ')')
-			// .attr('id', 'downCircle')
-			.call(drag);
+	function drawDownCircle(svg, downPoint, drag, downCircleRadius) {
+		var downCircle = svg.append('g')
+				.attr('id', 'pullHandler')
+				.attr('transform', 'translate(' + downPoint[0] + ',' + downPoint[1] + ')')
+				.call(drag);
 
 
-	downCircle.append('circle')
-			.attr('id', 'downCircle')
-			.attr('r', downCircleRadius) //下半部分控制球大小
-			.style('fill', '#AA001E');
+		downCircle.append('circle')
+				.attr('id', 'downCircle')
+				.attr('r', downCircleRadius) //下半部分控制球大小
+				.style('fill', '#AA001E');
 
-	downCircle.append('circle')
-		.attr('transform', 'translate(0,' + (-downCircleRadius/2) + ')')
-		.attr('id', 'downCircle-center')
-		.attr('r', downCircleRadius/2) //下半部分控制球内部小球大小设定一半
-		.style('fill', '#BA324A')
-		.style('stroke', 'white')
-		.style('stroke-width', 1.5)
-		.style("stroke-dasharray", ("2, 2"));
+		downCircle.append('circle')
+			.attr('transform', 'translate(0,' + (-downCircleRadius/2) + ')')
+			.attr('id', 'downCircle-center')
+			.attr('r', downCircleRadius/2) //下半部分控制球内部小球大小设定一半
+			.style('fill', '#BA324A')
+			.style('stroke', 'white')
+			.style('stroke-width', 1.5)
+			.style("stroke-dasharray", ("2, 2"));
+
+		return downCircle;
+	}
 		
 	//=======================================================
 
-	// 浮动工具栏
-	var tooltipMap = d3.select("body")
-	        .append("div")
-	        .attr("class", "tooltipMap")
-	        .style("opacity", 0);
-
-	// 列表和计数变量不能跟随window resize每次恢复原始值
-	var targetList = ['eastChina', 'centerChina', 'westChina'];
-	var countState = 1;
-
-	//自适应布局测试===============================================
+	//是否只适用于desktop的窗口缩放？===============================================
 	window.onresize = function() { //window.onresize 适用于desktop的窗口缩放，不适用于mobile
 		var resizeWindow = parseFloat(svgNode.clientWidth || svgNode.parent.clientWidth);
 
@@ -256,12 +286,6 @@ d3.csv('data/poor.csv', function(data) {
 		}
 	}
 
-	d3.select('#toggleButton')
-		// .on('click', clickTest('hello'));
-		.on('click', toogleVisible(countState, targetList));
-	// document.getElementById('toggleButton').addEventListener('onclick', clickTest, false);
-	// console.log(document.getElementById('toggleButton'));
-
 	function dragmove(d) {
 		// var x = d3.event.x;
 		var pullRatio = 4; //上球移动下球的1/4
@@ -277,19 +301,6 @@ d3.csv('data/poor.csv', function(data) {
 			//移动下方大圆
 			d3.select(this)
 				.attr('transform', 'translate(' + x + ',' + y + ')');
-
-			//单个被动圆的移动比例尺
-			// var rExtent = d3.extent(upPointGroup, function(d) {
-			// 	return d[2];
-			// });
-			// // console.log(rExtent);
-			// var radiusScale = d3.scale.linear()
-			// 		.domain(rExtent)
-			// 		.range([10,70]);
-
-			// var distanceScale = d3.scale.linear()
-			// 		.domain(rExtent)
-			// 		.range([2,4]);
 
 			var colorScale = d3.scale.linear()
 					.domain([0, maxPullDistance/2])
@@ -317,8 +328,8 @@ d3.csv('data/poor.csv', function(data) {
 				var newUpPoint = [d[0], (d[1] + pulledDistance/distanceScale(d[2]))];
 				var newDownPoint = [downPoint[0], y];
 
-				// var newMiddlePoint = [(newUpPoint[0] + newDownPoint[0])/2, newDownPoint[1]];
 				var newYDistance = newDownPoint[1] - newUpPoint[1];
+
 				var newM_1 = [newUpPoint[0], (newUpPoint[1] + newYDistance/3*2)];
 				var newM_2 = [newDownPoint[0], (newDownPoint[1] - newYDistance/3*2)];
 
@@ -333,7 +344,6 @@ d3.csv('data/poor.csv', function(data) {
 			newCurvePathGroup.forEach(function(d, i) {
 				d3.select('#bezier_' + i)
 					.attr("d", d)
-				    // .attr("stroke", "lightgray")
 				    .attr("stroke", fillCurveColor(i))
 				    .attr("stroke-width", curveWidth)
 				    .attr("fill", "none");
@@ -499,35 +509,6 @@ d3.csv('data/poor.csv', function(data) {
 			console.log(words);
 		}
 	}
-
-	// 判断屏幕是否旋转
-
-	function orientationChange() {
-	    switch(window.orientation) {
-	    　　case 0: 
-	            console.log("肖像模式 0,screen-width: " + screen.width + "; screen-height:" + screen.height);
-	            break;
-
-	    　　case -90: 
-	            console.log("左旋 -90,screen-width: " + screen.width + "; screen-height:" + screen.height);
-	            break;
-
-	    　　case 90:   
-	            console.log("右旋 90,screen-width: " + screen.width + "; screen-height:" + screen.height);
-	            break;
-
-	    　　case 180:   
-	        　　console.log("风景模式 180,screen-width: " + screen.width + "; screen-height:" + screen.height);
-	        　　break;
-	    };
-	}
-
-	// 添加事件监听
-	// addEventListener('load', function(){
-	//     orientationChange();
-	//     window.onorientationchange = orientationChange;
-	// });
-	// console.log(window.orientation);
 
 });
 

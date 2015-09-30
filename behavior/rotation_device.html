@@ -2,19 +2,53 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale = 1">
 	<title>device rotation test</title>
+	<script src = "lib/d3.js"></script>
 </head>
 <body>
 	<script>
+	d3.select('body')
+		.append('div')
+		.attr('id', 'logContainer')
+		.append('text')
+		.attr('id', 'rotationLog')
+		.attr('transform', 'translate(50,50)');
+
+	d3.select('#logContainer')
+		.append('text')
+		.attr('id', 'rotationLog_ios')
+		.attr('transform', 'translate(50,100)');
+
+	var countRotate = 0;
+
 	var previousOrientation = window.orientation;
 	var checkOrientation = function(){
-		console.log('rotation');
-		console.log('screen.width: ' + screen.width);
-		console.log('screen.height: ' + screen.height);
+		console.log(window.innerWidth);
+		// console.log('screen.width: ' + screen.width);
+		// console.log('screen.height: ' + screen.height);
+
+		// d3.select('#rotationLog')
+	 //        	.text('Orientation: ' + previousOrientation);
+
 	    if(window.orientation !== previousOrientation){
 	        previousOrientation = window.orientation;
+	        var screenOrientation = window.orientation;
+	        var screenState;
 	        // orientation changed, do your magic here
-	        console.log(screen.width);
+	        // console.log(screen.width);
+	        if (screenOrientation == 0 || screenOrientation == 180) {
+	        	screenState = 'portrait';
+	        }
+	        else if (screenOrientation == 90 || screenOrientation == -90) {
+	        	screenState = 'landscape';
+	        }
+
+	        countRotate++;
+
+	        d3.select('#rotationLog_ios')
+	        	.text('rotation: ' + screenState + ' , screen.width: ' + window.innerWidth + ', screen.height: ' + window.innerHeight + ', rotate count : ' + countRotate);
+
 	    }
 	};
 
