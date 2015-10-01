@@ -153,6 +153,7 @@ d3.csv('data/poor.csv', function(data) {
 
 		drawViz();
 
+		initialBubbleVisibility('.' + targetList[0], 'visible');
 		initialBubbleVisibility('.' + targetList[1], 'hidden');
 		initialBubbleVisibility('.' + targetList[2], 'hidden');
 
@@ -160,10 +161,12 @@ d3.csv('data/poor.csv', function(data) {
 				.style('visibility', 'visible');
 
 		d3.select('#toggleButtonLeft')
-				.on('click', toogleVisiblePrev(countState, targetList));
+				// .on('click', toogleVisiblePrev(countState, targetList));
+				.on('click', toggleBubbleVisibilityLeft);
 
 		d3.select('#toggleButtonRight')
-				.on('click', toogleVisibleNext(countState, targetList));
+				// .on('click', toogleVisibleNext(countState, targetList));
+				.on('click', toggleBubbleVisibilityRight); 
 		
 	}
 
@@ -464,58 +467,56 @@ d3.csv('data/poor.csv', function(data) {
 			.style('visibility', isVisible);
 	}
 
-	function toogleVisibleNext(countState, targetList) {
-		// var targetList = ['asia', 'africa', 'america'];
-		return function() {
-			// console.log('countState: ' + countState);
-			switch(countState) {
-				case 0:
-					initialBubbleVisibility('.' + targetList[1], 'visible');
-					initialBubbleVisibility('.' + targetList[0], 'hidden');
-					initialBubbleVisibility('.' + targetList[2], 'hidden');
-					countState = 1;
-					break;
-				case 1:
-					initialBubbleVisibility('.' + targetList[2], 'visible');
-					initialBubbleVisibility('.' + targetList[0], 'hidden');
-					initialBubbleVisibility('.' + targetList[1], 'hidden');
-					countState = 2;
-					break;
-				case 2:
-					initialBubbleVisibility('.' + targetList[0], 'visible');
-					initialBubbleVisibility('.' + targetList[1], 'hidden');
-					initialBubbleVisibility('.' + targetList[2], 'hidden');
-					countState = 0;
-					break;
-			}
-		}	
+	function toggleBubbleVisibilityRight() {
+		switch(countState) {
+			case 0:
+				initialBubbleVisibility('.' + targetList[0], 'hidden');
+				initialBubbleVisibility('.' + targetList[1], 'visible');
+				initialBubbleVisibility('.' + targetList[2], 'hidden');
+				countState = 1;
+				console.log(countState);
+				break;
+			case 1:
+				initialBubbleVisibility('.' + targetList[0], 'hidden');
+				initialBubbleVisibility('.' + targetList[1], 'hidden');
+				initialBubbleVisibility('.' + targetList[2], 'visible');
+				countState = 2;
+				console.log(countState);
+				break;
+			case 2:
+				initialBubbleVisibility('.' + targetList[0], 'visible');
+				initialBubbleVisibility('.' + targetList[1], 'hidden');
+				initialBubbleVisibility('.' + targetList[2], 'hidden');
+				countState = 0;
+				console.log(countState);
+				break;
+		}
 	}
 
-	function toogleVisiblePrev(countState, targetList) {
-		// var targetList = ['asia', 'africa', 'america'];
-		return function() {
-			// console.log('countState: ' + countState);
-			switch(countState) {
-				case 0:
-					initialBubbleVisibility('.' + targetList[2], 'visible');
-					initialBubbleVisibility('.' + targetList[0], 'hidden');
-					initialBubbleVisibility('.' + targetList[1], 'hidden');
-					countState = 2;
-					break;
-				case 1:
-					initialBubbleVisibility('.' + targetList[0], 'visible');
-					initialBubbleVisibility('.' + targetList[1], 'hidden');
-					initialBubbleVisibility('.' + targetList[2], 'hidden');
-					countState = 0;
-					break;
-				case 2:
-					initialBubbleVisibility('.' + targetList[1], 'visible');
-					initialBubbleVisibility('.' + targetList[0], 'hidden');
-					initialBubbleVisibility('.' + targetList[2], 'hidden');
-					countState = 1;
-					break;
-			}
-		}	
+	function toggleBubbleVisibilityLeft() {
+		switch(countState) {
+			case 0:
+				initialBubbleVisibility('.' + targetList[0], 'hidden');
+				initialBubbleVisibility('.' + targetList[1], 'hidden');
+				initialBubbleVisibility('.' + targetList[2], 'visible');
+				countState = 2;
+				console.log(countState);
+				break;
+			case 1:
+				initialBubbleVisibility('.' + targetList[0], 'visible');
+				initialBubbleVisibility('.' + targetList[1], 'hidden');
+				initialBubbleVisibility('.' + targetList[2], 'hidden');
+				countState = 0;
+				console.log(countState);
+				break;
+			case 2:
+				initialBubbleVisibility('.' + targetList[0], 'hidden');
+				initialBubbleVisibility('.' + targetList[1], 'visible');
+				initialBubbleVisibility('.' + targetList[2], 'hidden');
+				countState = 1;
+				console.log(countState);
+				break;
+		}
 	}
 
 	function clickTest (words) {
