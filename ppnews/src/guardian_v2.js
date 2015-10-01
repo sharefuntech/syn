@@ -57,32 +57,28 @@ d3.csv('data/poor.csv', function(data) {
 	// 列表和计数变量不能跟随window resize每次恢复原始值
 	//根据数据定义气泡和弧线的类别
 	var targetList = ['eastChina', 'centerChina', 'westChina'];
-	var countState = 1;
-	d3.select('#toggleButton')
-		.on('click', toogleVisible(countState, targetList));
+	var countState = 0;
+	// d3.select('#toggleButton')
+	// 	.on('click', toogleVisible(countState, targetList));
 
 	var downPoint; //定义大圆初始位置
-	var upPointGroup;
-	var curvePathGroup;
+	var upPointGroup; //上圆数据
+	var curvePathGroup; //曲线
 	var downCircle; //定义下部大圆
 
 	var toggleButtonVisible = 'hidden'; //移动设备按钮默认隐藏
 	var bubbleVisible = 'visible'; //气泡默认显示
 
-	
-
 	//定义大圆初始位置
-	// var downPoint = [screenWidth/2, screenHeight * 0.8];
 	var downCircleRadius = screenWidth * 0.08; //设定下方圆球半径为窗口宽度的20%
 
 	//生成一组圆形的原始位置点
-	// var numUpPoint = 8; //上部圆球个数
 	var numUpPoint = data.length;
-	// var sideGap = 100; //上部圆球最左最右的留白宽度
-	var sideGap = screenWidth * 0.1; //上部圆球最左最右的留白宽度，固定像素不如比例能在移动设备实现弹性布局
+	//上部圆球最左最右的留白宽度，固定像素不如比例能在移动设备实现弹性布局
+	var sideGap = screenWidth * 0.1; 
 	var stepPosition = (screenWidth - sideGap*2) / (numUpPoint - 1); //每个上部元球数据点间隔
 	//上部圆球位置不小于最大圆球的半径，确保最大的球在显示区域，因此最大圆球半径为screenWidth * 0.1（因为圆球实际上移半径的距离，离开连接线）
-	var yPositionUpPoint = screenWidth * 0.2 + 20; 
+	var yPositionUpPoint = screenWidth * 0.16 + 20; 
 
 	//定义拖拽工具
 	var drag = d3.behavior.drag()
@@ -96,12 +92,12 @@ d3.csv('data/poor.csv', function(data) {
 
 	//单个被动圆的移动比例尺
 	var rExtent = d3.extent(data, function(d) {
-		return d.poorPopulation;
+		return d.totalPopulation;
 	});
 	// console.log(rExtent);
 	var radiusScale = d3.scale.linear()
 			.domain(rExtent)
-			.range([10,screenWidth * 0.1]); //上部气球最大直径不超过下部圆球
+			.range([10,screenWidth * 0.08]); //上部气球最大直径不超过下部圆球
 
 	var distanceScale = d3.scale.linear()
 			.domain(rExtent)
@@ -117,24 +113,58 @@ d3.csv('data/poor.csv', function(data) {
 		desktopView();
 	}
 
+	//是否只适用于desktop的窗口缩放？===============================================
+	window.onresize = function() { //window.onresize 适用于desktop的窗口缩放，不适用于mobile
+		var resizeWindow = parseFloat(svgNode.clientWidth || svgNode.parent.clientWidth);
+
+		var isVisible = 'visible';
+		// console.log(resizeWindow);
+		if (resizeWindow > 1000) {
+			// console.log('pc');
+			d3.select('#toggleButton')
+				.style('visibility', 'hidden');
+
+			isVisible = 'visible';
+			initialBubbleVisibility('.' + targetList[0], isVisible);
+		} 
+		else if (resizeWindow >= 400 && resizeWindow <= 1000) {
+			// console.log('tablet');
+			d3.select('#toggleButton')
+				.style('visibility', 'hidden');
+
+			isVisible = 'visible';
+			initialBubbleVisibility('.' + targetList[0], isVisible);
+		} else {
+			console.log('phone');
+			isVisible = 'hidden';
+			initialBubbleVisibility('.' + targetList[0], isVisible);
+
+			// d3.select('#toggleButton')
+			// 	.on('click', toogleVisible(countState, targetList));
+
+			d3.select('#toggleButton')
+				.style('visibility', 'visible');
+
+		}
+	}
 
 	function phoneView() {//手机视图
 		downPoint = [screenWidth/2, screenHeight * 0.4];
+
+		drawViz();
+
+		initialBubbleVisibility('.' + targetList[1], 'hidden');
+		initialBubbleVisibility('.' + targetList[2], 'hidden');
+
 		d3.selectAll('.toggle')
 				.style('visibility', 'visible');
-		//生成上部圆球数据
-		upPointGroup = generateUpPointData(numUpPoint, sideGap, stepPosition, yPositionUpPoint, data);
-		//生成一组连线贝塞尔曲线数据
-		curvePathGroup = generateCurveData(upPointGroup, downPoint);
 
-		//绘制贝塞尔曲线		
-		drawCurve(curvePathGroup, svg, upPointGroup, curveWidth, highlightElement, unHighlightElement);
+		d3.select('#toggleButtonLeft')
+				.on('click', toogleVisiblePrev(countState, targetList));
 
-		//绘制上半组圆形
-		createCircle(svg, upPointGroup);
-
-		//绘制下半部分可拖动圆球
-		drawDownCircle(svg, downPoint, drag, downCircleRadius);
+		d3.select('#toggleButtonRight')
+				.on('click', toogleVisibleNext(countState, targetList));
+		
 	}
 
 	function tabletView() {//平板视图
@@ -142,20 +172,7 @@ d3.csv('data/poor.csv', function(data) {
 		d3.selectAll('.toggle')
 				.style('visibility', 'hidden');
 
-		//生成上部圆球数据
-		upPointGroup = generateUpPointData(numUpPoint, sideGap, stepPosition, yPositionUpPoint, data);
-		//生成一组连线贝塞尔曲线数据
-		curvePathGroup = generateCurveData(upPointGroup, downPoint);
-		
-
-		//绘制贝塞尔曲线		
-		drawCurve(curvePathGroup, svg, upPointGroup, curveWidth, highlightElement, unHighlightElement);
-
-		//绘制上半组圆形
-		createCircle(svg, upPointGroup);
-
-		//绘制下半部分可拖动圆球
-		drawDownCircle(svg, downPoint, drag, downCircleRadius);
+		drawViz();
 	}
 
 	function desktopView() {//桌面视图
@@ -163,6 +180,10 @@ d3.csv('data/poor.csv', function(data) {
 		d3.selectAll('.toggle')
 				.style('visibility', 'hidden');
 
+		drawViz();
+	}
+
+	function drawViz() {
 		//生成上部圆球数据
 		upPointGroup = generateUpPointData(numUpPoint, sideGap, stepPosition, yPositionUpPoint, data);
 		//生成一组连线贝塞尔曲线数据
@@ -182,7 +203,7 @@ d3.csv('data/poor.csv', function(data) {
 	//生成上部圆球数据
 	function generateUpPointData(numUpPoint, sideGap, stepPosition, yPositionUpPoint, data) {
 		var upPointGroup = d3.range(numUpPoint).map(function(i) {
-			return [(sideGap + i * stepPosition), yPositionUpPoint, data[i].poorPopulation, data[i].provinceClass, data[i].poorPercent, data[i].province];
+			return [(sideGap + i * stepPosition), yPositionUpPoint, data[i].poorPopulation, data[i].provinceClass, data[i].poorPercent, data[i].province, data[i].totalPopulation];
 		});
 
 		return upPointGroup;
@@ -251,40 +272,7 @@ d3.csv('data/poor.csv', function(data) {
 		
 	//=======================================================
 
-	//是否只适用于desktop的窗口缩放？===============================================
-	window.onresize = function() { //window.onresize 适用于desktop的窗口缩放，不适用于mobile
-		var resizeWindow = parseFloat(svgNode.clientWidth || svgNode.parent.clientWidth);
-
-		var isVisible = 'visible';
-		// console.log(resizeWindow);
-		if (resizeWindow > 1000) {
-			// console.log('pc');
-			d3.select('#toggleButton')
-				.style('visibility', 'hidden');
-
-			isVisible = 'visible';
-			initialBubbleVisibility('.' + targetList[0], isVisible);
-		} 
-		else if (resizeWindow >= 400 && resizeWindow <= 1000) {
-			// console.log('tablet');
-			d3.select('#toggleButton')
-				.style('visibility', 'hidden');
-
-			isVisible = 'visible';
-			initialBubbleVisibility('.' + targetList[0], isVisible);
-		} else {
-			console.log('phone');
-			isVisible = 'hidden';
-			initialBubbleVisibility('.' + targetList[0], isVisible);
-
-			// d3.select('#toggleButton')
-			// 	.on('click', toogleVisible(countState, targetList));
-
-			d3.select('#toggleButton')
-				.style('visibility', 'visible');
-
-		}
-	}
+	
 
 	function dragmove(d) {
 		// var x = d3.event.x;
@@ -385,10 +373,10 @@ d3.csv('data/poor.csv', function(data) {
 				return d[3]; //将class定义为数据的cate类别，以便弹性布局操控
 			})
 			.attr('transform', function(d) {
-				return 'translate(0,' + (-radiusScale(d[2]) - 20) + ')'; //为说明文字上移20空出白底
+				return 'translate(0,' + (-radiusScale(d[6]) - 20) + ')'; //为说明文字上移20空出白底
 			})
 			.attr('r', function(d) {
-				return radiusScale(d[2]);
+				return radiusScale(d[6]);
 			})
 			.attr('fill', '#FEEEF1')
 			.on('mouseover', function(d, i) { //高亮选中的圆球和曲线
@@ -476,31 +464,57 @@ d3.csv('data/poor.csv', function(data) {
 			.style('visibility', isVisible);
 	}
 
-	function toogleVisible(countState, targetList) {
+	function toogleVisibleNext(countState, targetList) {
 		// var targetList = ['asia', 'africa', 'america'];
 		return function() {
 			// console.log('countState: ' + countState);
-
-			d3.selectAll('.' + targetList[countState])
-				.transition()
-				.duration(1000)
-				.style('visibility', 'hidden');
-
-			if ((countState-1) >= 0) {
-				d3.selectAll('.' + targetList[countState-1]) //如果当前对象不是第一个，那么将上一个对象恢复为可见
-					.transition()
-					.duration(1000)
-					.style('visibility', 'visible');
-			} else {
-				//如果当前对象是第一个，那么将队尾的对象恢复为可见
-				d3.selectAll('.' + targetList[targetList.length-1])
-					.transition()
-					.duration(1000)
-					.style('visibility', 'visible');
+			switch(countState) {
+				case 0:
+					initialBubbleVisibility('.' + targetList[1], 'visible');
+					initialBubbleVisibility('.' + targetList[0], 'hidden');
+					initialBubbleVisibility('.' + targetList[2], 'hidden');
+					countState = 1;
+					break;
+				case 1:
+					initialBubbleVisibility('.' + targetList[2], 'visible');
+					initialBubbleVisibility('.' + targetList[0], 'hidden');
+					initialBubbleVisibility('.' + targetList[1], 'hidden');
+					countState = 2;
+					break;
+				case 2:
+					initialBubbleVisibility('.' + targetList[0], 'visible');
+					initialBubbleVisibility('.' + targetList[1], 'hidden');
+					initialBubbleVisibility('.' + targetList[2], 'hidden');
+					countState = 0;
+					break;
 			}
+		}	
+	}
 
-			countState++;
-			if (countState > 2) { countState = 0}
+	function toogleVisiblePrev(countState, targetList) {
+		// var targetList = ['asia', 'africa', 'america'];
+		return function() {
+			// console.log('countState: ' + countState);
+			switch(countState) {
+				case 0:
+					initialBubbleVisibility('.' + targetList[2], 'visible');
+					initialBubbleVisibility('.' + targetList[0], 'hidden');
+					initialBubbleVisibility('.' + targetList[1], 'hidden');
+					countState = 2;
+					break;
+				case 1:
+					initialBubbleVisibility('.' + targetList[0], 'visible');
+					initialBubbleVisibility('.' + targetList[1], 'hidden');
+					initialBubbleVisibility('.' + targetList[2], 'hidden');
+					countState = 0;
+					break;
+				case 2:
+					initialBubbleVisibility('.' + targetList[1], 'visible');
+					initialBubbleVisibility('.' + targetList[0], 'hidden');
+					initialBubbleVisibility('.' + targetList[2], 'hidden');
+					countState = 1;
+					break;
+			}
 		}	
 	}
 
