@@ -68,6 +68,11 @@ d3.csv('data/poor.csv', function(data) {
 
 	var toggleButtonVisible = 'hidden'; //移动设备按钮默认隐藏
 	var bubbleVisible = 'visible'; //气泡默认显示
+	// var toggleTitlePhoneView = svg.append('g')
+	// 		.attr('class', 'toggle')
+	// 		.append('text')
+	// 		.attr('id', 'toggleTitlePhoneView')
+	// 		.attr('transform', 'translate(20, 20)');
 
 	//定义大圆初始位置
 	var downCircleRadius = screenWidth * 0.08; //设定下方圆球半径为窗口宽度的20%
@@ -88,7 +93,7 @@ d3.csv('data/poor.csv', function(data) {
 		.on('drag', dragmove);
 
 	//贝塞尔曲线宽度
-	var curveWidth = 3;
+	var curveWidth = 4;
 
 	//单个被动圆的移动比例尺
 	var rExtent = d3.extent(data, function(d) {
@@ -101,7 +106,7 @@ d3.csv('data/poor.csv', function(data) {
 
 	var distanceScale = d3.scale.linear()
 			.domain(rExtent)
-			.range([2,4]);
+			.range([2,20]);
 
 	if (deviceWidth < 400) { 
 		phoneView();
@@ -171,11 +176,14 @@ d3.csv('data/poor.csv', function(data) {
 	}
 
 	function tabletView() {//平板视图
-		downPoint = [screenWidth/2, screenHeight * 0.8];
-		d3.selectAll('.toggle')
-				.style('visibility', 'hidden');
+		// downPoint = [screenWidth/2, screenHeight * 0.8];
+		// d3.selectAll('.toggle')
+		// 		.style('visibility', 'hidden');
 
-		drawViz();
+		// drawViz();
+
+		//门面模式直接套用phoneview
+		phoneView(); 
 	}
 
 	function desktopView() {//桌面视图
@@ -209,6 +217,7 @@ d3.csv('data/poor.csv', function(data) {
 			return [(sideGap + i * stepPosition), yPositionUpPoint, data[i].poorPopulation, data[i].provinceClass, data[i].poorPercent, data[i].province, data[i].totalPopulation];
 		});
 
+		console.log('upPointGroup: ' + upPointGroup);
 		return upPointGroup;
 	}
 
@@ -336,6 +345,7 @@ d3.csv('data/poor.csv', function(data) {
 				d3.select('#bezier_' + i)
 					.attr("d", d)
 				    .attr("stroke", fillCurveColor(i))
+				    .attr("stroke-opacity", .7)
 				    .attr("stroke-width", curveWidth)
 				    .attr("fill", "none");
 			});	
@@ -367,6 +377,7 @@ d3.csv('data/poor.csv', function(data) {
 				return 'translate(' + d[0] + ',' + d[1] + ')';
 			});
 
+		//上部大圆
 		svg.selectAll('g.up')
 			.append('circle')
 			.attr('id', function(d, i) {
@@ -382,6 +393,31 @@ d3.csv('data/poor.csv', function(data) {
 				return radiusScale(d[6]);
 			})
 			.attr('fill', '#FEEEF1')
+			.on('mouseover', function(d, i) { //高亮选中的圆球和曲线
+				highlightElement(d, i);
+			})
+			.on('mouseout', function(d, i) {
+				unHighlightElement(d, i);
+			});
+
+		//上部大圆内部小园
+		svg.selectAll('g.up')
+			.append('circle')
+			.attr('id', function(d, i) {
+				return 'upCircleInner_' + i;
+			})
+			.attr('class', function(d, i) {
+				return d[3]; //将class定义为数据的cate类别，以便弹性布局操控
+			})
+			.attr('transform', function(d) {
+				return 'translate(0,' + (-20 - radiusScale(d[6])/5) + ')'; 
+			})
+			.attr('r', function(d) {
+				return radiusScale(d[6])/5;
+			})
+			.attr('fill', '#fff')
+			.attr('stroke', '#ccc')
+			.style("stroke-dasharray", ("2, 2"))
 			.on('mouseover', function(d, i) { //高亮选中的圆球和曲线
 				highlightElement(d, i);
 			})
@@ -427,7 +463,7 @@ d3.csv('data/poor.csv', function(data) {
 
 		// 显示提示框
 		tooltipMap.style("opacity", .9).style('z-index', 10);
-		tooltipMap.html(d[3])
+		tooltipMap.html(d[5] + '贫困人口比例: ' + d[4] + '%')
 	        .style("left", function() {
 	        	if (d3.event.pageX < screenWidth/2) {
 	        		return d3.event.pageX + "px";
@@ -474,21 +510,30 @@ d3.csv('data/poor.csv', function(data) {
 				initialBubbleVisibility('.' + targetList[1], 'visible');
 				initialBubbleVisibility('.' + targetList[2], 'hidden');
 				countState = 1;
-				console.log(countState);
+				// console.log(countState);
+
+				d3.select('#toggleTitlePhoneView')
+					.text('中部地区');		
 				break;
+
 			case 1:
 				initialBubbleVisibility('.' + targetList[0], 'hidden');
 				initialBubbleVisibility('.' + targetList[1], 'hidden');
 				initialBubbleVisibility('.' + targetList[2], 'visible');
 				countState = 2;
-				console.log(countState);
+				// console.log(countState);
+				d3.select('#toggleTitlePhoneView')
+					.text('西部地区');
 				break;
+
 			case 2:
 				initialBubbleVisibility('.' + targetList[0], 'visible');
 				initialBubbleVisibility('.' + targetList[1], 'hidden');
 				initialBubbleVisibility('.' + targetList[2], 'hidden');
 				countState = 0;
-				console.log(countState);
+				// console.log(countState);
+				d3.select('#toggleTitlePhoneView')
+					.text('东部地区');
 				break;
 		}
 	}
