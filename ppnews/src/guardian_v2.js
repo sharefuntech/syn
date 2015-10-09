@@ -545,6 +545,8 @@ d3.csv('data/poor.csv', function(data) {
 				initialBubbleVisibility('.' + targetList[1], 'hidden');
 				initialBubbleVisibility('.' + targetList[2], 'visible');
 				countState = 2;
+				d3.select('#toggleTitlePhoneView')
+					.text('西部地区');
 				console.log(countState);
 				break;
 			case 1:
@@ -552,6 +554,8 @@ d3.csv('data/poor.csv', function(data) {
 				initialBubbleVisibility('.' + targetList[1], 'hidden');
 				initialBubbleVisibility('.' + targetList[2], 'hidden');
 				countState = 0;
+				d3.select('#toggleTitlePhoneView')
+					.text('西部地区');
 				console.log(countState);
 				break;
 			case 2:
@@ -559,6 +563,8 @@ d3.csv('data/poor.csv', function(data) {
 				initialBubbleVisibility('.' + targetList[1], 'visible');
 				initialBubbleVisibility('.' + targetList[2], 'hidden');
 				countState = 1;
+				d3.select('#toggleTitlePhoneView')
+					.text('东部地区');
 				console.log(countState);
 				break;
 		}
