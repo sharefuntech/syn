@@ -389,6 +389,29 @@ d3.csv('data/poor.csv', function(data) {
 				unHighlightElement(d, i);
 			});
 
+		//绘制内圆
+		svg.selectAll('g.up')
+			.append('circle.inner')
+			// .attr('id', function(d, i) {
+			// 	return 'upCircle_' + i;
+			// })
+			// .attr('class', function(d, i) {
+			// 	return d[3]; //将class定义为数据的cate类别，以便弹性布局操控
+			// })
+			.attr('transform', function(d) {
+				return 'translate(0,' + (-radiusScale(d[6]) - 20) + ')'; //为说明文字上移20空出白底
+			})
+			.attr('r', function(d) {
+				return radiusScale(d[6])/3;
+			})
+			.attr('fill', '#eee');
+			// .on('mouseover', function(d, i) { //高亮选中的圆球和曲线
+			// 	highlightElement(d, i);
+			// })
+			// .on('mouseout', function(d, i) {
+			// 	unHighlightElement(d, i);
+			// });
+
 
 		// 每个圆球的说明文字
 		svg.selectAll('g.up')
