@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>c11 billiard simple</title>
+	<link rel="stylesheet" href="src/style.css">
+	<script src='src/utils.js'></script>
+	<script src='src/ball.js'></script>
+	<style>
+	html, body {
+		/*margin: 0;
+		padding: 0;*/
+	}
+	/*#canvas {
+			background-color: #000;
+	}*/
+	</style>
+</head>
+<body>
+	<!-- <canvas id="canvas_1" width="400" height="100"></canvas> -->
+	<canvas id="canvas" width="400" height="400"></canvas>
+	<script>
+	window.onload = function() {
+
+		var canvas = document.getElementById('canvas');
+		var context = canvas.getContext('2d');
+		// var mouse = utils.captureMouse(canvas);
+
+		var ball_0 = new Ball();
+		var ball_1 = new Ball();
+
+		ball_0.mass = 2;
+		ball_0.x = 50;
+		ball_0.y = canvas.height / 2;
+		ball_0.vx = 1;
+
+		ball_1.mass = 1;
+		ball_1.x = 300;
+		ball_1.y = canvas.height / 2;
+		ball_1.vx = -1;
+
+		// var vr = 0.05;
+		// var angle = 0;
+		// var radius = 150;
+		// var centerX= canvas.width / 2;
+		// var centerY = canvas.height / 2;	
+
+		(function drawFrame(){
+			window.requestAnimationFrame(drawFrame, canvas);
+			context.clearRect(0, 0, canvas.width, canvas.height);
+
+			ball_0.x += ball_0.vx;
+			ball_1.x += ball_1.vx;
+
+			var dist = ball_1.x - ball_0.x;
+
+			if (Math.abs(dist) < ball_0.radius + ball_1.radius) {
+				var vx_0_Final = ((ball_0.mass - ball_1.mass) * ball_0.vx + 2 * ball_1.mass * ball_1.vx) / (ball_0.mass + ball_1.mass);
+				var vx_1_Final = ((ball_1.mass - ball_0.mass) * ball_1.vx + 2 * ball_0.mass * ball_0.vx) / (ball_0.mass + ball_1.mass);
+
+				ball_0.vx = vx_0_Final;
+				ball_1.vx = vx_1_Final;
+
+				ball_0.x += ball_0.vx;
+				ball_1.x += ball_1.vx;
+			}
+
+			ball_0.draw(context);
+			ball_1.draw(context);
+		}());
+	};
+	</script>
+</body>
+</html>

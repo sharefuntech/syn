@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>c11 billiard angle</title>
+	<link rel="stylesheet" href="src/style.css">
+	<script src='src/utils.js'></script>
+	<script src='src/ball.js'></script>
+	<style>
+	html, body {
+		/*margin: 0;
+		padding: 0;*/
+	}
+	/*#canvas {
+			background-color: #000;
+	}*/
+	</style>
+</head>
+<body>
+	<!-- <canvas id="canvas_1" width="400" height="100"></canvas> -->
+	<canvas id="canvas" width="400" height="400"></canvas>
+	<script>
+	window.onload = function() {
+
+		var canvas = document.getElementById('canvas');
+		var context = canvas.getContext('2d');
+		// var mouse = utils.captureMouse(canvas);
+
+		var ball_0 = new Ball(90);
+		var ball_1 = new Ball(50);
+
+		var bounce = -0.9;
+
+		ball_0.mass = 2;
+		ball_0.x = canvas.width - 200;
+		ball_0.y = canvas.height - 200;
+		ball_0.vx = Math.random() * 10 - 5;
+		ball_0.vy = Math.random() * 10 - 5;
+
+		ball_1.mass = 1;
+		ball_1.x = 100;
+		ball_1.y = 100;
+		ball_1.vx = Math.random() * 10 - 5;
+		ball_1.vy = Math.random() * 10 - 5;
+
+		function checkCollision(ball_0, ball_1) {
+			var dx = ball_1.x - ball_0.x;
+			var dy = ball_1.y - ball_0.y;
+			var dist = Math.sqrt(dx * dx + dy * dy);
+
+			if (dist < ball_0.radius + ball_1.radius) {
+				//calculate collision angle
+				var angle = Math.atan2(dy, dx);
+				var sin = Math.sin(angle);
+				var cos = Math.cos(angle);
+				//ini ball_0 as pivot positon and rotate
+				var x0 = 0;
+				var y0 = 0;
+				//rotate ball_1's position
+				var x1 = dx * cos + dy * sin;
+				var y1 = dy * cos - dx * sin;
+				//rotate ball_0's velocity
+				var vx0 = ball_0.vx * cos + ball_0.vy * sin;
+				var vy0 = ball_0.vy * cos - ball_0.vx * sin;
+				//rotate ball_1's velocity
+				var vx1 = ball_1.vx * cos + ball_1.vy * sin;
+				var vy1 = ball_1.vy * cos - ball_1.vx * sin;
+				//collision reaction
+				var vxTotal = vx0 - vx1;
+				vx0 = ((ball_0.mass - ball_1.mass) * vx0 + 2 * ball_1.mass * vx1) / (ball_0.mass + ball_1.mass);
+				vx1 = vxTotal + vx0;
+				x0 += vx0;
+				x1 += vx1;
+				//rotate position back
+				var x0Final = x0 * cos - y0 * sin;
+				var y0Final = y0 * cos + x0 * sin;
+				var x1Final = x1 * cos - y1 * sin;
+				var y1Final = y1 * cos + x1 * sin;
+				//adjust position to actual screen position
+				ball_1.x = ball_0.x + x1Final;
+				ball_1.y = ball_0.y + y1Final;
+				ball_0.x = ball_0.x + x0Final;
+				ball_0.y = ball_0.y + y0Final;
+				//rotate velocities back
+				ball_0.vx = vx0 * cos - vy0 * sin;
+				ball_0.vy = vy0 * cos + vx0 * sin;
+				ball_1.vx = vx1 * cos - vy1 * sin;
+				ball_1.vy = vy1 * cos - vx1 * sin;
+			}
+		}
+
+		function checkWalls(ball) {
+			if (ball.x + ball.radius > canvas.width) {
+				ball.x = canvas.width - ball.radius;
+				ball.vx *= bounce;
+			} else if(ball.x - ball.radius < 0) {
+				ball.x = ball.radius;
+				ball.vx *= bounce;
+			}
+
+			if (ball.y + ball.radius > canvas.height) {
+				ball.y = canvas.height - ball.radius;
+				ball.vy *= bounce;
+			} else if(ball.y - ball.radius < 0) {
+				ball.y = ball.radius;
+				ball.vy *= bounce;
+			}
+		}
+
+		(function drawFrame(){
+			window.requestAnimationFrame(drawFrame, canvas);
+			context.clearRect(0, 0, canvas.width, canvas.height);
+
+			ball_0.x += ball_0.vx;
+			ball_0.y += ball_0.vy;
+
+			ball_1.x += ball_1.vx;
+			ball_1.y += ball_1.vy;
+
+			checkCollision(ball_0, ball_1);
+
+			checkWalls(ball_0);
+			checkWalls(ball_1);
+
+			ball_0.draw(context);
+			ball_1.draw(context);
+		}());
+	};
+	</script>
+</body>
+</html>

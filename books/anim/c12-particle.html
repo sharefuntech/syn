@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>c12 particle</title>
+	<link rel="stylesheet" href="src/style.css">
+	<script src='src/utils.js'></script>
+	<script src='src/ball.js'></script>
+</head>
+<body>
+	<canvas id="canvas" width="400" height="400"></canvas>
+	<script>
+	window.onload = function() {
+		var canvas = document.getElementById('canvas');
+		var context = canvas.getContext('2d');
+
+		var particles = [];
+		var numParticles = 30;
+
+		for(var particle, i = 0; i < numParticles; i++) {
+			particle = new Ball(5);
+			particle.x = Math.random() * canvas.width;
+			particle.y = Math.random() * canvas.height;
+			particle.mass = 1;
+			particles.push(particle);
+		}
+
+		function draw(particle) {
+			particle.draw(context);
+		}
+
+		function move(partA, i) {
+			partA.x += partA.vx;
+			partA.y += partA.vy;
+
+			for (var partB, j = i + 1; j < numParticles; j++) {
+				partB = particles[j];
+				gravitate(partA, partB);
+			}
+		}
+
+		function gravitate(partA, partB) {
+			var dx = partB.x - partA.x;
+			var dy = partB.y - partA.y;
+			var distSQ = dx * dx + dy * dy;
+			var dist = Math.sqrt(distSQ);
+			var force = partA.mass * partB.mass / distSQ;
+			var ax = force * dx / dist;
+			var ay = force * dy / dist;
+
+			partA.vx += ax / partA.mass;
+			partA.vy += ay / partA.mass;
+			partB.vx -= ax / partB.mass;
+			partB.vy -= ay / partB.mass;
+		}
+
+		(function drawFrame() {
+			window.requestAnimationFrame(drawFrame, canvas);
+			context.clearRect(0, 0, canvas.width, canvas.height);
+
+			particles.forEach(move);
+			particles.forEach(draw);
+		}());
+	};
+	</script>
+</body>
+</html>
