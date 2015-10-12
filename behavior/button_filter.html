@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="initial-scale = 1">
+	<title>点击按钮 筛选内容</title>
+	<link rel="stylesheet" href="css/behavior.css">
+	<style>
+		#container {
+			/*float: left;
+			clear: both;*/
+		}
+
+		#countroller {
+			/*float: left;*/
+		}
+
+		.cube {
+			width: 100px;
+			height: 100px;
+			background-color: orange;
+			/*float: left;*/
+			/*padding: 5px;*/
+			display: inline-block;
+			margin: 5px;
+		}
+
+		.hide {
+			visibility: hidden;
+		}
+
+		.show {
+			visibility: visible;
+		}
+	</style>
+	<script src = "lib/d3.js"></script>
+</head>
+<body>
+	<div id='container'>
+		<div id="no_1" class='cube'></div>
+		<div id="no_2" class='cube'></div>
+		<div id="no_3" class='cube'></div>
+	</div>
+	<div id='countroller'>
+		<button id="bt_1" class="btn">no_1</button>
+		<button id="bt_2" class="btn">no_2</button>
+		<button id="bt_3" class="btn">no_3</button>
+	</div>
+	<script>
+	var flag = true;
+
+	d3.select('#bt_1')
+		.on('click', function() {
+			// console.log(this.id);
+			
+			toggleVisibility('#no_1')
+		});
+
+	d3.selectAll('.btn')
+		.on('click', echoSelf);
+
+	function toggleVisibility(target) {
+		if (flag) {
+			d3.select(target)
+				.classed('hide', true);
+			flag = false;
+		} else{
+			d3.select(target)
+				.classed('hide', false);
+			flag = true;
+		}
+	}
+
+	function echoSelf() {
+		console.log(this);
+	}
+
+	</script>
+</body>
+</html>
