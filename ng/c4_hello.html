@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>c1 now</title>
+	<script src='lib/1.2.13/angular.js'></script>
+</head>
+<body>
+	<div  ng-app="myApp">
+		<h1>You are: {{ name }}</h1>
+	</div>
+	<script>
+		angular.module('myApp', [])
+			.run(function($rootScope) {
+				$rootScope.name= 'william';
+			});
+	</script>
+</body>
+</html>
