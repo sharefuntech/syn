@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>c5-2 动态菜单</title>
+</head>
+<body>
+	<form action="#">
+		<select id="months">
+			<option value=''>Month</option>
+			<option value="0">Jan</option>
+			<option value="1">Feb</option>
+			<option value="2">Mar</option>
+			<option value="3">Apr</option>
+			<option value="4">May</option>
+			<option value="5">Jun</option>
+		</select>
+		<select id="days">
+			<option value="">day</option>
+		</select>
+	</form>
+	<script>
+		window.onload = initForm;
+		function initForm() {
+			document.getElementById('months').selectedIndex = 0;
+			document.getElementById('months').onchange = populateDays;
+			document.getElementById('days').onchange = displayDays;
+		}
+
+		function populateDays() {
+			var monthDays = [31, 28, 31, 30, 31, 30];
+			var monthStr = this.options[this.selectedIndex].value;
+
+			if (monthStr != '') {
+				var theMonth = parseInt(monthStr);
+
+				document.getElementById('days').options.length = 0;
+				for(var i = 0; i < monthDays[theMonth]; i++) {
+					document.getElementById('days').options[i] = new Option(i+1);
+				}
+			}
+		}
+
+		function displayDays() {
+			var dayStr = this.options[this.selectedIndex].value;
+			console.log(dayStr);
+		}
+	</script>
+	<!-- <input type="button" value="click">
+	<input type="checkbox" value="check">
+	<input type="radio" value="radio">
+	<input type="text" value="text"> -->
+</body>
+</html>
