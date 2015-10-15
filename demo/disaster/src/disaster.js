@@ -127,6 +127,24 @@ d3.csv('data/geo_disaster.csv', function(data) {
 
 	//===========end 绘制年度标题
 	//==================================================================
+	var allPointsGroup = svg.append('g');
+	allPointsGroup.attr('transform', 'translate(' + (marginHorizontal + singleBlockWidth * 0.5) + ',' + (marginTop + singleBlockHeight * 0.4) + ')');
+	for(var i=0; i<defaultNestedData.length; i++) {
+		// console.log(defaultNestedData[i].values);
+		defaultNestedData[i].values.forEach(function(d, j) {
+			// console.log(d);
+			// console.log(d.values.length);
+			// console.log(d.values);
+			var pointsGroupColumn = allPointsGroup.append('g')
+					.attr('transform', function(e) {
+						return 'translate(' + j * singleBlockWidth + ',' + i * singleBlockHeight + ')';
+					});
+
+			drawSinglePointsBlock(pointsGroupColumn, d.values, singleBlockWidth, singleBlockHeight);
+		});
+	}
+
+	// drawSinglePointsBlock(23, singleBlockWidth, singleBlockHeight);
 
 	// 绘制默认试图
 	renderViz(defaultNestedData);
@@ -137,20 +155,33 @@ d3.csv('data/geo_disaster.csv', function(data) {
 
 });
 
-function drawSinglePointsBlock (pointNum) {
+function drawSinglePointsBlock (allPointsGroup, data, singleBlockWidth, singleBlockHeight) {
 	var canvasWidth = singleBlockWidth;
 	var canvasHeight = singleBlockHeight;
-	var rPoint = 5;
-	var pointsVirtualData = d3.range(pointNum);
-	var pointsGroup = svg.append('g');
+	// 圆点半径
+	var rPoint = 10;
+	// 圆之间缝隙
+	var gapPoints = 1;
+	// 水平位置可以放置圆个数
+	var maxHorizontalPointsNum = Math.floor(singleBlockWidth / (rPoint*2 + gapPoints*2));
+	// console.log(maxHorizontalPointsNum);
+	// 构建和圆点个数一致的虚拟数据数组
+	// var pointsVirtualData = d3.range(pointNum);
+	// console.log(pointsVirtualData);
 
-	pointsGroup.selectAll('circle.dataPoints')
-		.data(pointsVirtualData)
+	allPointsGroup.selectAll('circle.dataPoints')
+		// .data(pointsVirtualData)
+		.data(data)
 		.enter()
 		.append('circle')
 		.attr('class', 'dataPoints')
 		.attr('r', rPoint)
-		.
+		.attr('transform', function(d, i) {
+			return 'translate(' + ((i % maxHorizontalPointsNum) * (rPoint*2 + gapPoints*2) + (gapPoints + rPoint)) + ',' + (Math.floor(i / maxHorizontalPointsNum) * (rPoint*2 + gapPoints*2) + (gapPoints + rPoint)) + ')';
+		})
+		.on('mouseover', function(d) {
+			console.log(d.place);
+		});
 }
 
 // 获取nesteddata数据的第一层key
