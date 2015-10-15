@@ -1,0 +1,66 @@
+html, body {
+	/*html body 100%是在移动设备中完全拉伸svg的关键！！！*/
+	width: 100%;
+	height: 100%;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	font-family: "Microsoft Hahei", arial, sans-serif;
+}
+
+/*整体dom容器*/
+#wholeContainer {
+	text-align: center;
+}
+
+/*项目标题*/
+#titleHolder {
+
+}
+
+/*单选框*/
+#radioButtonHolder {
+
+}
+
+/*下拉列表容器*/
+#selectHolder {
+	margin: 5px;
+}
+
+/*下拉列表*/
+#selectContainer {
+	width: 200px;
+	height: 35px;
+	text-align: center;
+	color: #999;
+	background-color: white;
+	font-size: 16px;
+	font-family: "Microsoft Hahei", arial, sans-serif;
+	padding-left: 10px;
+	vertical-align: middle;
+}
+
+/*季度标题*/
+.titleSeason {
+	text-anchor:middle;
+	/*这里不能用color属性，针对svg中的文字不起作用, use fill instead*/
+	fill: #666;
+	font-size: 14px;
+}
+
+/*年份标题*/
+.titleYear {
+	/*这里不能用color属性，针对svg中的文字不起作用, use fill instead*/
+	fill: #000;
+	font-size: 14px;
+}
+
+/*数据圆点*/
+.dataPoints {
+	fill: darkred;
+	stroke:none;
+}
+
