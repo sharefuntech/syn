@@ -149,6 +149,8 @@ function drawSinglePointsBlock (pointNum) {
 		.enter()
 		.append('circle')
 		.attr('class', 'dataPoints')
+		.attr('r', rPoint)
+		.
 }
 
 // 获取nesteddata数据的第一层key
