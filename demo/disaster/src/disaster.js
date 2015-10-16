@@ -30,6 +30,11 @@ svg.attr('viewBox', '0 0 ' + screenWidth + ' ' + screenHeight);
 //end 设置viz顶层div容器
 //==========================================================
 //**********************************************************
+// 浮动工具栏
+var mouseTooltip = d3.select("body")
+        .append("div")
+        .attr("class", "mouseTooltip")
+        .style("opacity", 0);
 
 // 布局设置
 // 两边距去除15%
@@ -127,24 +132,31 @@ d3.csv('data/geo_disaster.csv', function(data) {
 
 	//===========end 绘制年度标题
 	//==================================================================
-	var allPointsGroup = svg.append('g');
-	allPointsGroup.attr('transform', 'translate(' + (marginHorizontal + singleBlockWidth * 0.5) + ',' + (marginTop + singleBlockHeight * 0.4) + ')');
-	for(var i=0; i<defaultNestedData.length; i++) {
-		// console.log(defaultNestedData[i].values);
-		defaultNestedData[i].values.forEach(function(d, j) {
-			// console.log(d);
-			// console.log(d.values.length);
-			// console.log(d.values);
-			var pointsGroupColumn = allPointsGroup.append('g')
-					.attr('transform', function(e) {
-						return 'translate(' + j * singleBlockWidth + ',' + i * singleBlockHeight + ')';
-					});
 
-			drawSinglePointsBlock(pointsGroupColumn, d.values, singleBlockWidth, singleBlockHeight);
-		});
-	}
 
-	// drawSinglePointsBlock(23, singleBlockWidth, singleBlockHeight);
+	//==================================================================
+	//===========start 绘制默认视图
+	renderViz(defaultNestedData);
+	// var allPointsGroup = svg.append('g')
+	// 		.attr('id', 'allPointsGroup');
+
+	// allPointsGroup.attr('transform', 'translate(' + (marginHorizontal + singleBlockWidth * 0.5) + ',' + (marginTop + singleBlockHeight * 0.4) + ')');
+	// for(var i=0; i<defaultNestedData.length; i++) {
+	// 	// console.log(defaultNestedData[i].values);
+	// 	defaultNestedData[i].values.forEach(function(d, j) {
+	// 		// console.log(d);
+	// 		// console.log(d.values.length);
+	// 		// console.log(d.values);
+	// 		var pointsGroupColumn = allPointsGroup.append('g')
+	// 				.attr('transform', function(e) {
+	// 					return 'translate(' + j * singleBlockWidth + ',' + i * singleBlockHeight + ')';
+	// 				});
+
+	// 		drawSinglePointsBlock(pointsGroupColumn, d.values, singleBlockWidth, singleBlockHeight);
+	// 	});
+	// }
+	//===========end 绘制默认视图
+	//==================================================================
 
 	// 绘制默认试图
 	renderViz(defaultNestedData);
@@ -155,11 +167,44 @@ d3.csv('data/geo_disaster.csv', function(data) {
 
 });
 
+function showMouseTooltip(d, i) {
+	mouseTooltip.style("opacity", 1)
+		.style('z-index', 10);
+
+	mouseTooltip.html(generateMouseTipContent (d))
+        .style("left", function() {
+        	if (d3.event.pageX < screenWidth/2) {
+        		return d3.event.pageX + "px";
+        	} else{
+        		return (d3.event.pageX - 70) + "px";
+        	}
+        	
+        })
+        .style("top", (d3.event.pageY) + "px");
+}
+
+function hideMouseTooltip(d, i) {
+	// 隐藏提示框
+	mouseTooltip.style("opacity", 0);
+}
+
+function generateMouseTipContent (d) {
+	return "<div id='dateTooltip'>" + d.date + "</div>" + 
+	"<div id='deathTooltip'>死亡" + d.death + "人</div>" +
+	"<div id='placeTooltip'>" + d.place + "</div>" +
+	"<div class='lineTooltip'><hr id='lineInTooltip'></div>" +
+	"<div class='innerTitleTooltip'>事故描述</div>" +
+	"<div id='descriptionTooltip'>" + d.desc + "</div>" +
+	"<div class='lineTooltip'><hr id='lineInTooltip'></div>" +
+	"<div class='innerTitleTooltip'>事故责任方</div>" +
+	"<div id='responsibleTooltip'>" + d.responsible + "</div>";
+}
+
 function drawSinglePointsBlock (allPointsGroup, data, singleBlockWidth, singleBlockHeight) {
 	var canvasWidth = singleBlockWidth;
 	var canvasHeight = singleBlockHeight;
 	// 圆点半径
-	var rPoint = 10;
+	var rPoint = 8;
 	// 圆之间缝隙
 	var gapPoints = 1;
 	// 水平位置可以放置圆个数
@@ -179,9 +224,8 @@ function drawSinglePointsBlock (allPointsGroup, data, singleBlockWidth, singleBl
 		.attr('transform', function(d, i) {
 			return 'translate(' + ((i % maxHorizontalPointsNum) * (rPoint*2 + gapPoints*2) + (gapPoints + rPoint)) + ',' + (Math.floor(i / maxHorizontalPointsNum) * (rPoint*2 + gapPoints*2) + (gapPoints + rPoint)) + ')';
 		})
-		.on('mouseover', function(d) {
-			console.log(d.place);
-		});
+		.on('mouseover', showMouseTooltip)
+		.on('mouseout', hideMouseTooltip);
 }
 
 // 获取nesteddata数据的第一层key
@@ -220,9 +264,29 @@ function selectedChange(data) {
 			})
 			.entries(data);
 		// console.log(currentNestedData);
+		// 绘制园点
+		renderViz(currentNestedData);
 	}
 }
 
-function renderViz(data) {
-	// body...
+function renderViz(currentNestedData) {
+	d3.select('#allPointsGroup').remove();
+	var allPointsGroup = svg.append('g')
+			.attr('id', 'allPointsGroup');
+
+	allPointsGroup.attr('transform', 'translate(' + (marginHorizontal + singleBlockWidth * 0.5) + ',' + (marginTop + singleBlockHeight * 0.4) + ')');
+	for(var i=0; i<currentNestedData.length; i++) {
+		// console.log(currentNestedData[i].values);
+		currentNestedData[i].values.forEach(function(d, j) {
+			// console.log(d);
+			// console.log(d.values.length);
+			// console.log(d.values);
+			var pointsGroupColumn = allPointsGroup.append('g')
+					.attr('transform', function(e) {
+						return 'translate(' + j * singleBlockWidth + ',' + i * singleBlockHeight + ')';
+					});
+
+			drawSinglePointsBlock(pointsGroupColumn, d.values, singleBlockWidth, singleBlockHeight);
+		});
+	}
 }
