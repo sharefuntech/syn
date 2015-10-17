@@ -58,6 +58,8 @@ function singleBlockHeight(h) {
 
 // 获取列表默认选中值
 var defaultSelectedOption = d3.select('#selectContainer')[0][0].value;
+
+
 //==================================================================
 //===========start 绘制季度标题
 // console.log(singleBlockWidth);
