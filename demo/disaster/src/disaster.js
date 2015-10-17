@@ -137,24 +137,6 @@ d3.csv('data/geo_disaster.csv', function(data) {
 	//==================================================================
 	//===========start 绘制默认视图
 	renderViz(defaultNestedData);
-	// var allPointsGroup = svg.append('g')
-	// 		.attr('id', 'allPointsGroup');
-
-	// allPointsGroup.attr('transform', 'translate(' + (marginHorizontal + singleBlockWidth * 0.5) + ',' + (marginTop + singleBlockHeight * 0.4) + ')');
-	// for(var i=0; i<defaultNestedData.length; i++) {
-	// 	// console.log(defaultNestedData[i].values);
-	// 	defaultNestedData[i].values.forEach(function(d, j) {
-	// 		// console.log(d);
-	// 		// console.log(d.values.length);
-	// 		// console.log(d.values);
-	// 		var pointsGroupColumn = allPointsGroup.append('g')
-	// 				.attr('transform', function(e) {
-	// 					return 'translate(' + j * singleBlockWidth + ',' + i * singleBlockHeight + ')';
-	// 				});
-
-	// 		drawSinglePointsBlock(pointsGroupColumn, d.values, singleBlockWidth, singleBlockHeight);
-	// 	});
-	// }
 	//===========end 绘制默认视图
 	//==================================================================
 

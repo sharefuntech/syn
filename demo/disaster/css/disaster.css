@@ -115,6 +115,7 @@ div.mouseTooltip {
 #descriptionTooltip {
 	font-size: 12px;
 	padding-bottom: 5px;
+	text-align: left;
 }
 
 #responsible {
