@@ -2,16 +2,15 @@
 //==========================================================
 // start 设置viz顶层div容器
 //==========================================================
-var vizContainer = d3.select('body')
-		.append('div')
-		.attr('id', 'vizContainer')
-		.style('width', '100%')
-		.style('height', '100%');
+// var vizContainer = d3.select('#vizContainer')
+// 		.style('width', '100%')
+// 		.style('height', '100%');
 //设置svg画布
+var svgHeight = 700;
 var svg = d3.select('#vizContainer')
 		.append('svg')
 		.style('width', '100%')
-		.style('height', '100%');
+		.style('height', svgHeight);
 var svgNode = d3.select('svg').node();
 // console.log(svgNode);
 // console.log(svgNode.parent); //svgNode.parent is undefined
@@ -43,10 +42,22 @@ var marginTop = 30;
 
 //共分4.5块，第一块行首，占0.5块
  //内容连行标题分5块，每块宽度
-var singleBlockWidth = (screenWidth - marginHorizontal * 2)/4.5;
+var numContentBlocks = 4.5;
+var singleBlockWidth = (screenWidth - marginHorizontal * 2)/numContentBlocks;
 // 每块高度100
 var singleBlockHeight = 100;
 
+function singleBlockHeight(h) {
+	if(!argument.length) {
+		var _height = singleBlockHeight;
+	} else {
+		var _height = h;
+	}
+	return _height;
+}
+
+// 获取列表默认选中值
+var defaultSelectedOption = d3.select('#selectContainer')[0][0].value;
 //==================================================================
 //===========start 绘制季度标题
 // console.log(singleBlockWidth);
@@ -78,8 +89,7 @@ d3.csv('data/geo_disaster.csv', function(data) {
 		d.month = monthFormat(d.standardTime);
 	});
 	// console.log(data);
-	// 获取列表默认选中值
-	var defaultSelectedOption = d3.select('#selectContainer')[0][0].value;
+	
 	// console.log('default selected option: ' + defaultSelectedOption);
 
 	var defaultNestedData = d3.nest()
@@ -137,29 +147,8 @@ d3.csv('data/geo_disaster.csv', function(data) {
 	//==================================================================
 	//===========start 绘制默认视图
 	renderViz(defaultNestedData);
-	// var allPointsGroup = svg.append('g')
-	// 		.attr('id', 'allPointsGroup');
-
-	// allPointsGroup.attr('transform', 'translate(' + (marginHorizontal + singleBlockWidth * 0.5) + ',' + (marginTop + singleBlockHeight * 0.4) + ')');
-	// for(var i=0; i<defaultNestedData.length; i++) {
-	// 	// console.log(defaultNestedData[i].values);
-	// 	defaultNestedData[i].values.forEach(function(d, j) {
-	// 		// console.log(d);
-	// 		// console.log(d.values.length);
-	// 		// console.log(d.values);
-	// 		var pointsGroupColumn = allPointsGroup.append('g')
-	// 				.attr('transform', function(e) {
-	// 					return 'translate(' + j * singleBlockWidth + ',' + i * singleBlockHeight + ')';
-	// 				});
-
-	// 		drawSinglePointsBlock(pointsGroupColumn, d.values, singleBlockWidth, singleBlockHeight);
-	// 	});
-	// }
 	//===========end 绘制默认视图
 	//==================================================================
-
-	// 绘制默认试图
-	renderViz(defaultNestedData);
 
 	// 列表菜单设置触发函数
 	d3.select('#selectContainer')
@@ -245,10 +234,10 @@ function showSelectedValue() {
 function selectedChange(data) {
 	// on模式处理event不能传递参数，故用闭包传递参数
 	return function selectedChangeEventHandler() {
-		var currentSelectedValue = this.value;
+		defaultSelectedOption = this.value;
 		var currentNestedData = d3.nest()
 			.key(function(d) {
-				return d[currentSelectedValue];
+				return d[defaultSelectedOption];
 			})
 			.key(function(d) { //按季度分类
 				// return d.month; //暂时直接用已知变量
@@ -273,6 +262,14 @@ function renderViz(currentNestedData) {
 	d3.select('#allPointsGroup').remove();
 	var allPointsGroup = svg.append('g')
 			.attr('id', 'allPointsGroup');
+
+	console.log(defaultSelectedOption);
+
+	if (defaultSelectedOption == 'year') {
+		singleBlockHeight = 100;
+	} else if (defaultSelectedOption == 'province') {
+		singleBlockHeight = 20;
+	}
 
 	allPointsGroup.attr('transform', 'translate(' + (marginHorizontal + singleBlockWidth * 0.5) + ',' + (marginTop + singleBlockHeight * 0.4) + ')');
 	for(var i=0; i<currentNestedData.length; i++) {
