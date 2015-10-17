@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>选择列表实现视图变换</title>
+	<script src='lib/d3.js'></script>
+	<style>
+		#seletNestKey {
+			width: 200px;
+			height: 35px;
+			text-align: center;
+			color: #999;
+			background-color: white;
+			font-size: 16px;
+			font-family: "Microsoft Hahei", arial, sans-serif;
+			padding-left: 10px;
+			vertical-align: middle;
+		}
+	</style>
+</head>
+<body>
+	<div id="selectContainer">
+		<select id="seletNestKey">
+			<option value='province'>省份</option>
+			<option value="year">年份</option>
+		</select>
+	</div>
+
+	<script>
+		d3.csv('data/geo_disaster.csv', function(data) {
+			// console.log(data);
+			// 字符串转为标准时间格式
+			var dateFormat = d3.time.format('%Y-%m-%d');
+			// 标准时间格式转为年份
+			var yearFormat = d3.time.format('%Y');
+			data.forEach(function (d) {
+		        d.dd = dateFormat.parse(d.date);
+		        // d.year = d3.time.year(d.dd);
+		         d.year = yearFormat(d.dd);
+		    });
+		    // console.log(data);
+			//列表默认选中值
+			var defaultSelectedOption = d3.select('#seletNestKey')[0][0].value;
+			// console.log(defaultSelectedOption);
+			// 按默认选中值处理数据
+			var defaultNestedData = d3.nest()
+				    .key(function(d) { return d[defaultSelectedOption]; })
+				    .entries(data);
+			// console.log(defaultNestedData);
+
+			d3.selectAll('select#seletNestKey')
+				.on('change',showSelectedValue);
+
+			function showSelectedValue() {
+				// console.log(this.value);
+				//列表当前选中值
+				var currentSelectedOption = this.value;
+				var selectedNestedData = d3.nest()
+					    .key(function(d) { return d[currentSelectedOption]; })
+					    .entries(data);
+				console.log(selectedNestedData);
+			}
+
+		});
+
+		
+
+		
+	</script>
+</body>
+</html>

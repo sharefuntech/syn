@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>c5-1</title>
+</head>
+<body>
+	<form action="gotoLocation.cgi" class="centered">
+		<select name="" id="newLocation">
+			<option selected>Select a topic</option>
+			<option value="1">1</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+			<option value="5">5</option>
+		</select>
+	</form>
+
+	<form action="#.cgi">
+		<select id="months">
+			<option value=''>Month</option>
+			<option value="0">Jan</option>
+			<option value="1">Feb</option>
+			<option value="2">Mar</option>
+			<option value="3">Apr</option>
+			<option value="4">May</option>
+			<option value="5">Jun</option>
+		</select>
+		<select id="days">
+			<option value="">day</option>
+		</select>
+	</form>
+	<script>
+		window.onload = initForm;
+		function initForm() {
+			document.getElementById('newLocation').selectedIndex = 0;
+			document.getElementById('newLocation').onchange = showTitle;
+		}
+
+		function showTitle() {
+			var selectForm = document.getElementById('newLocation');
+			var selectedTitle = selectForm.options[selectForm.selectedIndex].value;
+			// document.getElementById('selectTitle').html(selectedTitle);
+			console.log('you got: ' + selectedTitle);
+		}
+	</script>
+	<!-- <input type="button" value="click">
+	<input type="checkbox" value="check">
+	<input type="radio" value="radio">
+	<input type="text" value="text"> -->
+</body>
+</html>

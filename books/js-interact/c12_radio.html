@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>interactive based on radio</title>
+	<script src='lib/d3.js'></script>
+	<style>
+		#months {
+			width: 200px;
+			height: 30px;
+			text-align: center;
+			color: #999;
+			background-color: white;
+			font-size: 16px;
+			font-family: "Microsoft Hahei", arial, sans-serif;
+			padding-left: 10px;
+		}
+	</style>
+</head>
+<body>
+	<div id="selects">
+		<select id="months">
+			<option value=''>国家</option>
+			<option value="0">中国</option>
+			<option value="1">美国</option>
+			<option value="2">日本</option>
+			<option value="3">Apr</option>
+			<option value="4">May</option>
+			<option value="5">Jun</option>
+		</select>
+	</div>
+
+	<div id="chartType">
+		Choose a chart <br>
+		<input class='radioBox' type="radio" name="type" value="browser" checked='checked'>Browser Usage <br>
+		<input class='radioBox' type="radio" name="type" value="plantform"> Javascript Usage <br>
+		<p><br></p>
+
+		Choose a color <br>
+		<input class='radioBox' type="radio" name="color" value="lilRed.gif" checked='checked'> Red <br>
+		<input class='radioBox' type="radio" name="color" value="lilGreen.gif"> Green <br>
+		<input class='radioBox' type="radio" name="color" value="lilBlue.gif"> Blue <br>
+		<p><br></p>
+
+		Choose a direction <br>
+		<input class='radioBox' type="radio" name="direction" value="horizontal" checked='checked'>horizontal <br>
+		<input class='radioBox' type="radio" name="direction" value="vertical"> vertical <br>
+		<p><br></p>
+	</div>
+
+	<div id="chartArea"></div>
+
+	<script>
+		d3.selectAll('input.radioBox')
+			.on('click',showCheckedValue);
+
+		d3.selectAll('select#months')
+			.on('change',showSelectedValue);
+
+		var selectedOption = d3.select('#months');
+		console.log(selectedOption[0][0].selectedIndex); //下行2层才能选中selectedIndex属性，为何？
+		// selectedIndex
+
+		// var checkedBoxsValue = d3.selectAll('input').filter(':checked');
+		// console.log(checkedBoxsValue);
+		// checkedBoxsValue[0].forEach(function(d) {
+		// 	console.log(d.value);
+		// });
+
+		function showCheckedValue() {
+			var checkedBoxsValue = d3.selectAll('input').filter(':checked');
+			// console.log(checkedBoxsValue);
+			checkedBoxsValue[0].forEach(function(d) {
+				console.log(d.value);
+			});
+		}	
+
+		function showSelectedValue() {
+			console.log(this.selectedIndex);
+		}
+	</script>
+</body>
+</html>
