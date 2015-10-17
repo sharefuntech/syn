@@ -154,6 +154,16 @@ d3.csv('data/geo_disaster.csv', function(data) {
 	d3.select('#selectContainer')
 		.on('change', selectedChange(data));
 
+	/*
+	render(selectedOption); //渲染视图，视图的类别取决于selectedOption的值
+	--processData(); //处理数据
+	--renderLabels(); //标签
+	----renderTopLabel(); //标签-顶部标签
+	----renderLeftLabel(); ////标签-左侧标签
+	--renderPoints();
+
+	*/
+
 });
 
 function showMouseTooltip(d, i) {
