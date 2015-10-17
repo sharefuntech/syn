@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>c9 distance</title>
+	<link rel="stylesheet" href="src/style.css">
+	<script src='src/utils.js'></script>
+	<script src='src/ball.js'></script>
+</head>
+<body>
+	<!-- <canvas id="canvas_1" width="400" height="100"></canvas> -->
+	<canvas id="canvas" width="400" height="400"></canvas>
+	<script>
+	window.onload = function() {
+
+		var canvas = document.getElementById('canvas');
+		var context = canvas.getContext('2d');
+		var mouse = utils.captureMouse(canvas);
+
+		var ballA = new Ball();
+		var ballB = new Ball();
+
+		ballA.x = canvas.width / 2;
+		ballA.y = canvas.height / 2;		
+
+		canvas.addEventListener('mousemove', drawFrame, false);
+
+		drawFrame();
+
+		function drawFrame() {
+			context.clearRect(0, 0, canvas.width, canvas.height);
+
+			ballB.x = mouse.x;
+			ballB.y = mouse.y;
+
+			var dx = ballB.x - ballA.x;
+			var dy = ballB.y - ballA.y;
+			var dist = Math.sqrt(dx * dx + dy * dy);
+
+			if(dist < 60) {
+				console.log('hit');
+			}
+
+			ballA.draw(context);
+			ballB.draw(context);
+		}
+	};
+	</script>
+</body>
+</html>

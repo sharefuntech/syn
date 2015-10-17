@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>c8 spring connect three circles</title>
+	<link rel="stylesheet" href="src/style.css">
+	<script src='src/utils.js'></script>
+	<script src='src/ball.js'></script>
+</head>
+<body>
+	<!-- <canvas id="canvas_1" width="400" height="100"></canvas> -->
+	<canvas id="canvas" width="400" height="400"></canvas>
+	<script>
+	window.onload = function() {
+
+		var canvas = document.getElementById('canvas');
+		var context = canvas.getContext('2d');
+		var mouse = utils.captureMouse(canvas);
+
+		var ball_a = new Ball(20);
+		var ball_b = new Ball(30);
+
+		ball_a.x = canvas.width / 2;
+		ball_a.y = canvas.height / 2;
+
+		
+		(function drawFrame(){
+			window.requestAnimationFrame(drawFrame, canvas);
+			context.clearRect(0, 0, canvas.width, canvas.height);
+
+			ball_b.x = mouse.x;
+			ball_b.y = mouse.y;
+
+			if (utils.intersects(ball_a.getBounds(), ball_b.getBounds())) {
+				console.log('hit');
+			} else {
+				// console.log('nope');
+			}
+
+			ball_a.draw(context);
+			ball_b.draw(context);
+		}());
+	};
+	</script>
+</body>
+</html>
