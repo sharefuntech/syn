@@ -85,6 +85,11 @@ body {
 	fill-opacity: 0.6;
 }
 
+/*血点图*/
+.blod {
+	opacity: 0.8;
+}
+
 /*浮动文本框*/
 div.mouseTooltip {
     position: absolute;

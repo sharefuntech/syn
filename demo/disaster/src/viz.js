@@ -297,33 +297,62 @@ function drawSingleForceCluster(placeHolder, data, singleForceClusterWidth, sing
 		    .on("tick", tick)
 		    .start();
 
+	// var node = placeHolder.append('g')
+	// 		.selectAll("circle.dataPoints")
+	// 	    .data(nodes)
+	// 		.enter()
+	// 		.append("circle")
+	// 	    .attr("class", "dataPoints")
+	// 	    .attr("cx", function(d) { return d.x; })
+	// 	    .attr("cy", function(d) { return d.y; })
+	// 	    .attr("r", function(d) {
+	// 	    	return rScale(+d.value.death);
+	// 	    })
+	// 	    .on('mouseover', showMouseTooltip)
+	// 	    .on('mouseout', hideMouseTooltip)
+	// 	    .on("mousedown", function() { d3.event.stopPropagation(); });
+
+	//start try use blod image=================================
 	var node = placeHolder.append('g')
-			.selectAll("circle.dataPoints")
+			.selectAll("image.blod")
 		    .data(nodes)
 			.enter()
-			.append("circle")
-		    .attr("class", "dataPoints")
-		    .attr("cx", function(d) { return d.x; })
-		    .attr("cy", function(d) { return d.y; })
-		    .attr("r", function(d) {
-		    	return rScale(+d.value.death);
-		    })
+			.append('image')
+		    .attr("class", "blod")
+		    .attr("x", function(d) { return d.x; })
+		    .attr("y", function(d) { return d.y; })
+		    .attr('xlink:href', 'images/blod.png')
+			.attr('width', function(d) {
+			    	return rScale(+d.value.death)*3 + 'px';
+			})
+			.attr('height', function(d) {
+			    	return rScale(+d.value.death)*3 + 'px';
+			})
 		    .on('mouseover', showMouseTooltip)
 		    .on('mouseout', hideMouseTooltip)
 		    .on("mousedown", function() { d3.event.stopPropagation(); });
 
+	//end try use blod image=================================
+
 	node.style("opacity", 1e-6)
 		.transition()
 	    .duration(1000)
-	    .style("opacity", 1);
+	    .style("opacity", 0.8); //半透明效果
 
 	d3.select("body")
 	    .on("mousedown", mousedown);
 
+	//针对图像版，所以是x，y
 	function tick(e) {
-		node.attr("cx", function(d) { return d.x; })
-	    	.attr("cy", function(d) { return d.y; });
+		node.attr("x", function(d) { return d.x; })
+	    	.attr("y", function(d) { return d.y; });
 	}
+
+	//针对图像版，所以是cx，cy
+	// function tick(e) {
+	// 	node.attr("cx", function(d) { return d.x; })
+	//     	.attr("cy", function(d) { return d.y; });
+	// }
 
 	function mousedown() {
 	  nodes.forEach(function(o, i) {
