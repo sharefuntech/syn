@@ -16,14 +16,17 @@
 	    height = 500;
 
 	var fill = d3.scale.category10();
+	var dataSet = [{apple:5, orange:7}, {apple:6, orange:4}, {apple:8, orange:2}];
 
-	var nodes = d3.range(100).map(function(i) {
-	  return {index: i};
+	var nodes = d3.range(3).map(function(i) {
+	  return {index: i, value: dataSet[i]};
 	});
+	// console.log(nodes);
 
 	var force = d3.layout.force()
 		    .nodes(nodes)
 		    .size([width, height])
+		    .gravity([0.2])
 		    .on("tick", tick)
 		    .start();
 
@@ -38,9 +41,11 @@
 		    .attr("cx", function(d) { return d.x; })
 		    .attr("cy", function(d) { return d.y; })
 		    .attr("r", 8)
-		    .style("fill", function(d, i) { return fill(i & 3); })
-		    .style("stroke", function(d, i) { return d3.rgb(fill(i & 3)).darker(2); })
+		    .attr('fill', 'pink')
+		    // .style("fill", function(d, i) { return fill(i & 3); })
+		    // .style("stroke", function(d, i) { return d3.rgb(fill(i & 3)).darker(2); })
 		    // .call(force.drag)
+		    .on('mouseover',hightLight)
 		    .on("mousedown", function() { d3.event.stopPropagation(); });
 
 	svg.style("opacity", 1e-6)
@@ -54,11 +59,11 @@
 	function tick(e) {
 
 	  // Push different nodes in different directions for clustering.
-	  var k = 6 * e.alpha;
-	  nodes.forEach(function(o, i) {
-	    o.y += i & 1 ? k : -k;
-	    o.x += i & 2 ? k : -k;
-	  });
+	  // var k = 6 * e.alpha;
+	  // nodes.forEach(function(o, i) {
+	  //   o.y += i & 1 ? k : -k;
+	  //   o.x += i & 2 ? k : -k;
+	  // });
 
 	  node.attr("cx", function(d) { return d.x; })
 	      .attr("cy", function(d) { return d.y; });
@@ -70,6 +75,12 @@
 	    o.y += (Math.random() - .5) * 40;
 	  });
 	  force.resume();
+	}
+
+	function hightLight() {
+		console.log(function(d) {
+			return d.value;
+		});
 	}
 	</script>
 </body>

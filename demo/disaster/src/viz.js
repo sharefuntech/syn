@@ -34,12 +34,27 @@ render(selectedOption); //渲染视图，视图的类别取决于selectedOption�
 --renderTooltip();
 */
 var viz = {};
+var countFlag = 0;
+
 var svg; //svg canvas
+var svgwWidth = 1000;
+var svgHeight = 600;
+var svgMargins = {top:20, right:50, bottom:10, left:50};
+
 var dataView; //nest之后的数据
 var rawData; //未nest之前到数据
 var selectedOption; //控件状态存储
 
+var mouseTooltip = d3.select("body")
+        .append("div")
+        .attr("class", "mouseTooltip")
+        .style("opacity", 0);
+
 d3.csv('data/geo_disaster.csv', function(data) {
+	//画布初始化，初始宽度加上左右边距，初始高度加上上下边距，因此svg画框原点即是边距的上、左点
+	iniSvg(svgwWidth, svgHeight, svgMargins);
+
+	//数据初始化，处理时间，添加必要属性
 	rawData = data;
 	iniData(rawData);
 	// console.log(dataView);
@@ -47,10 +62,20 @@ d3.csv('data/geo_disaster.csv', function(data) {
 	//注册表单控制事件
 	setControlsAction('#selectContainer', triggerControlChange);
 
+	//默认执行一次，包括获取默认表单状态，渲染视图
+	// triggerControlChange执行后返回的是函数，需要调用apply执行
+	triggerControlChange('#selectContainer').apply();
+
 });
 
-function iniSvg() {
-	// body...
+function iniSvg(svgwWidth, svgHeight) {
+	svg = d3.select('#vizContainer')
+		.append('svg')
+		.attr('id', 'svgCanvas')
+		.attr('width', svgwWidth + svgMargins.right + svgMargins.left)
+		.attr('height', svgHeight + svgMargins.top + svgMargins.bottom);
+
+	return svg;	
 }
 
 //数据初始化，处理时间，添加必要属性
@@ -65,8 +90,8 @@ function iniData(data) {
 		d.month = monthFormat(d.standardTime);
 	});
 
-	console.log('fun iniData: ');
-	console.log(data);
+	// console.log('fun iniData: ');
+	// console.log(data);
 	return data;
 }
 
@@ -98,9 +123,9 @@ function render(selectedOption) {
 	//处理数据,根据表单状态selectedOption改变数据nest状态，数据本身不改变
 	changeDataView(selectedOption); 
 	// //渲染标签
-	// renderLabels(); 
+	renderLabels(); 
 	// //渲染数据点
-	// renderPoints();
+	renderPoints();
 	// //渲染鼠标浮动提示框
 	// renderTooltip();
 }
@@ -125,16 +150,239 @@ function changeDataView(selectedOption) {
 		})
 		.entries(rawData);
 
-	console.log(dataView);
+	// console.log(dataView);
 }
 
+//渲染所有标题
 function renderLabels() {
 	//删除上次渲染内容
 	if (d3.select('#labelsGroup')) {
 		d3.select('#labelsGroup').remove();
+		console.log('old label remove');
 	}
-
+	svg.append('g').attr('id', 'labelsGroup');
+	// countFlag++;
+	// console.log(countFlag);
+	renderTopLabel();
+	renderLeftLabel();
 }
 
+//渲染顶部标题
+function renderTopLabel() {
+	//顶部标题内容，提取自dataview
+	var topLabelContent = getNestedDataKeys(dataView);
+	// console.log(topLabelContent);
+	//顶部标题内容字符串个数
+	var numTopLabel = topLabelContent.length;
+	//顶部标题位置
+	var leftGapTopLabelGroup = 50; //左侧空出边距，配合leftLabel
+	var xPositionTopLabelGroup = svgMargins.left+ leftGapTopLabelGroup;
+	var yPositionTopLabelGroup = svgMargins.top;
+	//顶部标题容器，#labelsGroup来自renderLabels()函数预先生成
+	// console.log(d3.select('#labelsGroup'));
+	var topLabelGroup = d3.select('#labelsGroup')
+			.append('g')
+			.attr('id', 'topLabelGroup')
+			.attr('transform', 'translate(' + xPositionTopLabelGroup + ',' + yPositionTopLabelGroup + ')');
+	//顶部标题容器实际宽度，减去左边距
+	var widthTopLabelCanvas = svgwWidth - leftGapTopLabelGroup;
+	var heightTopLabelCanvas = 20;
+
+	//顶部标题容器每一块宽度，除于numTopLabel
+	var singleTopLabelBlockWidth = widthTopLabelCanvas / numTopLabel;
+
+	topLabelGroup.selectAll('text.titleTop')
+		.data(topLabelContent)
+		.enter()
+		.append('text')
+		.attr('class', 'titleTop')
+		.attr('transform', function(d, i) {
+			//加0.5半个singleTopLabelBlockWidth，居中效果
+			return 'translate(' + ((i+0.5)*singleTopLabelBlockWidth) + ', 0)';
+		})
+		.text(function(d) {
+			return d;
+		});
+}
+
+//渲染左侧标题
+function renderLeftLabel() {
+	var leftlabelContent = ['第一季度','第二季度','第三季度','第四季度'];
+	var topGapLeftLabelGroup = 50; //顶侧空出边距，配合leftLabel
+	var gapIntervolLeftLabelGroup = 100; //左侧标题每个间隙
+	var xPositionLeftLabelGroup = svgMargins.left;
+	var yPositionLeftLabelGroup = svgMargins.top + topGapLeftLabelGroup;
+
+	var leftLabelGroup = d3.select('#labelsGroup')
+			.append('g')
+			.attr('id', 'leftLabelGroup')
+			.attr('transform', 'translate(' + xPositionLeftLabelGroup + ',' + yPositionLeftLabelGroup + ')');
+
+	leftLabelGroup.selectAll('text.titleLeft')
+		.data(leftlabelContent)
+		.enter()
+		.append('text')
+		.attr('class', 'titleLeft')
+		.attr('transform', function(d, i) {
+			return 'translate(0, ' + i*gapIntervolLeftLabelGroup + ')';
+		})
+		.text(function(d) {
+			return d;
+		});
+}
+
+//所有数据点
+function renderPoints() {
+	//删除上次渲染数据点
+	if (d3.select('#pointsGroup')) {
+		d3.select('#pointsGroup').remove();
+		console.log('old pointsGroup remove');
+	}
+	svg.append('g').attr('id', 'pointsGroup');
+	// 根据下拉列表选项渲染数据点类型
+	if (selectedOption == 'year') {
+		drawForce();
+	} else if (selectedOption == 'province') {
+		drawPoints();
+	}
+}
+
+//渲染力图类型数据点
+function drawForce() {
+	var leftGapForceGroup = 50; //左侧空出边距，配合leftLabel
+	var xPositionForceGroup = svgMargins.left+ leftGapForceGroup;
+	var yPositionForceGroup = svgMargins.top;
+
+	var numHorizontalForce = dataView.length;
+	var singleForceClusterWidth = (svgwWidth - leftGapForceGroup) / numHorizontalForce;
+	var singleForceClusterHeight = 100;
+
+	//数据点总容器
+	var allFroceGroup = d3.select('#pointsGroup')
+			.attr('transform', 'translate(' + xPositionForceGroup + ',' + yPositionForceGroup + ')');
+	//循环渲染每幅力图
+	for(var i=0; i<dataView.length; i++) {
+		// console.log(dataView[i].values);
+		dataView[i].values.forEach(function(d, j) {
+			// console.log(d);
+			// console.log(d.values.length);
+			// console.log(d.values);
+			//移动单个力图
+			var forceGroupColumn = allFroceGroup.append('g')
+					.attr('transform', function(e) {
+						return 'translate(' + i * singleForceClusterWidth + ',' + j * singleForceClusterHeight + ')';
+					});
+			//绘制单个力图
+			drawSingleForceCluster(forceGroupColumn, d.values, singleForceClusterWidth, singleForceClusterHeight);
+		});
+	}
+}
+
+//渲染单幅力图类型数据点
+function drawSingleForceCluster(placeHolder, data, singleForceClusterWidth, singleForceClusterHeight) {
+	var numForcePoints = data.length;
+	var nodes = d3.range(numForcePoints).map(function(i) {
+	  return {index: i, value: data[i]};
+	});
+	// console.log(nodes);
+	var rScale = d3.scale.linear()
+		.domain([10, 30])
+		.range([5, 12])
+		.clamp(true);
+
+	var force = d3.layout.force()
+		    .nodes(nodes)
+		    .size([singleForceClusterWidth, singleForceClusterHeight])
+		    .gravity([0.4])
+		    .on("tick", tick)
+		    .start();
+
+	var node = placeHolder.append('g')
+			.selectAll("circle.dataPoints")
+		    .data(nodes)
+			.enter()
+			.append("circle")
+		    .attr("class", "dataPoints")
+		    .attr("cx", function(d) { return d.x; })
+		    .attr("cy", function(d) { return d.y; })
+		    .attr("r", function(d) {
+		    	return rScale(+d.value.death);
+		    })
+		    .on('mouseover', showMouseTooltip)
+		    .on('mouseout', hideMouseTooltip)
+		    .on("mousedown", function() { d3.event.stopPropagation(); });
+
+	node.style("opacity", 1e-6)
+		.transition()
+	    .duration(1000)
+	    .style("opacity", 1);
+
+	d3.select("body")
+	    .on("mousedown", mousedown);
+
+	function tick(e) {
+		node.attr("cx", function(d) { return d.x; })
+	    	.attr("cy", function(d) { return d.y; });
+	}
+
+	function mousedown() {
+	  nodes.forEach(function(o, i) {
+	    o.x += (Math.random() - .5) * 40;
+	    o.y += (Math.random() - .5) * 40;
+	  });
+	  force.resume();
+	}
+}
+
+//出现提示框
+function showMouseTooltip(d, i) {
+	mouseTooltip.style("opacity", 1)
+		.style('z-index', 10);
+
+	mouseTooltip.html(generateMouseTipContent (d.value))
+        .style("left", function() {
+        	// if (d3.event.pageX < screenWidth/2) {
+        	// 	return d3.event.pageX + "px";
+        	// } else{
+        	// 	return (d3.event.pageX - 70) + "px";
+        	// }
+        	return d3.event.pageX + "px";
+        })
+        .style("top", (d3.event.pageY) + "px");
+}
+
+// 隐藏提示框
+function hideMouseTooltip(d, i) {
+	// 隐藏提示框
+	mouseTooltip.style("opacity", 0);
+}
+
+//生成提示框内容
+function generateMouseTipContent (d) {
+	return "<div id='dateTooltip'>" + d.date + "</div>" + 
+	"<div id='deathTooltip'>死亡" + d.death + "人</div>" +
+	"<div id='placeTooltip'>" + d.place + "</div>" +
+	"<div class='lineTooltip'><hr id='lineInTooltip'></div>" +
+	"<div class='innerTitleTooltip'>事故描述</div>" +
+	"<div id='descriptionTooltip'>" + d.desc + "</div>" +
+	"<div class='lineTooltip'><hr id='lineInTooltip'></div>" +
+	"<div class='innerTitleTooltip'>事故责任方</div>" +
+	"<div id='responsibleTooltip'>" + d.responsible + "</div>";
+}
+
+//渲染圆点类型数据点
+function drawPoints() {
+	
+}
+//utility tools ===================================
+// 获取nesteddata数据的第一层key
+function getNestedDataKeys(data) {
+	var dataKeys = [];
+	data.forEach(function(d) {
+		dataKeys.push(d.key);
+	});
+	// console.log('output from function getNestedDataKeys: ' + dataKeys);
+	return dataKeys;
+}
 
 
