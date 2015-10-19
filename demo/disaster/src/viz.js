@@ -53,15 +53,11 @@ var mouseTooltip = d3.select("body")
 d3.csv('data/geo_disaster.csv', function(data) {
 	//画布初始化，初始宽度加上左右边距，初始高度加上上下边距，因此svg画框原点即是边距的上、左点
 	iniSvg(svgwWidth, svgHeight, svgMargins);
-
 	//数据初始化，处理时间，添加必要属性
 	rawData = data;
 	iniData(rawData);
-	// console.log(dataView);
-
 	//注册表单控制事件
 	setControlsAction('#selectContainer', triggerControlChange);
-
 	//默认执行一次，包括获取默认表单状态，渲染视图
 	// triggerControlChange执行后返回的是函数，需要调用apply执行
 	triggerControlChange('#selectContainer').apply();
@@ -88,10 +84,13 @@ function iniData(data) {
 		d.standardTime = dateFormat.parse(d.date);//将字符串转为标准时间格式
 		d.year = yearFormat(d.standardTime);
 		d.month = monthFormat(d.standardTime);
+		d.area = setProvinceArea(d.province);
+		d.season = setSeason(+d.month);
+		d.disasterLevel = setDisasterLevel(+d.death);
 	});
 
 	// console.log('fun iniData: ');
-	// console.log(data);
+	console.log(data);
 	return data;
 }
 
@@ -114,7 +113,7 @@ function getControlsState(selectDivId) {
 	var selectedOptionIndex = d3.select(selectDivId)[0][0].selectedIndex;
 	selectedOption = d3.select(selectDivId)[0][0][selectedOptionIndex].value;
 
-	console.log('fun getControlsState: ' + selectedOption);
+	// console.log('fun getControlsState: ' + selectedOption);
 	return selectedOption;
 }
 
@@ -124,10 +123,10 @@ function render(selectedOption) {
 	changeDataView(selectedOption); 
 	// //渲染标签
 	renderLabels(); 
+	// //渲染背景
+	renderWidgets();
 	// //渲染数据点
 	renderPoints();
-	// //渲染鼠标浮动提示框
-	// renderTooltip();
 }
 
 //处理数据,根据表单状态selectedOption改变数据nest状态，数据本身不改变
@@ -136,17 +135,21 @@ function changeDataView(selectedOption) {
 		.key(function(d) {
 			return d[selectedOption];
 		})
-		.key(function(d) { //按季度分类
+		.key(function(d) { 
+			//按季度分类
 			// return d.month; //暂时直接用已知变量
-			if (d.month>=1 && d.month<=3) {
-				return 1;
-			} else if (d.month>=4 && d.month<=6) {
-				return 2;
-			} else if (d.month>=7 && d.month<=9) {
-				return 3;
-			} else if (d.month>=10 && d.month<=12) {
-				return 4;
-			}
+			// if (d.month>=1 && d.month<=3) {
+			// 	return 1;
+			// } else if (d.month>=4 && d.month<=6) {
+			// 	return 2;
+			// } else if (d.month>=7 && d.month<=9) {
+			// 	return 3;
+			// } else if (d.month>=10 && d.month<=12) {
+			// 	return 4;
+			// }
+
+			//按年度分
+			return d.year;
 		})
 		.entries(rawData);
 
@@ -158,7 +161,7 @@ function renderLabels() {
 	//删除上次渲染内容
 	if (d3.select('#labelsGroup')) {
 		d3.select('#labelsGroup').remove();
-		console.log('old label remove');
+		// console.log('old label remove');
 	}
 	svg.append('g').attr('id', 'labelsGroup');
 	// countFlag++;
@@ -175,7 +178,7 @@ function renderTopLabel() {
 	//顶部标题内容字符串个数
 	var numTopLabel = topLabelContent.length;
 	//顶部标题位置
-	var leftGapTopLabelGroup = 50; //左侧空出边距，配合leftLabel
+	var leftGapTopLabelGroup = 65; //左侧空出边距，配合leftLabel
 	var xPositionTopLabelGroup = svgMargins.left+ leftGapTopLabelGroup;
 	var yPositionTopLabelGroup = svgMargins.top;
 	//顶部标题容器，#labelsGroup来自renderLabels()函数预先生成
@@ -207,8 +210,8 @@ function renderTopLabel() {
 
 //渲染左侧标题
 function renderLeftLabel() {
-	var leftlabelContent = ['第一季度','第二季度','第三季度','第四季度'];
-	var topGapLeftLabelGroup = 50; //顶侧空出边距，配合leftLabel
+	var leftlabelContent = ['2011年','2012年','2013年','2014年', '2015年'];
+	var topGapLeftLabelGroup = 70; //顶侧空出边距，配合leftLabel
 	var gapIntervolLeftLabelGroup = 100; //左侧标题每个间隙
 	var xPositionLeftLabelGroup = svgMargins.left;
 	var yPositionLeftLabelGroup = svgMargins.top + topGapLeftLabelGroup;
@@ -231,6 +234,94 @@ function renderLeftLabel() {
 		});
 }
 
+//渲染线条、背景色
+function renderWidgets() {
+	if (d3.select('#widgetsGroup')) {
+		d3.select('#widgetsGroup').remove();
+		// console.log('old label remove');
+	}
+	// 总容器
+	var widgetsGroup = svg.append('g').attr('id', 'widgetsGroup');
+	
+	// 背景色容器
+	var backgroundHolder = widgetsGroup.append('g').attr('id', 'backgroundHolder');
+
+	
+	renderWidgetsBackground();
+	renderWidgetsLines(6);
+}
+
+// 渲染线条
+function renderWidgetsLines(data) {
+	var numLines = data;
+
+	var topGapWidgetsLinesGroup = 20; //顶侧空出边距，配合leftLabel
+	var gapIntervolWidgetsLinesGroup = 100; //左侧标题每个间隙
+	var xPositionWidgetsLinesGroup = svgMargins.left;
+	var yPositionWidgetsLinesGroup = svgMargins.top + topGapWidgetsLinesGroup;
+
+	var dataLinesVirtual = d3.range(numLines);
+
+	// 线条容器
+	var linesHolder = d3.select('#widgetsGroup')
+		.append('g')
+		.attr('id', 'linesHolder')
+		.attr('transform', 'translate(' + xPositionWidgetsLinesGroup + ',' + yPositionWidgetsLinesGroup + ')');
+
+	linesHolder.selectAll('line.widgetsLine')
+		.data(dataLinesVirtual)
+		.enter()
+		.append('line')
+		.attr('class', 'widgetsLine')
+		.attr('x1', 0)
+		.attr('y1', function(d, i) {
+			return i * gapIntervolWidgetsLinesGroup;
+		})
+		.attr('x2', svgwWidth) //线条长度等于画布宽度
+		.attr('y2', function(d, i) {
+			return i * gapIntervolWidgetsLinesGroup;
+		});
+}
+
+// 渲染背景色
+function renderWidgetsBackground() {
+	// 沿用force模式，修改尺寸
+	var leftGapForceGroup = 70; //左侧空出边距，配合leftLabel
+	var topGapForceGroup = 20; //顶部空出边距
+	var xPositionForceGroup = svgMargins.left+ leftGapForceGroup;
+	var yPositionForceGroup = svgMargins.top + topGapForceGroup;
+	// 沿用force尺寸
+	var numHorizontalForce = dataView.length;
+	var singleForceClusterWidth = (svgwWidth - leftGapForceGroup) / numHorizontalForce;
+	// 单个背景高度
+	var singleBackgroundHeight = 500;
+
+	var dataBackgroundVirtual = d3.range(numHorizontalForce);
+
+	// 线条容器
+	var backgroundHolder = d3.select('#widgetsGroup')
+		.append('g')
+		.attr('id', 'backgroundHolder')
+		.attr('transform', 'translate(' + xPositionForceGroup + ',' + yPositionForceGroup + ')');
+
+	backgroundHolder.selectAll('rect.widgetsBackground')
+		.data(dataBackgroundVirtual)
+		.enter()
+		.append('rect')
+		.attr('class', 'widgetsBackground')
+		.attr('x', function(d, i) {
+			return i * singleForceClusterWidth;
+		})
+		.attr('y', 0)
+		.attr('width', singleForceClusterWidth) //线条长度等于画布宽度
+		.attr('height', singleBackgroundHeight)
+		.classed('widgetsBackgroundGray', function(d, i) {
+			if(!(i%2)) {
+				return true;
+			}
+		});
+}
+
 //所有数据点
 function renderPoints() {
 	//删除上次渲染数据点
@@ -240,18 +331,20 @@ function renderPoints() {
 	}
 	svg.append('g').attr('id', 'pointsGroup');
 	// 根据下拉列表选项渲染数据点类型
-	if (selectedOption == 'year') {
-		drawForce();
-	} else if (selectedOption == 'province') {
-		drawPoints();
-	}
+	// if (selectedOption == 'season') {
+	// 	drawForce();
+	// } else if (selectedOption == 'area') {
+	// 	drawPoints();
+	// }
+	drawForce();
 }
 
 //渲染力图类型数据点
 function drawForce() {
 	var leftGapForceGroup = 50; //左侧空出边距，配合leftLabel
+	var topGapForceGroup = 10; //顶部空出边距
 	var xPositionForceGroup = svgMargins.left+ leftGapForceGroup;
-	var yPositionForceGroup = svgMargins.top;
+	var yPositionForceGroup = svgMargins.top + topGapForceGroup;
 
 	var numHorizontalForce = dataView.length;
 	var singleForceClusterWidth = (svgwWidth - leftGapForceGroup) / numHorizontalForce;
@@ -297,6 +390,7 @@ function drawSingleForceCluster(placeHolder, data, singleForceClusterWidth, sing
 		    .on("tick", tick)
 		    .start();
 
+	//原始圆点circle版
 	// var node = placeHolder.append('g')
 	// 		.selectAll("circle.dataPoints")
 	// 	    .data(nodes)
@@ -337,7 +431,7 @@ function drawSingleForceCluster(placeHolder, data, singleForceClusterWidth, sing
 	node.style("opacity", 1e-6)
 		.transition()
 	    .duration(1000)
-	    .style("opacity", 0.8); //半透明效果
+	    .style("opacity", 0.5); //半透明效果
 
 	d3.select("body")
 	    .on("mousedown", mousedown);
@@ -365,16 +459,21 @@ function drawSingleForceCluster(placeHolder, data, singleForceClusterWidth, sing
 
 //出现提示框
 function showMouseTooltip(d, i) {
+	//选中后降低透明度
+	d3.select(this).style('opacity', 1);
+	// console.log(this);
+
 	mouseTooltip.style("opacity", 1)
 		.style('z-index', 10);
 
 	mouseTooltip.html(generateMouseTipContent (d.value))
         .style("left", function() {
-        	// if (d3.event.pageX < screenWidth/2) {
-        	// 	return d3.event.pageX + "px";
-        	// } else{
-        	// 	return (d3.event.pageX - 70) + "px";
-        	// }
+        	var screenWidth = screen.width;
+        	if (d3.event.pageX < screenWidth/2) {
+        		return d3.event.pageX + "px";
+        	} else{
+        		return (d3.event.pageX - 160) + "px";
+        	}
         	return d3.event.pageX + "px";
         })
         .style("top", (d3.event.pageY) + "px");
@@ -382,6 +481,8 @@ function showMouseTooltip(d, i) {
 
 // 隐藏提示框
 function hideMouseTooltip(d, i) {
+	//取消选中后恢复透明度
+	d3.select(this).style('opacity', 0.5);
 	// 隐藏提示框
 	mouseTooltip.style("opacity", 0);
 }
@@ -412,6 +513,77 @@ function getNestedDataKeys(data) {
 	});
 	// console.log('output from function getNestedDataKeys: ' + dataKeys);
 	return dataKeys;
+}
+
+// 检查元素是否是数组成员
+function checkElementOfArray(targetElement, hostArray) {
+	var isElement = false;
+	for(var i=0; i<hostArray.length; i++) {
+		if (hostArray[i] == targetElement) {
+			isElement = true;
+			break;
+		}
+	}
+
+	return isElement;
+}
+
+// 将省份归入地区
+function setProvinceArea(d) {
+	var provinceArea;
+	var provinceAreaList = ['东部沿海地区', '中部内陆地区', '西部边远地区', '东北地区'];
+	var provinceList = [['北京','天津','河北','上海','江苏','浙江','福建','山东','广东','广西','海南','重庆'], 
+		['山西','内蒙古','安徽','江西','河南','湖北','湖南'], 
+		['四川','贵州','云南','西藏','陕西','甘肃','青海','宁夏','新疆'], 
+		['吉林','黑龙江','辽宁']
+	];
+	if(checkElementOfArray(d, provinceList[0])) {
+		provinceArea = provinceAreaList[0];
+	} else if(checkElementOfArray(d, provinceList[1])) {
+		provinceArea = provinceAreaList[1];
+	} else if(checkElementOfArray(d, provinceList[2])) {
+		provinceArea = provinceAreaList[2];
+	} else if(checkElementOfArray(d, provinceList[3])) {
+		provinceArea = provinceAreaList[3];
+	}
+
+	return provinceArea;
+}
+
+function setSeason(d) {
+	var season;
+	var seasonList = ['第一季度','第二季度','第三季度','第四季度'];
+	var monthList = [[1,2,3], [4,5,6], [7,8,9], [10,11,12]];
+
+	if(checkElementOfArray(d, monthList[0])) {
+		season = seasonList[0];
+	} else if(checkElementOfArray(d, monthList[1])) {
+		season = seasonList[1];
+	} else if(checkElementOfArray(d, monthList[2])) {
+		season = seasonList[2];
+	} else if(checkElementOfArray(d, monthList[3])) {
+		season = seasonList[3];
+	}
+
+	return season;
+}
+
+function setDisasterLevel(d) {
+	var level;
+	var levelList = ['死亡小于20人','死亡21～30人','死亡31～40人','死亡超过40人'];
+	var deathList = [0, 20, 30, 40];
+
+	if(d>=deathList[0] && d<=deathList[1]) {
+		level = levelList[0];
+	} else if(d>deathList[1] && d<=deathList[2]) {
+		level = levelList[1];
+	} else if(d>deathList[2] && d<=deathList[3]) {
+		level = levelList[2];
+	} else if(d>deathList[3]) {
+		level = levelList[3];
+	}
+
+	return level;
 }
 
 
