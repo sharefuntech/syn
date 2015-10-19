@@ -415,7 +415,10 @@ function drawSingleForceCluster(placeHolder, data, singleForceClusterWidth, sing
 		    .attr("class", "blod")
 		    .attr("x", function(d) { return d.x; })
 		    .attr("y", function(d) { return d.y; })
-		    .attr('xlink:href', 'images/blod.png')
+		    // .attr('xlink:href', 'images/blod.png')
+		    .attr('xlink:href', function(d) {
+		    	return getRandomImgae();
+		    })
 			.attr('width', function(d) {
 			    	return rScale(+d.value.death)*3 + 'px';
 			})
@@ -550,6 +553,7 @@ function setProvinceArea(d) {
 	return provinceArea;
 }
 
+// 数据添加季度属性
 function setSeason(d) {
 	var season;
 	var seasonList = ['第一季度','第二季度','第三季度','第四季度'];
@@ -568,6 +572,7 @@ function setSeason(d) {
 	return season;
 }
 
+// 数据添加死亡人数级别属性
 function setDisasterLevel(d) {
 	var level;
 	var levelList = ['死亡小于20人','死亡21～30人','死亡31～40人','死亡超过40人'];
@@ -585,5 +590,18 @@ function setDisasterLevel(d) {
 
 	return level;
 }
+
+// 生成随机图片
+function getRandomImgae() {
+	return 'images/b' + generateRandomInt() + '.png';
+
+	function generateRandomInt() {
+		return Math.floor(Math.random()*4) + 1;
+	}
+}
+
+// console.log(getRandomImgae());
+
+
 
 
