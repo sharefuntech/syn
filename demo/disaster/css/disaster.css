@@ -175,3 +175,81 @@ div.mouseTooltip {
 	font-weight: bold;
 }
 /*end 浮动文本框=====================================*/
+
+/*start 地图=====================================*/
+#mapContainer {
+	text-align: center;
+	margin:0 auto;
+	width: 1000px;
+	height: 600px;
+}
+
+#map {
+	/*position: absolute;*/
+	/*text-align: center;
+	margin:0 auto;*/
+	height: 100%;
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+#layer {
+    position: fixed;
+    top: 70px;
+    left: 10px;
+    /*bottom: 25px;
+    right: 25px;*/
+    width: 300px;
+    height: 500px;
+    margin: 0;
+    padding-top: 10px;
+    padding-bottom: 5px;
+    font-size: 12px;
+    background: rgba(255, 255, 255, 0.5);
+    box-shadow: 5px 5px 5px #ccc;
+    border-radius: 5px;
+    text-align: center;
+    z-index: 1;
+    font-family: "Microsoft Yahei", Helvetica, Arial, sans-serif;
+}
+
+/*标点聚合 ====================================*/
+.dead-small {
+	background-color: rgba(243, 112, 34, 0.6); 
+}
+.dead-small div {
+	background-color: rgba(243, 112, 34, 0.6);
+}
+.dead-medium {
+	background-color: rgba(237, 27, 54, 0.6); 
+}
+.dead-medium div {
+	background-color: rgba(237, 27, 54, 0.6);
+}
+.dead-large {
+	background-color: rgba(139, 0, 19, 0.6);  
+}
+.dead-large div {
+	background-color: rgba(139, 0, 19, 0.6);
+}
+
+/*base style =================================*/
+.marker-cluster {
+	background-clip: padding-box;
+	border-radius: 20px;
+}
+.marker-cluster div {
+	width: 30px;
+	height: 30px;
+	margin-left: 5px;
+	margin-top: 5px;
+
+	text-align: center;
+	border-radius: 15px;
+	font: 12px "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+.marker-cluster span {
+	line-height: 30px;
+}
+/*end 地图=====================================*/

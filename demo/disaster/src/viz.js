@@ -27,15 +27,20 @@ getControlsState();
 //渲染图表
 render(selectedOption); //渲染视图，视图的类别取决于selectedOption的值
 --changeDataView(); //处理数据,根据表单状态selectedOption改变数据nest状态，数据本身不改变
+--renderWidgets();
+----renderWidgetsLine();
+----renderWidgetsBackground();
 --renderLabels(); //标签
 ----renderTopLabel(); //标签-顶部标签
 ----renderLeftLabel(); ////标签-左侧标签
 --renderPoints();
---renderTooltip();
-*/
-var viz = {};
-var countFlag = 0;
+----drawForce();
 
+//渲染地图
+renderMap(data);
+*/
+
+//start 交互力图变量初始化 =================================================
 var svg; //svg canvas
 var svgwWidth = 1000;
 var svgHeight = 600;
@@ -49,7 +54,20 @@ var mouseTooltip = d3.select("body")
         .append("div")
         .attr("class", "mouseTooltip")
         .style("opacity", 0);
+//end 交互力图变量初始化 =================================================
 
+//start 地图变量初始化 ===============================================
+var viewCenter = [34.277799897831,100.9530982792]; //view center
+var mapScale = 4; //default map view scale
+var minZoom = 3; // min zoom level
+var maxZoom = 13;
+var mapStyle = 'http://{s}.tile.osm.org/{z}/{x}/{y}.png'; //map style from osm
+var mapAttribution = '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'; //buttom labels on map
+var map = L.map('map').setView(viewCenter, mapScale); //attach to div#map
+L.tileLayer(mapStyle, {attribution: mapAttribution,  maxZoom: maxZoom, minZoom: minZoom}).addTo(map); //initial map
+//end 地图变量初始化 ===============================================
+
+//载入数据，渲染力图与地图
 d3.csv('data/geo_disaster.csv', function(data) {
 	//画布初始化，初始宽度加上左右边距，初始高度加上上下边距，因此svg画框原点即是边距的上、左点
 	iniSvg(svgwWidth, svgHeight, svgMargins);
@@ -61,9 +79,11 @@ d3.csv('data/geo_disaster.csv', function(data) {
 	//默认执行一次，包括获取默认表单状态，渲染视图
 	// triggerControlChange执行后返回的是函数，需要调用apply执行
 	triggerControlChange('#selectContainer').apply();
-
+	// 加载地图，不属于交互项目，放render之外
+	renderMap(data);
 });
 
+// svg画布初始化
 function iniSvg(svgwWidth, svgHeight) {
 	svg = d3.select('#vizContainer')
 		.append('svg')
@@ -127,6 +147,7 @@ function render(selectedOption) {
 	renderWidgets();
 	// //渲染数据点
 	renderPoints();
+
 }
 
 //处理数据,根据表单状态selectedOption改变数据nest状态，数据本身不改变
@@ -439,13 +460,13 @@ function drawSingleForceCluster(placeHolder, data, singleForceClusterWidth, sing
 	d3.select("body")
 	    .on("mousedown", mousedown);
 
-	//针对图像版，所以是x，y
+	//针对插入图片版，所以是x，y
 	function tick(e) {
 		node.attr("x", function(d) { return d.x; })
 	    	.attr("y", function(d) { return d.y; });
 	}
 
-	//针对图像版，所以是cx，cy
+	//针对添加circle版，所以是cx，cy
 	// function tick(e) {
 	// 	node.attr("cx", function(d) { return d.x; })
 	//     	.attr("cy", function(d) { return d.y; });
@@ -505,7 +526,7 @@ function generateMouseTipContent (d) {
 
 //渲染圆点类型数据点
 function drawPoints() {
-	
+	//won't use
 }
 //utility tools ===================================
 // 获取nesteddata数据的第一层key
@@ -593,15 +614,64 @@ function setDisasterLevel(d) {
 
 // 生成随机图片
 function getRandomImgae() {
-	return 'images/b' + generateRandomInt() + '.png';
+	return 'image/b' + generateRandomInt() + '.png';
 
 	function generateRandomInt() {
 		return Math.floor(Math.random()*4) + 1;
 	}
 }
 
-// console.log(getRandomImgae());
+//map utility function =================================================
+// 定义标点分组函数
+function defineCluster(clusterCss) {
+        var clusterObj = {};
+        clusterObj.maxClusterRadius = 100;
+        clusterObj.iconCreateFunction = function (cluster) {
+            var childCount = cluster.getChildCount();
 
+            var c = clusterCss;
+            if (childCount < 10) {
+                c += '-small';
+            } else if (childCount < 30) {
+                c += '-medium';
+            } else {
+                c += '-large';
+            }
 
+            return new L.DivIcon({ html: '<div><span>' + childCount + '</span></div>', className:'marker-cluster ' + c, iconSize: new L.Point(40, 40) });
+        }
 
+        return L.markerClusterGroup(clusterObj);
+}
+//定义单个标点函数
+function defineMarker(d, cluster, markerIcon) {
+    var title = '<b>事故时间</b>：' + d.date + '<br>' + '<b>事故地点</b>：' + d.place + '<br>' + '<b>死亡人数</b>：' + d.death + '<br>' + '<b>事故原因</b>：' + d.desc;
+    var marker = L.marker(new L.LatLng(d.lat, d.lng), { title: title,  icon: markerIcon});
+    
+    marker.bindPopup(title);
+    cluster.addLayer(marker);
+}
+
+// 渲染地图
+function renderMap(data) {
+	// 自定义图标
+    var LeafIcon = L.Icon.extend({
+            options: {
+                iconSize:     [30, 40],
+                iconAnchor:   [15, 20],
+                popupAnchor:  [0, -30]
+            }
+        });
+    var iconPath = new LeafIcon({iconUrl: 'image/dead.png'});
+    // 定义标点分组
+    var markersCluster = defineCluster('dead');
+    // 定义单个标点
+    data.forEach(function(d) {
+        // console.log(d.death);
+        defineMarker(d, markersCluster, iconPath);
+    });
+    // 添加标点分组到地图
+    map.addLayer(markersCluster); 
+}
+ 
 

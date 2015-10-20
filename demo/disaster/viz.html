@@ -4,7 +4,12 @@
 	<meta charset="UTF-8">
 	<title>viz</title>
 	<script src='lib/d3.js'></script>
+	<script src='lib/leaflet.js'></script>
+	<script src='lib/leaflet.markercluster.js'></script>
 	<link rel="stylesheet" href="css/disaster.css">
+	<link rel="stylesheet" href="css/leaflet.css"> 
+	<link rel="stylesheet" href="css/MarkerCluster.css">
+	<link rel="stylesheet" href="css/MarkerCluster.Default.css">
 </head>
 <body>
 	<div id='wholeContainer'>
@@ -27,9 +32,11 @@
 		<!-- viz container -->
 		<div id="vizContainer"></div>
 	</div>
-
-	<!-- <div id="imageSample"><img src="images/imageSample.jpg" alt=""></div> -->
-
+	<!-- 地图容器 -->
+	<div id="mapContainer">
+		<div id="map"></div>
+	</div>
+	
 	<script src='src/viz.js'></script>
 </body>
 </html>
