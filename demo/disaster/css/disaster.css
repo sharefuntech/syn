@@ -7,7 +7,7 @@ html, body {
 body {
 	margin: 0;
 	padding: 0;
-	font-family: "Microsoft Hahei", arial, sans-serif;
+	font-family: Arial, "Microsoft Hahei", simhei;
 }
 
 /*整体dom容器*/
