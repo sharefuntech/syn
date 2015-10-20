@@ -181,7 +181,10 @@ div.mouseTooltip {
 	text-align: center;
 	margin:0 auto;
 	width: 1000px;
-	height: 600px;
+	height: 800px;
+	border-style:solid;
+	border-color: #999;
+	border-width: 1px;
 }
 
 #map {
@@ -214,7 +217,7 @@ div.mouseTooltip {
     font-family: "Microsoft Yahei", Helvetica, Arial, sans-serif;
 }
 
-/*标点聚合 ====================================*/
+/*地图标点聚合 ====================================*/
 .dead-small {
 	background-color: rgba(243, 112, 34, 0.6); 
 }
@@ -251,5 +254,22 @@ div.mouseTooltip {
 }
 .marker-cluster span {
 	line-height: 30px;
+}
+/*地图工具栏*/
+#mapMenuContainer {
+	width: 100%;
+	height: 32px;
+	margin: 0;
+}
+#mapMenu {
+	width: 100%;
+	height: 30px;
+	margin: 0;
+	/*overflow: hidden;*/
+	background-color: #F5F5F5;
+	/*position: relative;*/
+	box-shadow: 0 1px 2px #999;
+	z-index: 10;
+	behavior: url(css/PIE.htc);
 }
 /*end 地图=====================================*/
