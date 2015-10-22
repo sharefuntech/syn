@@ -40,6 +40,29 @@ body{
 	stroke-width: 1px;
 }
 
+/*时间刻度标签*/
+.radarMarkerYearLabel {
+	font-family: arial, 'Microsoft Yahei', simHei;
+	font-size: 12px;
+	fill:#000;
+	text-anchor: middle;
+}
+
+.radarMarkerMonthLabel {
+	font-family: arial, 'Microsoft Yahei', simHei;
+	font-size: 10px;
+	fill:#000;
+	text-anchor: middle;
+}
+
+/*收益刻度标签*/
+.radarLabelRevenue {
+	font-family: arial, 'Microsoft Yahei', simHei;
+	font-size: 10px;
+	fill:#000;
+	text-anchor: middle;
+}
+
 /*数据曲线样本*/
 .dataPath {
 	stroke: #f00;

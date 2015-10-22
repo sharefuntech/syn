@@ -71,7 +71,7 @@ function renderRadar(vizG, svgwWidth, svgHeight) {
 	// 渲染雷达框架线条
 	rendaerRadarStructure(numCircle, rInterpolateCircle);
 	// 渲染雷达数据标签
-	// rendaerRadarLabel(numCircle, rInterpolateCircle);
+	rendaerRadarLabel(numCircle, rInterpolateCircle);
 
 	function rendaerRadarStructure(numCircle, rInterpolateCircle){
 		// 雷达结构容器
@@ -155,7 +155,7 @@ function renderRadar(vizG, svgwWidth, svgHeight) {
 			var dataRadarLineMarkerMonthVirtual = d3.range(5*12);
 			var angleLineMarkerYear = Math.PI*2/5;
 			var angleLineMarkerMonth = Math.PI*2/(5*12);
-			
+			// 年刻度
 			radarStructureLineMarkerGroup.selectAll('line.radarStructureLineMarkerYear')
 				.data(dataRadarLineMarkerYearVirtual)
 				.enter()
@@ -168,12 +168,30 @@ function renderRadar(vizG, svgwWidth, svgHeight) {
 					return - Math.cos(angleLineMarkerYear * i) * rInterpolateCircle*7;
 				}) //从黑圈开始
 				.attr('x2', function(d, i) {
-					return + Math.sin(angleLineMarkerYear * i) * (rInterpolateCircle*7 + 20);
+					return + Math.sin(angleLineMarkerYear * i) * (rInterpolateCircle*7 + 10);
 				})
 				.attr('y2', function(d, i) {
-					return - Math.cos(angleLineMarkerYear * i) * (rInterpolateCircle*7 + 20);
+					return - Math.cos(angleLineMarkerYear * i) * (rInterpolateCircle*7 + 10);
 				});
 
+			//年标签
+			radarStructureLineMarkerGroup.selectAll('text.radarMarkerYearLabel')
+				.data(dataRadarLineMarkerYearVirtual)
+				.enter()
+				.append('text')
+				.attr('class', 'radarMarkerYearLabel')
+				.attr('x', function(d, i) {
+					return + Math.sin(angleLineMarkerYear * i) * (rInterpolateCircle*7 + 25);
+				})
+				.attr('y', function(d, i) {
+					return - Math.cos(angleLineMarkerYear * i) * (rInterpolateCircle*7 + 25);
+				})
+				.text(function(d, i) {
+					return 2011+i;
+				});
+
+
+			// 月刻度
 			radarStructureLineMarkerGroup.selectAll('line.radarStructureLineMarkerMonth')
 				.data(dataRadarLineMarkerMonthVirtual)
 				.enter()
@@ -186,11 +204,28 @@ function renderRadar(vizG, svgwWidth, svgHeight) {
 					return - Math.cos(angleLineMarkerMonth * i) * rInterpolateCircle*7;
 				}) //从黑圈开始
 				.attr('x2', function(d, i) {
-					return + Math.sin(angleLineMarkerMonth * i) * (rInterpolateCircle*7 + 10);
+					return + Math.sin(angleLineMarkerMonth * i) * (rInterpolateCircle*7 + 5);
 				})
 				.attr('y2', function(d, i) {
-					return - Math.cos(angleLineMarkerMonth * i) * (rInterpolateCircle*7 + 10);
+					return - Math.cos(angleLineMarkerMonth * i) * (rInterpolateCircle*7 + 5);
 				});
+
+			//月标签
+			radarStructureLineMarkerGroup.selectAll('text.radarMarkerMonthLabel')
+				.data(dataRadarLineMarkerMonthVirtual)
+				.enter()
+				.append('text')
+				.attr('class', 'radarMarkerMonthLabel')
+				.attr('x', function(d, i) {
+					return + Math.sin(angleLineMarkerMonth * i) * (rInterpolateCircle*7 + 15);
+				})
+				.attr('y', function(d, i) {
+					return - Math.cos(angleLineMarkerMonth * i) * (rInterpolateCircle*7 + 15);
+				})
+				.text(function(d, i) {
+					return i%12 + 1;
+				});
+
 
 		} 
 
@@ -200,9 +235,10 @@ function renderRadar(vizG, svgwWidth, svgHeight) {
 	function rendaerRadarLabel(numCircle, rInterpolateCircle){
 		// 雷达结构容器
 		var radarLabelGroup = vizG.append('g')
-			.attr('id', 'radarLabelGroup');
+			.attr('id', 'radarLabelGroup')
+			.attr('transform', 'translate(' + svgwWidth/2 + ',' + svgHeight/2 + ')');;
 
-		rendaerRadarLabelTime(numCircle, rInterpolateCircle);//渲染雷达时间标签
+		// rendaerRadarLabelTime(numCircle, rInterpolateCircle);//渲染雷达时间标签
 		rendaerRadarLabelRevenue(numCircle, rInterpolateCircle); //渲染雷达收益标签
 
 		//渲染雷达时间标签
@@ -212,7 +248,20 @@ function renderRadar(vizG, svgwWidth, svgHeight) {
 
 		//渲染雷达收益标签
 		function rendaerRadarLabelRevenue(numCircle, rInterpolateCircle){
-			// body...
+			var dataRadarLabelRevenueVirtual = d3.range(numCircle);
+
+			radarLabelGroup.selectAll('text.radarLabelRevenue')
+				.data(dataRadarLabelRevenueVirtual)
+				.enter()
+				.append('text')
+				.attr('class', 'radarLabelRevenue')
+				.attr('x', 0)
+				.attr('y', function(d, i) {
+					return -i*rInterpolateCircle + 10;
+				})
+				.text(function(d, i) {
+					return i;
+				});
 		}
 	}
 }
@@ -247,6 +296,10 @@ function drawCircle(hostContainer, circleClass, center, r) {
 				.attr('x1', center.x)
 				.attr('y1', center.y)
 				.attr('r', r);
+}
+
+function drawLineWithData(hostContainer, lineClass, data) {
+	// body...
 }
 
 // var data = [d3.range(200).map(function (i) {
