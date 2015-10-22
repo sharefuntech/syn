@@ -1,23 +1,48 @@
 body{
-	background-color: #000;
-}
-
-.line {
-	stroke:#933;
-	fill:none;
-	stroke-width:2;
+	background-color: #fff;
+	padding: 0;
+	margin: 0;
 }
 
 /*雷达圆圈*/
 .radarStructureCircle {
 	fill: none;
-	stroke: #333;
-	stroke-width: 0.5px;
+	stroke: #000;
+	stroke-opacity: 0.15;
+	/*stroke-width: 0.5px;*/
+}
+
+/*外侧黑色圆圈*/
+.radarStructureCircleOutBlack {
+	fill: none;
+	stroke: #000;
+	stroke-width: 1.5px;
 }
 
 /*雷达半径射线*/
 .radarStructureLine {
 	fill: none;
-	stroke: #333;
-	stroke-width: 0.5px;
+	stroke: #000;
+	stroke-opacity: 0.15;
+	/*stroke-width: 0.5px;*/
+}
+
+/*刻度*/
+.radarStructureLineMarkerYear {
+	fill: none;
+	stroke: #000;
+	stroke-width: 1.5px;
+}
+
+.radarStructureLineMarkerMonth {
+	fill: none;
+	stroke: #000;
+	stroke-width: 1px;
+}
+
+/*数据曲线样本*/
+.dataPath {
+	stroke: #f00;
+	stroke-width:2px;
+	fill:none;
 }
