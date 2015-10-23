@@ -38,6 +38,8 @@ var startYear = 2001; //第一支开放式基金成立于2001年
 var numLine = 36; //半径射线数量，36符合美感，不密不疏
 var numMarkerCircle = 9;//黑色标签圈在第九圈
 
+var animateTime = 10*1000; //动画总时间，用于线条展开
+
 var sampleData = [d3.range(360).map(function (i) {
 			return {x: i, y: Math.round(Math.random()*20 + 80)};
 	})];
@@ -53,12 +55,45 @@ d3.csv('data/stockSample.csv', function(data) {
 	renderData(vizG, data);
 
 	//渲染走时红点
-	//renderTick();
+	renderTick();
 });
 
 //渲染走时红点
 function renderTick(){
+	var radarTickGroup = vizG.append('g')
+			.attr('id', 'radarTickGroup')
+			.attr('transform', 'translate(' + svgwWidth/2 + ',' + svgHeight/2 + ')');
 
+	radarTickGroup.append('circle')
+		.attr('id', 'radarTick')
+		.attr('r', '5')
+		.attr('cx', 0)
+		.attr('cy', rInterpolateCircle*numMarkerCircle-5);
+
+	var totalAngleNum = numYear; //按年跳动
+	var singleAngle = Math.PI *2 / totalAngleNum;
+	var angleCount = 1;
+	var tickTime = animateTime / totalAngleNum;
+	var tickTimeOut = tickTime * totalAngleNum;
+
+	var tickInterval = window.setInterval(tickMove, tickTime);
+	setTimeout(stopTick, tickTimeOut);
+		
+	// if (angleCount >= 10) {
+	// 	clearInterval(tickInterval);
+	// } 
+
+	function tickMove() {
+		d3.select('#radarTick')
+			.attr('cx', Math.sin(singleAngle*angleCount) * (rInterpolateCircle*numMarkerCircle-5))
+			.attr('cy', -Math.cos(singleAngle*angleCount) * (rInterpolateCircle*numMarkerCircle-5));
+
+		angleCount++;	
+	}
+
+	function stopTick() {
+		clearInterval(tickInterval);
+	}
 }
 
 //数据初始化，处理时间，添加必要属性
@@ -107,9 +142,10 @@ function renderData(vizG, data){
 			.domain(dateExtent)
 			.range(dateScaleAngleExtent);
 
-	var lineCircle = d3.svg.line.radial()
-			.radius(function (d) { return rScale(d.quote); })
-			.angle(function(d) { return dateScaleAngle(d.standardTime); }); 
+	//单条曲线方式，不能实现delay动画
+	// var lineCircle = d3.svg.line.radial()
+	// 		.radius(function (d) { return rScale(d.quote); })
+	// 		.angle(function(d) { return dateScaleAngle(d.standardTime); }); 
 			// .interpolate("basis");
 
 	// vizG.append("g")
@@ -123,6 +159,7 @@ function renderData(vizG, data){
 	// 	.attr("d", function (d) {
 	// 		// console.log(d);
 	// 		 return lineCircle(d); });
+	var singleDelayTime = animateTime / data.length;
 
 	vizG.append("g")
 		.attr('id', 'dataLineGroup')
@@ -133,7 +170,7 @@ function renderData(vizG, data){
 		.append('line')
 		.transition()
 		.delay(function(d, i) {
-			return i*10;
+			return i*singleDelayTime;
 		})
 		// .duration(500)
 		.attr("class", "dataLine")
@@ -273,32 +310,41 @@ function renderRadar(vizG, svgwWidth, svgHeight) {
 					return - Math.cos(angleLineMarkerYear * i) * rInterpolateCircle*numMarkerCircle;
 				}) //从黑圈开始
 				.attr('x2', function(d, i) {
-					return + Math.sin(angleLineMarkerYear * i) * (rInterpolateCircle*numMarkerCircle + 10);
+					return + Math.sin(angleLineMarkerYear * i) * (rInterpolateCircle*numMarkerCircle + 8);
 				})
 				.attr('y2', function(d, i) {
-					return - Math.cos(angleLineMarkerYear * i) * (rInterpolateCircle*numMarkerCircle + 10);
+					return - Math.cos(angleLineMarkerYear * i) * (rInterpolateCircle*numMarkerCircle + 8);
 				});
 
-			//年标签
-			radarStructureLineMarkerGroup.selectAll('text.radarMarkerYearLabel')
+			//年标签旋转 translate not work
+			svg.append('g')
+				.attr('id', 'yearLabelGroupGroup')
+				.selectAll('g.yearLabelGroup')
 				.data(dataRadarLineMarkerYearVirtual)
 				.enter()
+				.append('g')
+				.attr('class', 'yearLabelGroup');
+
+			d3.selectAll('g.yearLabelGroup')
+				.data(dataRadarLineMarkerYearVirtual)
 				.append('text')
 				.attr('class', 'radarMarkerYearLabel')
-				// .attr('transform', function(d, i) {
-				// 	console.log(360 * i / numYear);
-				// 	return 'rotate(' + 360 * i / numYear  + ')';
-				// })
-				.attr('x', function(d, i) {
-					return + Math.sin(angleLineMarkerYear * i) * (rInterpolateCircle*numMarkerCircle + 25);
-				})
-				.attr('y', function(d, i) {
-					return - Math.cos(angleLineMarkerYear * i) * (rInterpolateCircle*numMarkerCircle + 25);
-				})
 				.text(function(d, i) {
 					return startYear+i;
+				})
+				.attr('transform', function(d, i) {
+					// console.log(360 * i / numYear);
+					return 'rotate(' + 360 * i / numYear  + ')';
 				});
 
+			d3.select('#yearLabelGroupGroup')
+				.attr('transform', 'translate(' + (svgMargins.left + svgwWidth/2) + ',' + (svgMargins.top + svgHeight/2) + ')');
+
+			d3.selectAll('g.yearLabelGroup')
+				.data(dataRadarLineMarkerYearVirtual)
+				.attr('transform', function(d, i) {
+					return 'translate(' + (Math.sin(angleLineMarkerYear * i) * (rInterpolateCircle*numMarkerCircle + 25)) + ',' + (-Math.cos(angleLineMarkerYear * i) * (rInterpolateCircle*numMarkerCircle + 25)) + ')';
+				});
 
 			// 月刻度
 			radarStructureLineMarkerGroup.selectAll('line.radarStructureLineMarkerMonth')
@@ -316,23 +362,37 @@ function renderRadar(vizG, svgwWidth, svgHeight) {
 					return + Math.sin(angleLineMarkerMonth * i) * (rInterpolateCircle*numMarkerCircle + 5);
 				})
 				.attr('y2', function(d, i) {
-					return - Math.cos(angleLineMarkerMonth * i) * (rInterpolateCircle*numMarkerCircle + 7);
+					return - Math.cos(angleLineMarkerMonth * i) * (rInterpolateCircle*numMarkerCircle + 5);
 				});
 
-			//月标签
-			radarStructureLineMarkerGroup.selectAll('text.radarMarkerMonthLabel')
+			//月标签旋转 translate not work
+			svg.append('g')
+				.attr('id', 'monthLabelGroupGroup')
+				.selectAll('g.monthLabelGroup')
 				.data(dataRadarLineMarkerMonthVirtual)
 				.enter()
+				.append('g')
+				.attr('class', 'monthLabelGroup');
+
+			d3.selectAll('g.monthLabelGroup')
+				.data(dataRadarLineMarkerMonthVirtual)
 				.append('text')
 				.attr('class', 'radarMarkerMonthLabel')
-				.attr('x', function(d, i) {
-					return + Math.sin(angleLineMarkerMonth * i) * (rInterpolateCircle*numMarkerCircle + 15);
-				})
-				.attr('y', function(d, i) {
-					return - Math.cos(angleLineMarkerMonth * i) * (rInterpolateCircle*numMarkerCircle + 15);
-				})
 				.text(function(d, i) {
 					return i%12 + 1;
+				})
+				.attr('transform', function(d, i) {
+					// console.log(360 * i / numYear);
+					return 'rotate(' + 360 * i / (numYear*12)  + ')';
+				});
+
+			d3.select('#monthLabelGroupGroup')
+				.attr('transform', 'translate(' + (svgMargins.left + svgwWidth/2) + ',' + (svgMargins.top + svgHeight/2) + ')');
+
+			d3.selectAll('g.monthLabelGroup')
+				.data(dataRadarLineMarkerMonthVirtual)
+				.attr('transform', function(d, i) {
+					return 'translate(' + Math.sin(angleLineMarkerMonth * i) * (rInterpolateCircle*numMarkerCircle + 10) + ',' + (-Math.cos(angleLineMarkerMonth * i) * (rInterpolateCircle*numMarkerCircle + 10)) + ')';
 				});
 
 
@@ -431,6 +491,7 @@ function caculateDateAngle(date, data) {
 	console.log(dateScaleAngle(standardTime));
 }
 
+//计算日期间隔长度，以uts标准时间计算
 function caculateDateLength(d1, d2) {
 	var dateFormat = d3.time.format('%Y/%m/%d');
 	// var yearFormat = d3.time.format('%Y');
@@ -440,51 +501,11 @@ function caculateDateLength(d1, d2) {
 	var standardTime_1 = dateFormat.parse(d1);
 	var standardTime_2 = dateFormat.parse(d2);
 
-	// var dateExtent = d3.extent(data, function(d) {
-	// 	return d.standardTime;
-	// });
-	// console.log(dateExtent);
-
-	// var dateScaleAngle = d3.time.scale()
-	// 		.domain(dateExtent)
-	// 		.range([0, Math.PI*2]);
 	var dateLenth = standardTime_2 - standardTime_1;
 	console.log(dateLenth);
 	return dateLenth;
 }
 
-
-
-// var data = [d3.range(200).map(function (i) {
-// 			return {x: i, y: Math.round(Math.random()*20 + 80)};
-// 	})];
-
-// // console.log(data);
-
-// var rScale = d3.scale.linear()
-// 		.domain([0, 100])
-// 		.range([0, 200]);
-
-
-// svg = d3.select("body").append("svg")
-// 		.attr("id", "svgCanvas")
-// 		.attr("width", svgwWidth)
-// 		.attr("height", svgHeight);
-
-// var lineCircle = d3.svg.line.radial()
-// 		.radius(function (d) { return rScale(d.y); })
-// 		.angle(function(d, i) { return i/100*Math.PI; }) //max over 2 Pi means more than 1 round
-// 		// .interpolate("basis-closed");
-// 		.interpolate("basis");
-
-// svg.append("g")
-//     	.attr("transform", "translate(" + svgwWidth / 2 + "," + svgHeight / 2 + ")")
-// 		.selectAll("path.line")
-// 		.data(data)
-// 		.enter()
-// 		.append("path")
-// 		.attr("class", "line")
-// 		.attr("d", function (d) { return lineCircle(d); });
 
 
 
