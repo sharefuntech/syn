@@ -44,20 +44,31 @@ var sampleData = [d3.range(360).map(function (i) {
 			return {x: i, y: Math.round(Math.random()*20 + 80)};
 	})];
 
-d3.csv('data/stockSample.csv', function(data) {
+var rawData, dataView;
+
+d3.csv('data/threeStock.csv', function(data) {
+	// console.log(data);
+	rawData = data;
+	dataView = iniData(rawData);
+	// console.log(dataView);
 	// 初始化画布
 	iniSvg(svgwWidth, svgHeight);
 	// 渲染雷达背景
 	renderRadar(vizG, svgwWidth, svgHeight);
 	//数据初始化
-	iniData(data);
+	// iniData(data);
 	// 渲染数据
-	renderData(vizG, data);
-
+	// renderData(vizG, dataView);
+	dataView.forEach(function(d) {
+		return renderData(vizG, d.values, d.key);
+	});
 	//渲染走时红点
 	renderTick();
 });
 
+// function renderHighlightLine() {
+// 	// body...
+// }
 //渲染走时红点
 function renderTick(){
 	var radarTickGroup = vizG.append('g')
@@ -78,10 +89,6 @@ function renderTick(){
 
 	var tickInterval = window.setInterval(tickMove, tickTime);
 	setTimeout(stopTick, tickTimeOut);
-		
-	// if (angleCount >= 10) {
-	// 	clearInterval(tickInterval);
-	// } 
 
 	function tickMove() {
 		d3.select('#radarTick')
@@ -98,7 +105,7 @@ function renderTick(){
 
 //数据初始化，处理时间，添加必要属性
 function iniData(data) {
-	var dateFormat = d3.time.format('%Y/%m/%d');
+	var dateFormat = d3.time.format('%Y-%m-%d');
 	var yearFormat = d3.time.format('%Y');
 	var monthFormat = d3.time.format('%m');
 	var dayFormat = d3.time.format('%d');
@@ -111,12 +118,23 @@ function iniData(data) {
 		d.quote = +d.quote;
 	});
 
+	var nestedData = d3.nest()
+	    // .sortValues(d3.descending, function(d) { return d.standardTime; })
+	    .key(function(d) { return d.company; })
+	    .entries(data);
+
+	nestedData.forEach(function(d) {
+		d.values = _.sortBy(d.values, 'standardTime');
+	});
+
 	// console.log('fun iniData: ');
 	// console.log(data);
-	return data;
+	return nestedData;
 }
 
-function renderData(vizG, data){
+// 渲染数据曲线
+function renderData(vizG, data, dataLineClass){
+	// 用于数据点技术配合动画
 	var dataVirtualLength = data.length - 1;
 	// console.log(dataVirtualLength);
 	var dataVirtual = d3.range(dataVirtualLength);
@@ -142,6 +160,9 @@ function renderData(vizG, data){
 			.domain(dateExtent)
 			.range(dateScaleAngleExtent);
 
+	// console.log('dateScaleAngleExtent: ' + dateScaleAngleExtent);
+	// 渲染数据曲线开始前需要delay的时间长度
+	var startDelayPortion = dateScaleAngleExtent[0]/(Math.PI*2)*animateTime;
 	//单条曲线方式，不能实现delay动画
 	// var lineCircle = d3.svg.line.radial()
 	// 		.radius(function (d) { return rScale(d.quote); })
@@ -159,7 +180,7 @@ function renderData(vizG, data){
 	// 	.attr("d", function (d) {
 	// 		// console.log(d);
 	// 		 return lineCircle(d); });
-	var singleDelayTime = animateTime / data.length;
+	var singleDelayTime = ((dateScaleAngleExtent[1]-dateScaleAngleExtent[0])/(Math.PI*2))*animateTime / data.length;
 
 	vizG.append("g")
 		.attr('id', 'dataLineGroup')
@@ -168,12 +189,15 @@ function renderData(vizG, data){
 		.data(dataVirtual)//需要存入数组进行操作
 		.enter()
 		.append('line')
+		.on('mouseover', hightLightDataLine)
+		.on('mouseout', unHightLightDataLine)
+		.classed(dataLineClass, true)
+		.classed("dataLine", true)
 		.transition()
 		.delay(function(d, i) {
-			return i*singleDelayTime;
+			return i*singleDelayTime + startDelayPortion;
 		})
-		// .duration(500)
-		.attr("class", "dataLine")
+		// .attr("class", 'dataLine')
 		.attr('x1', function(d, i) {
 			return Math.sin(dateScaleAngle(data[i].standardTime)) * rScale(data[i].quote);
 		})
@@ -186,8 +210,26 @@ function renderData(vizG, data){
 		.attr('y2', function(d, i) {
 			return -Math.cos(dateScaleAngle(data[i+1].standardTime)) * rScale(data[i+1].quote);
 		});
-
 }
+
+function hightLightDataLine() {
+	// console.log(d3.select(this).attr('class'));
+	var hoverClass = d3.select(this).attr('class');
+	var classList = hoverClass.split(' ');
+	// console.log(classList[0]);
+	d3.selectAll('.' + classList[0])
+		.classed('highLightLine', true);
+}
+
+function unHightLightDataLine() {
+	// console.log(d3.select(this).attr('class'));
+	var hoverClass = d3.select(this).attr('class');
+	var classList = hoverClass.split(' ');
+	// console.log(classList[0]);
+	d3.selectAll('.' + classList[0])
+		.classed('highLightLine', false);
+}
+
 // 计算数据日期角度极值
 function caculateDateAngleExtent(fullDate, targetDate) {
 	var dateFormat = d3.time.format('%Y/%m/%d');

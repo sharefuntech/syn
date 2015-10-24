@@ -14,63 +14,67 @@ var data = d3.range(numDataPoints-1);
 
 iniSvg(svgwWidth, svgHeight);
 
-var data_2 = d3.range(6);
+//==========================================================
+// 旋转文字，圆周环绕
+// var data_2 = d3.range(6);
 
-vizG.append('g')
-	.attr("id", "holder")
-	.selectAll('g.textGroup')
-	.data(data_2)
-	.enter()
-	.append('g')
-	.attr("class", "textGroup")
-
-d3.selectAll('g.textGroup')
-	.data(data_2)
-	.append('text')
-	.attr("class", "dataText")
-	.text(function(d) {
-		return d;
-	})
-	.attr('transform', function(d, i) {
-		return 'rotate(' + 15 * i + ')';
-	});
-
-d3.select('#holder')
-	.attr('transform', function(d, i) {
-		return 'translate(' + 300 + ',' + 300 + ')';
-	});
-
-d3.selectAll('g.textGroup')
-	.data(data_2)
-	.attr('transform', function(d, i) {
-		return 'translate(' + 50 * i + ',' + 50 * i + ')';
-	});
-
-// vizG.append("g")
-// 	.attr('id', 'dataLineGroup')
-// 	// .attr("transform", "translate(" + svgwWidth / 2 + "," + svgHeight / 2 + ")")
-// 	.selectAll("line.dataLine")
-// 	.data(data)//需要存入数组进行操作
+// vizG.append('g')
+// 	.attr("id", "holder")
+// 	.selectAll('g.textGroup')
+// 	.data(data_2)
 // 	.enter()
-// 	.append('line')
-// 	.transition()
-// 	.delay(function(d, i) {
-// 		return i*100;
+// 	.append('g')
+// 	.attr("class", "textGroup")
+
+// d3.selectAll('g.textGroup')
+// 	.data(data_2)
+// 	.append('text')
+// 	.attr("class", "dataText")
+// 	.text(function(d) {
+// 		return d;
 // 	})
-// 	// .duration(500)
-// 	.attr("class", "dataLine")
-// 	.attr('x1', function(d, i) {
-// 		return sampleData[0][i].x;
-// 	})
-// 	.attr('y1', function(d, i) {
-// 		return sampleData[0][i].y;
-// 	})
-// 	.attr('x2', function(d, i) {
-// 		return sampleData[0][i+1].x;
-// 	})
-// 	.attr('y2', function(d, i) {
-// 		return sampleData[0][i+1].y;
+// 	.attr('transform', function(d, i) {
+// 		return 'rotate(' + 15 * i + ')';
 // 	});
+
+// d3.select('#holder')
+// 	.attr('transform', function(d, i) {
+// 		return 'translate(' + 300 + ',' + 300 + ')';
+// 	});
+
+// d3.selectAll('g.textGroup')
+// 	.data(data_2)
+// 	.attr('transform', function(d, i) {
+// 		return 'translate(' + 50 * i + ',' + 50 * i + ')';
+// 	});
+
+//==========================================================
+//动画生成曲线，delay效果
+vizG.append("g")
+	.attr('id', 'dataLineGroup')
+	// .attr("transform", "translate(" + svgwWidth / 2 + "," + svgHeight / 2 + ")")
+	.selectAll("line.dataLine")
+	.data(sampleData)//需要存入数组进行操作
+	.enter()
+	.append('line')
+	.transition()
+	.delay(function(d, i) {
+		return i*100;
+	})
+	// .duration(500)
+	.attr("class", "dataLine")
+	.attr('x1', function(d, i) {
+		return sampleData[0][i].x;
+	})
+	.attr('y1', function(d, i) {
+		return sampleData[0][i].y;
+	})
+	.attr('x2', function(d, i) {
+		return sampleData[0][i+1].x;
+	})
+	.attr('y2', function(d, i) {
+		return sampleData[0][i+1].y;
+	});
 
 // svg画布初始化
 function iniSvg(svgwWidth, svgHeight) {
