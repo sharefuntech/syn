@@ -46,7 +46,7 @@ var sampleData = [d3.range(360).map(function (i) {
 
 var rawData, dataView;
 
-d3.csv('data/threeStock.csv', function(data) {
+d3.csv('data/fund.csv', function(data) {
 	// console.log(data);
 	rawData = data;
 	dataView = iniData(rawData);
@@ -105,7 +105,7 @@ function renderTick(){
 
 //数据初始化，处理时间，添加必要属性
 function iniData(data) {
-	var dateFormat = d3.time.format('%Y-%m-%d');
+	var dateFormat = d3.time.format('%Y/%m/%d');
 	var yearFormat = d3.time.format('%Y');
 	var monthFormat = d3.time.format('%m');
 	var dayFormat = d3.time.format('%d');
@@ -128,7 +128,7 @@ function iniData(data) {
 	});
 
 	// console.log('fun iniData: ');
-	// console.log(data);
+	console.log(nestedData);
 	return nestedData;
 }
 
@@ -150,7 +150,8 @@ function renderData(vizG, data, dataLineClass){
 	// console.log(dateExtent);
 	//设定日期范围
 	var rScale = d3.scale.linear()
-			.domain(quoteExtent)
+			// .domain(quoteExtent)
+			.domain([0,9])
 			.range([0, rInterpolateCircle*numMarkerCircle]);
 
 	var fullDateTime = ['2001/1/1', '2016/12/31'];
