@@ -86,8 +86,8 @@ edb41ae0-7b28-11e5-b578-97e99e403eb7] - page.onError - stack:
 [ERROR - 2015-10-25T15:27:03.149Z] Session [edb41ae0-7b28-11e5-b578-97e99e403eb7] - page.onError - msg: SyntaxError: Parse error
 [ERROR - 2015-10-25T15:27:03.149Z] Session [edb41ae0-7b28-11e5-b578-97e99e403eb7] - page.onError - stack:
 
-[ERROR - 2015-10-25T15:25:12.714Z] Session [8826a350-7b28-11e5-a439-219ece3466de] - page.onError - msg: SyntaxError: Parse error
-[ERROR - 2015-10-25T15:25:12.714Z] Session [8826a350-7b28-11e5-a439-219ece3466de] - page.onError - stack:
+[ERROR - 2015-10-25T15:28:03.050Z] Session [edb41ae0-7b28-11e5-b578-97e99e403eb7] - page.onError - msg: SyntaxError: Parse error
+[ERROR - 2015-10-25T15:28:03.050Z] Session [edb41ae0-7b28-11e5-b578-97e99e403eb7] - page.onError - stack:
 
 [INFO  - 2015-10-25T15:26:11.773Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
 [ERROR - 2015-10-25T15:26:12.668Z] Session [8826a350-7b28-11e5-a439-219ece3466de] - page.onError - msg: SyntaxError: Parse error
@@ -96,21 +96,21 @@ edb41ae0-7b28-11e5-b578-97e99e403eb7] - page.onError - stack:
 [ERROR - 2015-10-25T15:27:12.633Z] Session [8826a350-7b28-11e5-a439-219ece3466de] - page.onError - msg: SyntaxError: Parse error
 [ERROR - 2015-10-25T15:27:12.633Z] Session [8826a350-7b28-11e5-a439-219ece3466de] - page.onError - stack:
 
-[ERROR - 2015-10-25T15:26:44.160Z] Session [52d46e30-7b28-11e5-982b-37f126d4686f] - page.onError - msg: SyntaxError: Parse error
-[ERROR - 2015-10-25T15:26:44.160Z] Session [52d46e30-7b28-11e5-982b-37f126d4686f] - page.onError - stack:
+[ERROR - 2015-10-25T15:28:12.660Z] Session [8826a350-7b28-11e5-a439-219ece3466de] - page.onError - msg: SyntaxError: Parse error
+[ERROR - 2015-10-25T15:28:12.660Z] Session [8826a350-7b28-11e5-a439-219ece3466de] - page.onError - stack:
 
-[ERROR - 2015-10-25T15:25:41.016Z] Session [09fb2370-7b28-11e5-84e1-c72668e57284] - page.onError - msg: SyntaxError: Parse error
-[ERROR - 2015-10-25T15:25:41.016Z] Session [09fb2370-7b28-11e5-84e1-c72668e57284] - page.onError - stack:
+[ERROR - 2015-10-25T15:27:44.621Z] Session [52d46e30-7b28-11e5-982b-37f126d4686f] - page.onError - msg: SyntaxError: Parse error
+[ERROR - 2015-10-25T15:27:44.621Z] Session [52d46e30-7b28-11e5-982b-37f126d4686f] - page.onError - stack:
 
 [ERROR - 2015-10-25T15:26:41.021Z] Session [09fb2370-7b28-11e5-84e1-c72668e57284] - page.onError - msg: SyntaxError: Parse error
 [ERROR - 2015-10-25T15:26:41.022Z] Session [09fb2370-7b28-11e5-84e1-c72668e57284] - page.onError - stack:
 
-[INFO  - 2015-10-25T15:27:13.099Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
-[ERROR - 2015-10-25T15:27:14.346Z] Session [f9e84d00-7b27-11e5-8c45-5d20cb1869df] - page.onError - msg: SyntaxError: Parse error
-[ERROR - 2015-10-25T15:27:14.346Z] Session [f9e84d00-7b27-11e5-8c45-5d20cb1869df] - page.onError - stack:
+[INFO  - 2015-10-25T15:27:40.076Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[ERROR - 2015-10-25T15:27:40.993Z] Session [09fb2370-7b28-11e5-84e1-c72668e57284] - page.onError - msg: SyntaxError: Parse error
+[ERROR - 2015-10-25T15:27:40.993Z] Session [09fb2370-7b28-11e5-84e1-c72668e57284] - page.onError - stack:
 
-[ERROR - 2015-10-25T15:27:37.918Z] Session [e4586f10-7b27-11e5-8c3a-bf0601562cdf] - page.onError - msg: SyntaxError: Parse error
-[ERROR - 2015-10-25T15:27:37.918Z] Session [e4586f10-7b27-11e5-8c3a-bf0601562cdf] - page.onError - stack:
+[ERROR - 2015-10-25T15:28:14.421Z] Session [f9e84d00-7b27-11e5-8c45-5d20cb1869df] - page.onError - msg: SyntaxError: Parse error
+[ERROR - 2015-10-25T15:28:14.421Z] Session [f9e84d00-7b27-11e5-8c45-5d20cb1869df] - page.onError - stack:
 
 [ERROR - 2015-10-25T15:27:27.735Z] Session [b9fd62c0-7b27-11e5-bb79-3f0de3ca8f19] - page.onError - msg: SyntaxError: Parse error
 [ERROR - 2015-10-25T15:27:27.735Z] Session [b9fd62c0-7b27-11e5-bb79-3f0de3ca8f19] - page.onError - stack:
@@ -134,12 +134,12 @@ edb41ae0-7b28-11e5-b578-97e99e403eb7] - page.onError - stack:
 [ERROR - 2015-10-25T15:26:49.750Z] Session [cd480110-7b26-11e5-9b7d-15a9eeeb3125] - page.onError - msg: SyntaxError: Parse error
 [ERROR - 2015-10-25T15:26:49.750Z] Session [cd480110-7b26-11e5-9b7d-15a9eeeb3125] - page.onError - stack:
 
-[ERROR - 2015-10-25T15:26:54.652Z] Session [ac5fee90-7b26-11e5-87a4-635ee0954325] - page.onError - msg: SyntaxError: Parse error
-[ERROR - 2015-10-25T15:26:54.652Z] Session [ac5fee90-7b26-11e5-87a4-635ee0954325] - page.onError - stack:
+[ERROR - 2015-10-25T15:27:49.768Z] Session [cd480110-7b26-11e5-9b7d-15a9eeeb3125] - page.onError - msg: SyntaxError: Parse error
+[ERROR - 2015-10-25T15:27:49.768Z] Session [cd480110-7b26-11e5-9b7d-15a9eeeb3125] - page.onError - stack:
 
-[INFO  - 2015-10-25T15:22:58.326Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
-[ERROR - 2015-10-25T15:23:00.277Z] Session [fc6cbfe0-7b25-11e5-aa5a-592da52ea1da] - page.onError - msg: SyntaxError: Parse error
-[ERROR - 2015-10-25T15:23:00.277Z] Session [fc6cbfe0-7b25-11e5-aa5a-592da52ea1da] - page.onError - stack:
+[INFO  - 2015-10-25T15:27:53.548Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[ERROR - 2015-10-25T15:27:54.675Z] Session [ac5fee90-7b26-11e5-87a4-635ee0954325] - page.onError - msg: SyntaxError: Parse error
+[ERROR - 2015-10-25T15:27:54.675Z] Session [ac5fee90-7b26-11e5-87a4-635ee0954325] - page.onError - stack:
 
 [ERROR - 2015-10-25T15:24:00.380Z] Session [fc6cbfe0-7b25-11e5-aa5a-592da52ea1da] - page.onError - msg: SyntaxError: Parse error
 [ERROR - 2015-10-25T15:24:00.380Z] Session [fc6cbfe0-7b25-11e5-aa5a-592da52ea1da] - page.onError - stack:
@@ -153,12 +153,14 @@ edb41ae0-7b28-11e5-b578-97e99e403eb7] - page.onError - stack:
 [ERROR - 2015-10-25T15:27:00.308Z] Session [fc6cbfe0-7b25-11e5-aa5a-592da52ea1da] - page.onError - msg: SyntaxError: Parse error
 [ERROR - 2015-10-25T15:27:00.308Z] Session [fc6cbfe0-7b25-11e5-aa5a-592da52ea1da] - page.onError - stack:
 
-[INFO  - 2015-10-25T15:27:04.206Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
-[ERROR - 2015-10-25T15:27:05.184Z] Session [dc2dbea0-7b25-11e5-b4c1-45e9cc94ea5c] - page.onError - msg: SyntaxError: Parse error
-[ERROR - 2015-10-25T15:27:05.185Z] Session [dc2dbea0-7b25-11e5-b4c1-45e9cc94ea5c] - page.onError - stack:
+[INFO  - 2015-10-25T15:27:58.331Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[ERROR - 2015-10-25T15:28:00.290Z] Session [fc6cbfe0-7b25-11e5-aa5a-592da52ea1da] - page.onError - msg: SyntaxError: Parse error
+[ERROR - 2015-10-25T15:28:00.290Z] Session [fc6cbfe0-7b25-11e5-aa5a-592da52ea1da] - page.onError - stack:
 
- - 2015-10-25T15:11:56.129Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
-[ERROR - 2015-10-25T15:11:58.240Z] Session [8a2cbe70-7b26-11e5-93aa-fb07422b936c] - page.onError - msg: SyntaxError: Parse error
+[ERROR - 2015-10-25T15:28:06.196Z] Session [dc2dbea0-7b25-11e5-b4c1-45e9cc94ea5c] - page.onError - msg: SyntaxError: Parse error
+[ERROR - 2015-10-25T15:28:06.196Z] Session [dc2dbea0-7b25-11e5-b4c1-45e9cc94ea5c] - page.onError - stack:
+
+SyntaxError: Parse error
 [ERROR - 2015-10-25T15:11:58.240Z] Session [8a2cbe70-7b26-11e5-93aa-fb07422b936c] - page.onError - stack:
 
 [ERROR - 2015-10-25T15:12:58.130Z] Session [8a2cbe70-7b26-11e5-93aa-fb07422b936c] - page.onError - msg: SyntaxError: Parse error
@@ -209,8 +211,8 @@ edb41ae0-7b28-11e5-b578-97e99e403eb7] - page.onError - stack:
 [ERROR - 2015-10-25T15:26:58.171Z] Session [8a2cbe70-7b26-11e5-93aa-fb07422b936c] - page.onError - msg: SyntaxError: Parse error
 [ERROR - 2015-10-25T15:26:58.171Z] Session [8a2cbe70-7b26-11e5-93aa-fb07422b936c] - page.onError - stack:
 
-[ERROR - 2015-10-25T15:24:49.824Z] Session [1a82c6a0-7b26-11e5-a52a-a379e7dd32f3] - page.onError - msg: SyntaxError: Parse error
-[ERROR - 2015-10-25T15:24:49.824Z] Session [1a82c6a0-7b26-11e5-a52a-a379e7dd32f3] - page.onError - stack:
+[ERROR - 2015-10-25T15:27:58.123Z] Session [8a2cbe70-7b26-11e5-93aa-fb07422b936c] - page.onError - msg: SyntaxError: Parse error
+[ERROR - 2015-10-25T15:27:58.123Z] Session [8a2cbe70-7b26-11e5-93aa-fb07422b936c] - page.onError - stack:
 
 [ERROR - 2015-10-25T15:25:49.787Z] Session [1a82c6a0-7b26-11e5-a52a-a379e7dd32f3] - page.onError - msg: SyntaxError: Parse error
 [ERROR - 2015-10-25T15:25:49.787Z] Session [1a82c6a0-7b26-11e5-a52a-a379e7dd32f3] - page.onError - stack:
@@ -218,8 +220,8 @@ edb41ae0-7b28-11e5-b578-97e99e403eb7] - page.onError - stack:
 [ERROR - 2015-10-25T15:26:49.815Z] Session [1a82c6a0-7b26-11e5-a52a-a379e7dd32f3] - page.onError - msg: SyntaxError: Parse error
 [ERROR - 2015-10-25T15:26:49.815Z] Session [1a82c6a0-7b26-11e5-a52a-a379e7dd32f3] - page.onError - stack:
 
-[ERROR - 2015-10-25T15:21:03.008Z] Session [26d8b190-7b25-11e5-aae4-9d28fe2f71ca] - page.onError - msg: SyntaxError: Parse error
-[ERROR - 2015-10-25T15:21:03.008Z] Session [26d8b190-7b25-11e5-aae4-9d28fe2f71ca] - page.onError - stack:
+[ERROR - 2015-10-25T15:27:49.805Z] Session [1a82c6a0-7b26-11e5-a52a-a379e7dd32f3] - page.onError - msg: SyntaxError: Parse error
+[ERROR - 2015-10-25T15:27:49.805Z] Session [1a82c6a0-7b26-11e5-a52a-a379e7dd32f3] - page.onError - stack:
 
 [INFO  - 2015-10-25T15:22:00.015Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
 [ERROR - 2015-10-25T15:22:02.008Z] Session [26d8b190-7b25-11e5-aae4-9d28fe2f71ca] - page.onError - msg: [ERROR - 2015-10-25T15:22:24.003Z] Session [219b7990-7b22-11e5-97fe-7b6acd6f0e81] - page.onError - msg: SyntaxError: Parse error
@@ -230,12 +232,10 @@ edb41ae0-7b28-11e5-b578-97e99e403eb7] - page.onError - stack:
 
 [INFO  - 2015-10-25T15:27:00.015Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
 [ERROR - 2015-10-25T15:27:02.002Z] Session [26d8b190-7b25-11e5-aae4-9d28fe2f71ca] - page.onError - msg: [ERROR - 2015-10-25T15:27:23.957Z] Session [219b7990-7b22-11e5-97fe-7b6acd6f0e81] - page.onError - msg: SyntaxError: Parse error
-[ERROR - 2015-10-25T15:27:23.957Z] Session [219b7990-7b22-11e5-97fe-7b6acd6f0e81] - page.onError - stack:
+[ER[ERROR - 2015-10-25T15:28:02.057Z] Session [26d8b190-7b25-11e5-aae4-9d28fe2f71ca] - page.onError - msg: [ERROR - 2015-10-25T15:28:24.046Z] Session [219b7990-7b22-11e5-97fe-7b6acd6f0e81] - page.onError - msg: SyntaxError: Parse error
+[ERROR - 2015-10-25T15:28:24.046Z] Session [219b7990-7b22-11e5-97fe-7b6acd6f0e81] - page.onError - stack:
 
 SyntaxError: Parse error
-[ERROR - 2015-10-25T15:12:59.982Z] Session [0d83a030-7b23-11e5-9783-09b34a01d34e] - page.onError - stack:
-
-[ERROR - 2015-10-25T15:13:59.776Z] Session [0d83a030-7b23-11e5-9783-09b34a01d34e] - page.onError - msg: SyntaxError: Parse error
 [ERROR - 2015-10-25T15:13:59.776Z] Session [0d83a030-7b23-11e5-9783-09b34a01d34e] - page.onError - stack:
 
 [ERROR - 2015-10-25T15:14:59.784Z] Session [0d83a030-7b23-11e5-9783-09b34a01d34e] - page.onError - msg: SyntaxError: Parse error
@@ -280,10 +280,10 @@ SyntaxError: Parse error
 [ERROR - 2015-10-25T15:26:59.723Z] Session [0d83a030-7b23-11e5-9783-09b34a01d34e] - page.onError - msg: SyntaxError: Parse error
 [ERROR - 2015-10-25T15:26:59.724Z] Session [0d83a030-7b23-11e5-9783-09b34a01d34e] - page.onError - stack:
 
-ROR - 2015-10-25T15:09:07.968Z] Session [7b77b960-7b1d-11e5-9d65-7748497497b2] - page.onError - stack:
+[ERROR - 2015-10-25T15:28:00.766Z] Session [0d83a030-7b23-11e5-9783-09b34a01d34e] - page.onError - msg: SyntaxError: Parse error
+[ERROR - 2015-10-25T15:28:00.766Z] Session [0d83a030-7b23-11e5-9783-09b34a01d34e] - page.onError - stack:
 
-[ERROR - 2015-10-25T15:10:08.018Z] Session [7b77b960-7b1d-11e5-9d65-7748497497b2] - page.onError - msg: SyntaxError: Parse error
-[ERROR - 2015-10-25T15:10:08.018Z] Session [7b77b960-7b1d-11e5-9d65-7748497497b2] - page.onError - stack:
+ROR - 2015-10-25T15:10:08.018Z] Session [7b77b960-7b1d-11e5-9d65-7748497497b2] - page.onError - stack:
 
 [ERROR - 2015-10-25T15:11:07.966Z] Session [7b77b960-7b1d-11e5-9d65-7748497497b2] - page.onError - msg: SyntaxError: Parse error
 [ERROR - 2015-10-25T15:11:07.966Z] Session [7b77b960-7b1d-11e5-9d65-7748497497b2] - page.onError - stack:
@@ -340,10 +340,10 @@ ROR - 2015-10-25T15:09:07.968Z] Session [7b77b960-7b1d-11e5-9d65-7748497497b2] -
 [ERROR - 2015-10-25T15:27:07.998Z] Session [7b77b960-7b1d-11e5-9d65-7748497497b2] - page.onError - msg: SyntaxError: Parse error
 [ERROR - 2015-10-25T15:27:07.998Z] Session [7b77b960-7b1d-11e5-9d65-7748497497b2] - page.onError - stack:
 
-r - msg: SyntaxError: Parse error
-[ERROR - 2015-10-25T15:24:19.996Z] Session [f2d9aa00-7b1c-11e5-a172-396b8a1fe2af] - page.onError - stack:
+[ERROR - 2015-10-25T15:28:08.007Z] Session [7b77b960-7b1d-11e5-9d65-7748497497b2] - page.onError - msg: SyntaxError: Parse error
+[ERROR - 2015-10-25T15:28:08.007Z] Session [7b77b960-7b1d-11e5-9d65-7748497497b2] - page.onError - stack:
 
-[ERROR - 2015-10-25T15:25:19.987Z] Session [f2d9aa00-7b1c-11e5-a172-396b8a1fe2af] - page.onError - msg: SyntaxError: Parse error
+r - msg: SyntaxError: Parse error
 [ERROR - 2015-10-25T15:25:19.987Z] Session [f2d9aa00-7b1c-11e5-a172-396b8a1fe2af] - page.onError - stack:
 
 [ERROR - 2015-10-25T15:26:19.973Z] Session [f2d9aa00-7b1c-11e5-a172-396b8a1fe2af] - page.onError - msg: SyntaxError: Parse error
@@ -352,15 +352,19 @@ r - msg: SyntaxError: Parse error
 [ERROR - 2015-10-25T15:27:19.981Z] Session [f2d9aa00-7b1c-11e5-a172-396b8a1fe2af] - page.onError - msg: SyntaxError: Parse error
 [ERROR - 2015-10-25T15:27:19.981Z] Session [f2d9aa00-7b1c-11e5-a172-396b8a1fe2af] - page.onError - stack:
 
-[INFO  - 2015-10-25T15:27:27.609Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
-[ERROR - 2015-10-25T15:27:30.144Z] Session [d5876870-7b1c-11e5-a627-ed4b9984aa50] - page.onError - msg: SyntaxError: Parse error
-[ERROR - 2015-10-25T15:27:30.144Z] Session [d5876870-7b1c-11e5-a627-ed4b9984aa50] - page.onError - stack:
+[INFO  - 2015-10-25T15:28:16.811Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[ERROR - 2015-10-25T15:28:20.002Z] Session [f2d9aa00-7b1c-11e5-a172-396b8a1fe2af] - page.onError - msg: SyntaxError: Parse error
+[ERROR - 2015-10-25T15:28:20.002Z] Session [f2d9aa00-7b1c-11e5-a172-396b8a1fe2af] - page.onError - stack:
 
 5-10-25T15:27:09.513Z] Session [a5bd8570-7b1c-11e5-8de6-9b335ad0afa6] - page.onError - stack:
 
-a2a-d5ea122fdfaa] - page.onError - msg: SyntaxError: Parse error
-[ERROR - 2015-10-25T15:25:50.343Z] Session [78eab3a0-7b22-11e5-aa2a-d5ea122fdfaa] - page.onError - stack:
+[ERROR - 2015-10-25T15:28:09.504Z] Session [a5bd8570-7b1c-11e5-8de6-9b335ad0afa6] - page.onError - msg: SyntaxError: Parse error
+[ERROR - 2015-10-25T15:28:09.504Z] Session [a5bd8570-7b1c-11e5-8de6-9b335ad0afa6] - page.onError - stack:
 
-[ERROR - 2015-10-25T15:26:50.406Z] Session [78eab3a0-7b22-11e5-aa2a-d5ea122fdfaa] - page.onError - msg: SyntaxError: Parse error
+a2a-d5ea122fdfaa] - page.onError - msg: SyntaxError: Parse error
 [ERROR - 2015-10-25T15:26:50.406Z] Session [78eab3a0-7b22-11e5-aa2a-d5ea122fdfaa] - page.onError - stack:
+
+[INFO  - 2015-10-25T15:27:49.221Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[ERROR - 2015-10-25T15:27:50.362Z] Session [78eab3a0-7b22-11e5-aa2a-d5ea122fdfaa] - page.onError - msg: SyntaxError: Parse error
+[ERROR - 2015-10-25T15:27:50.362Z] Session [78eab3a0-7b22-11e5-aa2a-d5ea122fdfaa] - page.onError - stack:
 
