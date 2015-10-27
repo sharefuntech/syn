@@ -55,21 +55,13 @@ def readAllFundQuote():
 # ---------------------------------------------------------------
 
 # ------setupConnection() 载入单个基金页面=========================
-def setupConnection(fundCode):
+def setupConnection(fundCode, driverMode):
 	url = 'http://stock.finance.sina.com.cn/fundInfo/view/FundInfo_LSJZ.php?symbol=' + fundCode;
-	systemType = checkSystem()
-	# linux
-	if systemType == 'Linux':
-		driver = webdriver.PhantomJS(executable_path='/home/guowei/bin/phantomjs/bin/phantomjs')
-	elif systemType == 'Windows':
-		driver = ''
-	# macOS
-	else : 
-		driver = webdriver.PhantomJS(executable_path='/Users/guowei/Documents/tools/phantomjs/bin/phantomjs')
-	# driver for linux~~~~~~~~
-	# driver = webdriver.PhantomJS(executable_path='/home/guowei/bin/phantomjs/bin/phantomjs')
-	# driver for mac~~~~~~~
-	# driver = webdriver.PhantomJS(executable_path='/Users/guowei/Documents/tools/phantomjs/bin/phantomjs')
+	# 根据驱动模式和操作系统选择driver
+	if driverMode == 'browser':
+		driver = webdriver.Firefox()
+	elif driverMode == 'phantomjs':
+		driver = selectPhantomjs()
 	#载入页面
 	try:
 		driver.get(url)
@@ -85,6 +77,21 @@ def setupConnection(fundCode):
 	return pageConnection
 # ---------------------------------------------------------------
 
+# --------selectPhantomjs() 选择phanthomjs平台=====================
+def selectPhantomjs():
+	systemType = checkSystem()
+	# linux
+	if systemType == 'Linux':
+		driver = webdriver.PhantomJS(executable_path='/home/guowei/bin/phantomjs/bin/phantomjs')
+	# macOS
+	elif systemType == 'Darwin':
+		driver = webdriver.PhantomJS(executable_path='/Users/guowei/Documents/tools/phantomjs/bin/phantomjs')
+	#windows not test yet
+	else : 
+		driver = ''
+	return driver
+# ---------------------------------------------------------------
+
 # --------checkSystem() 检测操作系统类型============================
 def checkSystem():
     systemType = platform.system()
@@ -95,7 +102,7 @@ def checkSystem():
 # ----getSingleFundQuote() 抓取单个基金业绩======================
 def getSingleFundQuote(fundCode, fundName):
 	# 载入单个基金页面
-	pageConnection = setupConnection(fundCode)
+	pageConnection = setupConnection(fundCode, 'phantomjs')
 	totalPageNumber = calculateTotalPage(pageConnection)
 	for x in range(totalPageNumber):
 		scrapQuote(pageConnection, fundCode, fundName)

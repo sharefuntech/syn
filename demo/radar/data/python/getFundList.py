@@ -20,7 +20,7 @@ dcap["phantomjs.page.settings.userAgent"] = (
 
 #=======================================
 # url = 'http://vip.stock.finance.sina.com.cn/fund_center/index.html#jzkfgpx'
-url = 'http://vip.stock.finance.sina.com.cn/fund_center/index.html#jzkfzqx'
+url = 'http://vip.stock.finance.sina.com.cn/fund_center/index.html#jzkfall'
 # driver for linux
 # driver = webdriver.PhantomJS(executable_path='/home/guowei/bin/phantomjs/bin/phantomjs')
 # driver for mac
@@ -30,7 +30,7 @@ url = 'http://vip.stock.finance.sina.com.cn/fund_center/index.html#jzkfzqx'
 driver=webdriver.Firefox()
 #载入页面=========================================
 driver.get(url)
-time.sleep(5)
+time.sleep(3)
 
 #数据抓取函数====================================
 def getDataPerPage():
@@ -74,16 +74,22 @@ def getDataPerPage():
 def turnPage():
 	try:
 		# 当前页码
-		print 'current page is:'
 		curr_page = driver.find_element_by_xpath('//p[@id = "jjjzP"]//span[@class = "pagecurr pagedisabled"]')
+		print 'current page is: '
 		print curr_page.text.encode('utf-8')
-		# 获取翻页链接
-		pageHolder = driver.find_elements_by_xpath('//p[@id = "jjjzP"]//a')
 
-		# 最后一个元素是下一页链接
-		# nextPageLink = pageHolder[-1]
-		nextPageLink = pageHolder.pop()
-		nextPageLink.click()
+		nextPage = driver.find_element_by_css_selector('span[class*="pagecurr pagedisabled"] + *')
+		print 'next page is: '
+		print nextPage.text.encode('utf-8')
+
+		nextPage.click()
+		# # 获取翻页链接
+		# pageHolder = driver.find_elements_by_xpath('//p[@id = "jjjzP"]//a')
+
+		# # 最后一个元素是下一页链接
+		# # nextPageLink = pageHolder[-1]
+		# nextPageLink = pageHolder.pop()
+		# nextPageLink.click()
 		# 休眠放封杀
 		time.sleep(3)
 		# print 'page turned'

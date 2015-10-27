@@ -46,7 +46,7 @@ var sampleData = [d3.range(360).map(function (i) {
 
 var rawData, dataView;
 
-d3.csv('data/fund.csv', function(data) {
+d3.csv('data/allFundQuote.csv', function(data) {
 	// console.log(data);
 	rawData = data;
 	dataView = iniData(rawData);
@@ -115,12 +115,12 @@ function iniData(data) {
 		// d.year = yearFormat(d.standardTime);
 		// d.month = monthFormat(d.standardTime);
 		// d.day = dayFormat(d.standardTime);
-		d.quote = +d.quote;
+		d.totalValue = +d.totalValue;
 	});
 
 	var nestedData = d3.nest()
 	    // .sortValues(d3.descending, function(d) { return d.standardTime; })
-	    .key(function(d) { return d.company; })
+	    .key(function(d) { return d.fundName; })
 	    .entries(data);
 
 	nestedData.forEach(function(d) {
@@ -140,7 +140,7 @@ function renderData(vizG, data, dataLineClass){
 	var dataVirtual = d3.range(dataVirtualLength);
 	// 股价极值
 	var quoteExtent = d3.extent(data, function(d) {
-		return d.quote;
+		return d.totalValue;
 	});
 	// console.log(quoteExtent);
 	// 时间极值
@@ -200,16 +200,16 @@ function renderData(vizG, data, dataLineClass){
 		})
 		// .attr("class", 'dataLine')
 		.attr('x1', function(d, i) {
-			return Math.sin(dateScaleAngle(data[i].standardTime)) * rScale(data[i].quote);
+			return Math.sin(dateScaleAngle(data[i].standardTime)) * rScale(data[i].totalValue);
 		})
 		.attr('y1', function(d, i) {
-			return -Math.cos(dateScaleAngle(data[i].standardTime)) * rScale(data[i].quote);
+			return -Math.cos(dateScaleAngle(data[i].standardTime)) * rScale(data[i].totalValue);
 		})
 		.attr('x2', function(d, i) {
-			return Math.sin(dateScaleAngle(data[i+1].standardTime)) * rScale(data[i+1].quote);
+			return Math.sin(dateScaleAngle(data[i+1].standardTime)) * rScale(data[i+1].totalValue);
 		})
 		.attr('y2', function(d, i) {
-			return -Math.cos(dateScaleAngle(data[i+1].standardTime)) * rScale(data[i+1].quote);
+			return -Math.cos(dateScaleAngle(data[i+1].standardTime)) * rScale(data[i+1].totalValue);
 		});
 }
 
