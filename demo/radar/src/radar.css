@@ -5,6 +5,14 @@ body{
 	font-family: arial, 'Microsoft Yahei', simHei;
 }
 
+#svgCanvas {
+	position: absolute;
+}
+
+canvas {
+	position: absolute;
+}
+
 /*雷达圆圈*/
 .radarStructureCircle {
 	fill: none;
@@ -67,13 +75,15 @@ body{
 /*数据曲线样本*/
 /*单条整条曲线*/
 .dataPath {
-	stroke: #f00;
-	/*stroke-width:.5px;*/
+	stroke:#000;
+	stroke-opacity: 0.2;
+	/*stroke-width:2;*/
 	fill:none;
 }
 /*单独每条动画生成直线*/
 .dataLine {
-	stroke:#999;
+	stroke:#000;
+	stroke-opacity: 0.2;
 	/*stroke-width:2;*/
 	fill:none;
 }
@@ -82,6 +92,7 @@ body{
 	stroke:#f00;
 	stroke-width:2;
 	fill:none;
+	stroke-opacity: 0.7;
 }
 
 /*走珠*/

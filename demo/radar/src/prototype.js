@@ -38,7 +38,7 @@ var startYear = 2001; //第一支开放式基金成立于2001年
 var numLine = 36; //半径射线数量，36符合美感，不密不疏
 var numMarkerCircle = 9;//黑色标签圈在第九圈
 
-var animateTime = 10*1000; //动画总时间，用于线条展开
+var animateTime = 20*1000; //动画总时间，用于线条展开
 
 var sampleData = [d3.range(360).map(function (i) {
 			return {x: i, y: Math.round(Math.random()*20 + 80)};
@@ -164,24 +164,32 @@ function renderData(vizG, data, dataLineClass){
 	// console.log('dateScaleAngleExtent: ' + dateScaleAngleExtent);
 	// 渲染数据曲线开始前需要delay的时间长度
 	var startDelayPortion = dateScaleAngleExtent[0]/(Math.PI*2)*animateTime;
-	//单条曲线方式，不能实现delay动画
-	// var lineCircle = d3.svg.line.radial()
-	// 		.radius(function (d) { return rScale(d.quote); })
-	// 		.angle(function(d) { return dateScaleAngle(d.standardTime); }); 
-			// .interpolate("basis");
 
-	// vizG.append("g")
-	// 	.attr('id', 'dataPath')
- //    	.attr("transform", "translate(" + svgwWidth / 2 + "," + svgHeight / 2 + ")")
-	// 	.selectAll("path.dataPath")
-	// 	.data([data])//需要存入数组进行操作
-	// 	.enter()
-	// 	.append("path")
-	// 	.attr("class", "dataPath")
-	// 	.attr("d", function (d) {
-	// 		// console.log(d);
-	// 		 return lineCircle(d); });
-	var singleDelayTime = ((dateScaleAngleExtent[1]-dateScaleAngleExtent[0])/(Math.PI*2))*animateTime / data.length;
+	//===================================================================
+	//单条曲线方式，不能实现delay动画 =======================================
+	var lineCircle = d3.svg.line.radial()
+			.radius(function (d) { return rScale(d.totalValue); })
+			.angle(function(d) { return dateScaleAngle(d.standardTime); }); 
+
+	vizG.append("g")
+		.attr('id', 'dataPath')
+    	.attr("transform", "translate(" + svgwWidth / 2 + "," + svgHeight / 2 + ")")
+		.selectAll("path.dataPath")
+		.data([data])//需要存入数组进行操作
+		.enter()
+		.append("path")
+		.attr("class", "dataPath")
+		.attr("d", function (d) {
+			// console.log(d);
+			 return lineCircle(d); 
+		})
+		.on('mouseover', hightLightDataPath)
+		.on('mouseout', unHightLightDataPath);
+	//---------------------------------------------------------------------
+
+	//=====================================================================
+	//多条曲线拼接方式，delay动画 ============================================
+	/*var singleDelayTime = ((dateScaleAngleExtent[1]-dateScaleAngleExtent[0])/(Math.PI*2))*animateTime / data.length;
 
 	vizG.append("g")
 		.attr('id', 'dataLineGroup')
@@ -210,9 +218,36 @@ function renderData(vizG, data, dataLineClass){
 		})
 		.attr('y2', function(d, i) {
 			return -Math.cos(dateScaleAngle(data[i+1].standardTime)) * rScale(data[i+1].totalValue);
-		});
+		});*/
+	//---------------------------------------------------------------------
 }
 
+// canvas render
+function renderCanvas() {
+	d3.select('body').append('canvas');
+	var context = d3.select('canvas')
+			.node()
+			.getContext('2d');
+
+	context.strokeStyle = 'black';
+	context.fillStyle = 'gray';
+	context.lineWidth = '1px';
+
+	
+
+
+}
+
+// 单条曲线
+function hightLightDataPath() {
+	d3.select(this).classed('highLightLine', true);
+}
+
+function unHightLightDataPath() {
+	d3.select(this).classed('highLightLine', false);
+}
+
+// 多条曲线拼接动画
 function hightLightDataLine() {
 	// console.log(d3.select(this).attr('class'));
 	var hoverClass = d3.select(this).attr('class');

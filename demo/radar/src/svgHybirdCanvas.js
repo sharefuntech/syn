@@ -36,14 +36,15 @@ function createMap(countries) {
 	var canvasPath = d3.geo.path()
 			.projection(projection);
 
-	var g = d3.select('body')
-			.select('svg')
+	var g = d3.select('svg')
 			.append('g');
 
 	var mapZoom = d3.behavior.zoom()
 			.translate(projection.translate())
 			.scale(projection.scale())
-			.on('zoom', zoomed);
+			.on('zoom', zoomed)
+			.on('zoomstart', zoomInitialized)
+			.on('zoomend', zoomFinished);
 
 	d3.select('svg').call(mapZoom);
 
@@ -64,7 +65,7 @@ function createMap(countries) {
 			d3.select(this).style('fill', 'pink');
 		});
 
-	zoomed();
+	zoomFinished();
 
 	function zoomed() {
 		projection.translate(mapZoom.translate())
@@ -94,19 +95,62 @@ function createMap(countries) {
 			context.fill();
 		}
 
-		// context.strokeStyle = 'black';
-		// context.fillStyle = 'rgba(255, 0, 0, 0.2)';
-		// context.lineWidth = '1px';
+		context.strokeStyle = 'black';
+		context.fillStyle = 'rgba(255, 0, 0, 0.2)';
+		context.lineWidth = '1px';
 
-		// for(var x in sampleData) {
-		// 	// console.log('var x in sampleData: ' + x); //x stand for key
-		// 	context.beginPath();
-		// 	geoPath(sampleData[x]);
-		// 	context.stroke();
-		// 	context.fill();
-		// }
+		for(var x in sampleData) {
+			// console.log('var x in sampleData: ' + x); //x stand for key
+			context.beginPath();
+			canvasPath(sampleData[x]);
+			context.stroke();
+			context.fill();
+		}
+
+		// d3.selectAll('path.sample')
+		// 	.attr('d', svgPath);
+	}
+
+	function zoomInitialized() {
+		d3.selectAll('path.sample')
+			.style('display', 'none');
+
+		zoomed();
+	}
+
+	function zoomFinished() {
+		var context = d3.select('canvas')
+				.node()
+				.getContext('2d');
+
+		context.clearRect(0, 0, 500, 500);
+		canvasPath.context(context);
+
+		context.strokeStyle = 'black';
+		context.fillStyle = 'gray';
+		context.lineWidth = '1px';
+
+		for(var x in countries.features) {
+			context.beginPath();
+			canvasPath(countries.features[x]);
+			context.stroke();
+			context.fill();
+		}
 
 		d3.selectAll('path.sample')
+			.style('display', 'block')
 			.attr('d', svgPath);
 	}
 };
+
+
+
+
+
+
+
+
+
+
+
+
