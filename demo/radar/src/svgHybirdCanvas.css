@@ -1,0 +1,47 @@
+body, html {
+	margin: 0;
+}
+
+canvas {
+	position: absolute;
+	width: 500px;
+	height: 500px;
+}
+
+svg {
+	position: absolute;
+	width: 500px;
+	height: 500px;
+}
+
+path.countries {
+	fill:gray;
+	stroke:white;
+	stroke-width:0.5;
+	fill-opacity: 0.3;
+}
+
+path.sample {
+	fill:red;
+	stroke:black;
+	stroke-width:1;
+	fill-opacity: 0.5;
+}
+
+line.link {
+	stroke:black;
+	stroke-width:1;
+	stroke-opacity: 0.5;
+}
+
+circle.node {
+	fill:red;
+	stroke:white;
+	stroke-width:1;
+}
+
+circle.xy {
+	fill:pink;
+	stroke:black;
+	stroke-width:1;
+}

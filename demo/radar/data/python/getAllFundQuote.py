@@ -42,7 +42,7 @@ def iniAllFundQuoteCsv():
 
 # --readAllFundQuote()  读入基金名称列表=========================
 def readAllFundQuote():
-	csvReader = open('./fundList.csv', 'rb')
+	csvReader = open('./allFundList.csv', 'rb')
 	fundList = csv.reader(csvReader)
 	# 根据基金代码名单抓取每个基金业绩
 	for fund in fundList:
@@ -55,27 +55,20 @@ def readAllFundQuote():
 # ---------------------------------------------------------------
 
 # ------setupConnection() 载入单个基金页面=========================
-def setupConnection(fundCode):
+def setupConnection(fundCode, driverMode):
 	url = 'http://stock.finance.sina.com.cn/fundInfo/view/FundInfo_LSJZ.php?symbol=' + fundCode;
-	systemType = checkSystem()
-	# linux
-	if systemType == 'Linux':
-		driver = webdriver.PhantomJS(executable_path='/home/guowei/bin/phantomjs/bin/phantomjs')
-	elif systemType == 'Windows':
-		driver = ''
-	# macOS
-	else : 
-		driver = webdriver.PhantomJS(executable_path='/Users/guowei/Documents/tools/phantomjs/bin/phantomjs')
-	# driver for linux~~~~~~~~
-	# driver = webdriver.PhantomJS(executable_path='/home/guowei/bin/phantomjs/bin/phantomjs')
-	# driver for mac~~~~~~~
-	# driver = webdriver.PhantomJS(executable_path='/Users/guowei/Documents/tools/phantomjs/bin/phantomjs')
+	# 根据驱动模式和操作系统选择driver
+	if driverMode == 'browser':
+		driver = webdriver.Firefox()
+	elif driverMode == 'phantomjs':
+		driver = selectPhantomjs()
 	#载入页面
 	try:
 		driver.get(url)
 	except Exception, e:
 		print 'setup connection fail'
 		return
+		# break #如果单个基金载入失败，return会退出整个程序，break可以载入下一个基金循环(还是在外部控制为宜)
 	
 	# 需要返回driver而不是driver.get(url)，才能实现传递抓取页面对象
 	pageConnection = driver
@@ -83,6 +76,21 @@ def setupConnection(fundCode):
 	# 测试内部应用calculateTotalPage通过
 	# calculateTotalPage(driver) 
 	return pageConnection
+# ---------------------------------------------------------------
+
+# --------selectPhantomjs() 选择phanthomjs平台=====================
+def selectPhantomjs():
+	systemType = checkSystem()
+	# linux
+	if systemType == 'Linux':
+		driver = webdriver.PhantomJS(executable_path='/home/guowei/bin/phantomjs/bin/phantomjs')
+	# macOS
+	elif systemType == 'Darwin':
+		driver = webdriver.PhantomJS(executable_path='/Users/guowei/Documents/tools/phantomjs/bin/phantomjs')
+	#windows not test yet
+	else : 
+		driver = ''
+	return driver
 # ---------------------------------------------------------------
 
 # --------checkSystem() 检测操作系统类型============================
@@ -94,12 +102,17 @@ def checkSystem():
 
 # ----getSingleFundQuote() 抓取单个基金业绩======================
 def getSingleFundQuote(fundCode, fundName):
-	# 载入单个基金页面
-	pageConnection = setupConnection(fundCode)
-	totalPageNumber = calculateTotalPage(pageConnection)
-	for x in range(totalPageNumber):
-		scrapQuote(pageConnection, fundCode, fundName)
-		turnPage(pageConnection)
+	try:
+		# 载入单个基金页面
+		pageConnection = setupConnection(fundCode, 'phantomjs')
+		totalPageNumber = calculateTotalPage(pageConnection)
+		for x in range(totalPageNumber):
+			scrapQuote(pageConnection, fundCode, fundName)
+			turnPage(pageConnection)
+	except Exception, e:
+		print 'fail to load the specific fund'
+		return
+# ---------------------------------------------------------------
 
 # ------calculateTotalPage() 计算单个基金业绩内容所有页面数量========
 def calculateTotalPage(pageConnection):
@@ -161,7 +174,7 @@ def writeScrappedQuote(fundCode, fundName, date, currentValue, totalValue):
 		writer.writerow((fundCode, fundName, date, currentValue, totalValue))
 	finally:
 		allFundQuote.close()
-
+# ---------------------------------------------------------------
 
 #================================================================
 #================================================================
