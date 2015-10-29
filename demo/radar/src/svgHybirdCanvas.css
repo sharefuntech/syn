@@ -4,16 +4,14 @@ body, html {
 
 canvas {
 	position: absolute;
-	width: 500px;
-	height: 500px;
+	/*width: 600px;
+	height: 600px;*/
 }
 
 svg {
 	position: absolute;
-	width: 500px;
-	height: 500px;
 }
-
+/*
 path.countries {
 	fill:gray;
 	stroke:white;
@@ -44,4 +42,4 @@ circle.xy {
 	fill:pink;
 	stroke:black;
 	stroke-width:1;
-}
+}*/

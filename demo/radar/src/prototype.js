@@ -55,13 +55,12 @@ d3.csv('data/allFundQuote.csv', function(data) {
 	iniSvg(svgwWidth, svgHeight);
 	// 渲染雷达背景
 	renderRadar(vizG, svgwWidth, svgHeight);
-	//数据初始化
-	// iniData(data);
-	// 渲染数据
-	// renderData(vizG, dataView);
-	dataView.forEach(function(d) {
-		return renderData(vizG, d.values, d.key);
-	});
+	//渲染canvas动态连接曲线
+	renderCanvas(dataView);
+	// 渲染svg静态曲线
+	// dataView.forEach(function(d) {
+	// 	return renderData(vizG, d.values, d.key);
+	// });
 	//渲染走时红点
 	renderTick();
 });
@@ -223,19 +222,85 @@ function renderData(vizG, data, dataLineClass){
 }
 
 // canvas render
-function renderCanvas() {
-	d3.select('body').append('canvas');
+function renderCanvas(dataView) {
+	//初始化canvas画布
+	var canvas = d3.select('body')
+			.append('canvas')
+			.attr('width', 1020) //css设置不能控制canvas的大小，否则会出现自动放大模糊
+			.attr('height', 1020);
 	var context = d3.select('canvas')
 			.node()
 			.getContext('2d');
 
 	context.strokeStyle = 'black';
-	context.fillStyle = 'gray';
-	context.lineWidth = '1px';
+	context.lineWidth = 1;
 
-	
+	dataView.forEach(function(d) {
+		return renderSingleCanvasCurve(canvas, context, d.values);
+	});
+}
 
+function renderSingleCanvasCurve(canvas, context, data) {
+	// 用于数据点技术配合动画
+	var dataVirtualLength = data.length - 1;
+	// console.log(dataVirtualLength);
+	var dataVirtual = d3.range(dataVirtualLength);
+	// 股价极值
+	var totalValueExtent = d3.extent(data, function(d) {
+		return d.totalValue;
+	});
+	// console.log(totalValueExtent);
+	// 时间极值
+	var dateExtent = d3.extent(data, function(d) {
+		return d.standardTime;
+	});
+	// console.log(dateExtent);
+	//设定日期范围
+	var rScale = d3.scale.linear()
+			// .domain(totalValueExtent)
+			.domain([0,9])
+			.range([0, rInterpolateCircle*numMarkerCircle]);
 
+	var fullDateTime = ['2001/1/1', '2016/12/31'];
+	//当前数据日期跨度占元周角度
+	var dateScaleAngleExtent = caculateDateAngleExtent(fullDateTime, dateExtent);
+	var dateScaleAngle = d3.time.scale()
+			.domain(dateExtent)
+			.range(dateScaleAngleExtent);
+
+	// 渲染数据曲线开始前需要delay的时间长度
+	var startDelayPortion = dateScaleAngleExtent[0]/(Math.PI*2)*animateTime;
+
+		// context.beginPath();
+		// context.moveTo(50, 50);
+		// context.lineTo(400, 50)
+		// context.stroke();
+		// context.closePath();
+
+	// counter i 
+	var i = 0;
+	(function drawFrame(){
+		var animateCurveId = window.requestAnimationFrame(drawFrame, canvas);
+
+		if (i < dataVirtualLength) {
+			x1 = Math.sin(dateScaleAngle(data[i].standardTime)) * rScale(data[i].totalValue) + svgwWidth/2 + svgMargins.left;
+			y1 = -Math.cos(dateScaleAngle(data[i].standardTime)) * rScale(data[i].totalValue)+ svgHeight/2 + svgMargins.top;
+			x2 = Math.sin(dateScaleAngle(data[i+1].standardTime)) * rScale(data[i+1].totalValue) + svgwWidth/2 + svgMargins.left;
+			y2 = -Math.cos(dateScaleAngle(data[i+1].standardTime)) * rScale(data[i+1].totalValue)+ svgHeight/2 + svgMargins.top;
+
+			context.beginPath();
+			context.moveTo(x1, y1);
+			context.lineTo(x2, y2)
+			context.stroke();
+			context.closePath();
+			//count i
+			i++;
+			// console.log('i counter is: ' + i);
+			console.log(x1);
+		} else{
+			window.cancelAnimationFrame(animateCurveId);
+		}
+	}());
 }
 
 // 单条曲线

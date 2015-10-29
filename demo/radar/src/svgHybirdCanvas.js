@@ -1,3 +1,68 @@
+var svg; //svg canvas
+var vizG; //所有svg元素容器，偏移到margin圆点
+var svgwWidth = 580;
+var svgHeight = 580;
+var svgMargins = {top:10, right:10, bottom:10, left:10};
+//ini svg 
+iniSvg(svgwWidth, svgHeight);
+
+var canvas = d3.select('body')
+		.append('canvas')
+		.attr('width', 600) //css设置不能控制canvas的大小，否则会出现自动放大模糊
+		.attr('height', 600);
+
+var context = d3.select('canvas')
+		.node().getContext('2d');
+
+var sampleData = d3.range(10).map(function (i) {
+			return {x: i*50, y: (Math.sin(i)*20 + 80)};
+	});
+
+console.log(sampleData);
+
+vizG.append('circle')
+	.attr('r', 100)
+	.attr('cx', 100)
+	.attr('cy', 100)
+	.style('fill', '#f00');
+
+// context.beginPath();
+// context.strokeStyle = 'teal';
+// context.lineWidth = 30;
+// context.arc(150, 150, 100, (Math.PI/180)*0, (Math.PI/180)*360, false);
+// // context.moveTo(100, 100);
+// // context.lineTo(200, 100);
+// context.stroke();
+// context.closePath();
+
+context.beginPath();
+context.moveTo(10, 10);
+sampleData.forEach(function(d, i) {
+	console.log(d.x);
+	console.log(d.y);
+	return context.lineTo(d.x, d.y);
+});
+context.stroke();
+context.closePath();
+
+// svg画布初始化
+function iniSvg(svgwWidth, svgHeight) {
+	svg = d3.select('body')
+		.append('svg')
+		.attr('id', 'svgCanvas')
+		.attr('width', svgwWidth + svgMargins.right + svgMargins.left)
+		.attr('height', svgHeight + svgMargins.top + svgMargins.bottom);
+
+	vizG = svg.append('g') //总g，移动到margin原点
+		.attr('id', 'vizG')
+		.attr('transform', 'translate(' + svgMargins.left + ',' + svgMargins.top + ')');
+
+	return vizG;	
+}
+
+//=========================================================================
+//svg canvas hybird map -- sample of 'd3.js in action' ====================
+/*
 var sampleData = d3.range(1000).map(function(d) {
 	var datapoint = {};
 
@@ -142,6 +207,7 @@ function createMap(countries) {
 			.attr('d', svgPath);
 	}
 };
+*/
 
 
 
