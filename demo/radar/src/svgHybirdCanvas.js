@@ -14,11 +14,11 @@ var canvas = d3.select('body')
 var context = d3.select('canvas')
 		.node().getContext('2d');
 
-var sampleData = d3.range(10).map(function (i) {
-			return {x: i*50, y: (Math.sin(i)*20 + 80)};
+var sampleData = d3.range(100).map(function (i) {
+			return {x: (i*5 + 5), y: (Math.random()*40 + 80)};
 	});
 
-console.log(sampleData);
+// console.log(sampleData[0].x);
 
 vizG.append('circle')
 	.attr('r', 100)
@@ -36,14 +36,47 @@ vizG.append('circle')
 // context.closePath();
 
 context.beginPath();
-context.moveTo(10, 10);
-sampleData.forEach(function(d, i) {
-	console.log(d.x);
-	console.log(d.y);
-	return context.lineTo(d.x, d.y);
-});
-context.stroke();
+context.strokeStyle = 'teal';
+context.lineWidth = 5;
+// context.moveTo(10, 10);
+// sampleData.forEach(function(d, i) {
+// 	return context.lineTo(d.x, d.y);
+// });
+
+
+
+
+var dataLength = sampleData.length;
+var i = 0;
+var animateCurveId;
+
+var xPosition;
+var yPosition;
+
+context.beginPath();
+context.strokeStyle = 'teal';
+context.lineWidth = 5;
+
+(function drawFrame(){
+	animateCurveId = window.requestAnimationFrame(drawFrame, canvas);
+	if (i < dataLength) {
+		xPosition = sampleData[i].x;
+		yPosition = sampleData[i].y;
+
+		context.lineTo(xPosition, yPosition);
+		context.stroke();
+		// console.log(sampleData[i]);
+		i++;
+	} else{
+		window.cancelAnimationFrame(animateCurveId);
+	}
+}());
+
 context.closePath();
+
+function delayDraw(x, y) {
+	return context.lineTo(x, y);
+}
 
 // svg画布初始化
 function iniSvg(svgwWidth, svgHeight) {

@@ -271,36 +271,45 @@ function renderSingleCanvasCurve(canvas, context, data) {
 	// 渲染数据曲线开始前需要delay的时间长度
 	var startDelayPortion = dateScaleAngleExtent[0]/(Math.PI*2)*animateTime;
 
-		// context.beginPath();
-		// context.moveTo(50, 50);
-		// context.lineTo(400, 50)
-		// context.stroke();
-		// context.closePath();
-
-	// counter i 
+	var dataLength = data.length;
 	var i = 0;
+	var animateCurveId;
+
+	var xPosition;
+	var yPosition;
+
+	context.beginPath();
+	context.strokeStyle = 'gray';
+	context.lineWidth = 1;
+
 	(function drawFrame(){
-		var animateCurveId = window.requestAnimationFrame(drawFrame, canvas);
+		animateCurveId = window.requestAnimationFrame(drawFrame, canvas);
+		if (i < dataLength) {
+			xPosition = Math.sin(dateScaleAngle(data[i].standardTime)) * rScale(data[i].totalValue) + svgwWidth/2 + svgMargins.left;;
+			yPosition = -Math.cos(dateScaleAngle(data[i].standardTime)) * rScale(data[i].totalValue)+ svgHeight/2 + svgMargins.top;
 
-		if (i < dataVirtualLength) {
-			x1 = Math.sin(dateScaleAngle(data[i].standardTime)) * rScale(data[i].totalValue) + svgwWidth/2 + svgMargins.left;
-			y1 = -Math.cos(dateScaleAngle(data[i].standardTime)) * rScale(data[i].totalValue)+ svgHeight/2 + svgMargins.top;
-			x2 = Math.sin(dateScaleAngle(data[i+1].standardTime)) * rScale(data[i+1].totalValue) + svgwWidth/2 + svgMargins.left;
-			y2 = -Math.cos(dateScaleAngle(data[i+1].standardTime)) * rScale(data[i+1].totalValue)+ svgHeight/2 + svgMargins.top;
-
-			context.beginPath();
-			context.moveTo(x1, y1);
-			context.lineTo(x2, y2)
+			context.lineTo(xPosition, yPosition);
 			context.stroke();
-			context.closePath();
-			//count i
+			// console.log(sampleData[i]);
 			i++;
-			// console.log('i counter is: ' + i);
-			console.log(x1);
 		} else{
 			window.cancelAnimationFrame(animateCurveId);
 		}
 	}());
+
+	// context.closePath();
+
+
+
+	// (function drawFrame(){
+	// 	var animateCurveId = window.requestAnimationFrame(drawFrame, canvas);
+
+	// 	data.forEach(function(d) {
+	// 		x = Math.sin(dateScaleAngle(d.standardTime)) * rScale(d.totalValue) + svgwWidth/2 + svgMargins.left;
+	// 		y = -Math.cos(dateScaleAngle(d.standardTime)) * rScale(d.totalValue)+ svgHeight/2 + svgMargins.top;
+	// 		return context.lineTo(x, y);
+	// 	});
+	// }());
 }
 
 // 单条曲线
