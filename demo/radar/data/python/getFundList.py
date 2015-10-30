@@ -155,10 +155,10 @@ def turnPage(pageConnection):
 		# nextPageLink = pageHolder.pop()
 		nextPageLink.click()
 		# 休眠放封杀
-		time.sleep(random.randint(3,5))
+		time.sleep(random.randint(2,3))
 	except Exception, e:
 		print 'turn page fail'
-		time.sleep(random.randint(3,5)) #避免翻页失败快速连接，引发下一次被据
+		time.sleep(random.randint(2,3)) #避免翻页失败快速连接，引发下一次被据
 		return #出错中断抓取避免数据重复错误
 # ---------------------------------------------------------------
 

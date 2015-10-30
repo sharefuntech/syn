@@ -11,8 +11,6 @@ body{
 
 canvas {
 	position: absolute;
-	width:1020px;
-	height: 1020px;
 }
 
 /*雷达圆圈*/

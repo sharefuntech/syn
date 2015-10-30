@@ -46,7 +46,7 @@ var sampleData = [d3.range(360).map(function (i) {
 
 var rawData, dataView;
 
-d3.csv('data/allFundQuote.csv', function(data) {
+d3.csv('data/allFundQuoteLess.csv', function(data) {
 	// console.log(data);
 	rawData = data;
 	dataView = iniData(rawData);
@@ -56,11 +56,11 @@ d3.csv('data/allFundQuote.csv', function(data) {
 	// 渲染雷达背景
 	renderRadar(vizG, svgwWidth, svgHeight);
 	//渲染canvas动态连接曲线
-	renderCanvas(dataView);
+	// renderCanvas(dataView);
 	// 渲染svg静态曲线
-	// dataView.forEach(function(d) {
-	// 	return renderData(vizG, d.values, d.key);
-	// });
+	dataView.forEach(function(d) {
+		return renderData(vizG, d.values, d.key);
+	});
 	//渲染走时红点
 	renderTick();
 });
@@ -166,29 +166,29 @@ function renderData(vizG, data, dataLineClass){
 
 	//===================================================================
 	//单条曲线方式，不能实现delay动画 =======================================
-	var lineCircle = d3.svg.line.radial()
-			.radius(function (d) { return rScale(d.totalValue); })
-			.angle(function(d) { return dateScaleAngle(d.standardTime); }); 
+	// var lineCircle = d3.svg.line.radial()
+	// 		.radius(function (d) { return rScale(d.totalValue); })
+	// 		.angle(function(d) { return dateScaleAngle(d.standardTime); }); 
 
-	vizG.append("g")
-		.attr('id', 'dataPath')
-    	.attr("transform", "translate(" + svgwWidth / 2 + "," + svgHeight / 2 + ")")
-		.selectAll("path.dataPath")
-		.data([data])//需要存入数组进行操作
-		.enter()
-		.append("path")
-		.attr("class", "dataPath")
-		.attr("d", function (d) {
-			// console.log(d);
-			 return lineCircle(d); 
-		})
-		.on('mouseover', hightLightDataPath)
-		.on('mouseout', unHightLightDataPath);
+	// vizG.append("g")
+	// 	.attr('id', 'dataPath')
+ //    	.attr("transform", "translate(" + svgwWidth / 2 + "," + svgHeight / 2 + ")")
+	// 	.selectAll("path.dataPath")
+	// 	.data([data])//需要存入数组进行操作
+	// 	.enter()
+	// 	.append("path")
+	// 	.attr("class", "dataPath")
+	// 	.attr("d", function (d) {
+	// 		// console.log(d);
+	// 		 return lineCircle(d); 
+	// 	})
+	// 	.on('mouseover', hightLightDataPath)
+	// 	.on('mouseout', unHightLightDataPath);
 	//---------------------------------------------------------------------
 
 	//=====================================================================
 	//多条曲线拼接方式，delay动画 ============================================
-	/*var singleDelayTime = ((dateScaleAngleExtent[1]-dateScaleAngleExtent[0])/(Math.PI*2))*animateTime / data.length;
+	var singleDelayTime = ((dateScaleAngleExtent[1]-dateScaleAngleExtent[0])/(Math.PI*2))*animateTime / data.length;
 
 	vizG.append("g")
 		.attr('id', 'dataLineGroup')
@@ -217,7 +217,7 @@ function renderData(vizG, data, dataLineClass){
 		})
 		.attr('y2', function(d, i) {
 			return -Math.cos(dateScaleAngle(data[i+1].standardTime)) * rScale(data[i+1].totalValue);
-		});*/
+		});
 	//---------------------------------------------------------------------
 }
 
@@ -228,6 +228,7 @@ function renderCanvas(dataView) {
 			.append('canvas')
 			.attr('width', 1020) //css设置不能控制canvas的大小，否则会出现自动放大模糊
 			.attr('height', 1020);
+
 	var context = d3.select('canvas')
 			.node()
 			.getContext('2d');
@@ -242,9 +243,9 @@ function renderCanvas(dataView) {
 
 function renderSingleCanvasCurve(canvas, context, data) {
 	// 用于数据点技术配合动画
-	var dataVirtualLength = data.length - 1;
-	// console.log(dataVirtualLength);
-	var dataVirtual = d3.range(dataVirtualLength);
+	// var dataVirtualLength = data.length - 1;
+	// // console.log(dataVirtualLength);
+	// var dataVirtual = d3.range(dataVirtualLength);
 	// 股价极值
 	var totalValueExtent = d3.extent(data, function(d) {
 		return d.totalValue;
@@ -282,6 +283,12 @@ function renderSingleCanvasCurve(canvas, context, data) {
 	context.strokeStyle = 'gray';
 	context.lineWidth = 1;
 
+	//test simple curve
+	// context.moveTo(100, 100);
+	// context.lineTo(300, 300);
+	// context.lineTo(500, 300);
+	// context.stroke();
+
 	(function drawFrame(){
 		animateCurveId = window.requestAnimationFrame(drawFrame, canvas);
 		if (i < dataLength) {
@@ -290,26 +297,12 @@ function renderSingleCanvasCurve(canvas, context, data) {
 
 			context.lineTo(xPosition, yPosition);
 			context.stroke();
-			// console.log(sampleData[i]);
+
 			i++;
 		} else{
 			window.cancelAnimationFrame(animateCurveId);
 		}
 	}());
-
-	// context.closePath();
-
-
-
-	// (function drawFrame(){
-	// 	var animateCurveId = window.requestAnimationFrame(drawFrame, canvas);
-
-	// 	data.forEach(function(d) {
-	// 		x = Math.sin(dateScaleAngle(d.standardTime)) * rScale(d.totalValue) + svgwWidth/2 + svgMargins.left;
-	// 		y = -Math.cos(dateScaleAngle(d.standardTime)) * rScale(d.totalValue)+ svgHeight/2 + svgMargins.top;
-	// 		return context.lineTo(x, y);
-	// 	});
-	// }());
 }
 
 // 单条曲线
