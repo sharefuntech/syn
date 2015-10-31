@@ -75,16 +75,16 @@ canvas {
 /*数据曲线样本*/
 /*单条整条曲线*/
 .dataPath {
-	stroke:#000;
-	stroke-opacity: 0.2;
-	/*stroke-width:2;*/
+	stroke: #000;
+	stroke-opacity: 0.7;
+	stroke-width:1;
 	fill:none;
 }
 /*单独每条动画生成直线*/
 .dataLine {
-	stroke:#000;
-	stroke-opacity: 0.2;
-	/*stroke-width:2;*/
+	stroke: #000;
+	stroke-opacity: 0.7;
+	stroke-width:1;
 	fill:none;
 }
 /*鼠标经过，高亮曲线*/
