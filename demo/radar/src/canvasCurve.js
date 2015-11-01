@@ -1,7 +1,8 @@
 var canvasWidth = 600;
 var canvasHeight = 600;
+var animateTime = 7000;
 
-d3.csv('data/canvasCurve.csv', function(data) {
+d3.csv('data/allFundQuoteLess.csv', function(data) {
 	// console.log(data);
 	data = iniData(data);
 	console.log(data);
@@ -16,27 +17,23 @@ function renderCanvas(dataView) {
 			.attr('width', canvasWidth) //css设置不能控制canvas的大小，否则会出现自动放大模糊
 			.attr('height', canvasHeight);
 
-	var context_1 = d3.select('canvas')
-			.node()
-			.getContext('2d');
-
-	var context_2 = d3.select('canvas')
+	var context = d3.select('canvas')
 			.node()
 			.getContext('2d');
 
 	// context.strokeStyle = 'black';
 	// context.lineWidth = 1;
 
-	// dataView.forEach(function(d) {
-	// 	return renderSingleCanvasCurve(canvas, context, d.values);
-	// });
-	var curveNumber = dataView.length;
+	dataView.forEach(function(d) {
+		return renderSingleCanvasCurve(canvas, context, d.values);
+	});
+	// var curveNumber = dataView.length;
 
 	// for(var i=0; i<curveNumber; i++) {
 	// 	renderSingleCanvasCurve(canvas, context, dataView[i].values);
 	// }
-	// renderSingleCanvasCurve(canvas, context_1, dataView[3].values);
-	renderSingleCanvasCurve(canvas, context_2, dataView[2].values);
+	// renderSingleCanvasCurve(canvas, context, dataView[3].values);
+	// renderSingleCanvasCurve(canvas, context, dataView[2].values);
 }
 
 function renderSingleCanvasCurve(canvas, context, data) {
@@ -53,8 +50,8 @@ function renderSingleCanvasCurve(canvas, context, data) {
 	//设定日期范围
 	var rScale = d3.scale.linear()
 			// .domain(totalValueExtent)
-			.domain([0,3])
-			.range([0, 300]);
+			.domain([0,6])
+			.range([0, 280]);
 
 	var fullDateTime = ['2001/1/1', '2016/12/31'];
 	//当前数据日期跨度占元周角度
@@ -64,52 +61,71 @@ function renderSingleCanvasCurve(canvas, context, data) {
 			.range(dateScaleAngleExtent);
 
 	// 渲染数据曲线开始前需要delay的时间长度
-	// var startDelayPortion = dateScaleAngleExtent[0]/(Math.PI*2)*animateTime;
+	var startDelayPortion = dateScaleAngleExtent[0]/(Math.PI*2)*animateTime;
 
 	var dataLength = data.length;
 	var i = 0;
 	var animateCurveId;
 
-	var xPosition;
-	var yPosition;
-
-	// var context = d3.select('canvas')
-	// 		.node()
-	// 		.getContext('2d');
+	var xPosition_start;
+	var yPosition_start;
+	var xPosition_end;
+	var yPosition_end;
 
 	context.beginPath();
-	context.strokeStyle = 'gray';
-	context.lineWidth = 1;
+	context.strokeStyle = 'lightsteelblue';
+	context.lineWidth = 0.5;
 	context.lineCap = 'round';
 
-	//test simple curve=========
-	// context.moveTo(100, 100);
-	// context.lineTo(300, 300);
-	// context.lineTo(500, 300);
-	// context.stroke();
+	//set interval mode ============================================
+	
+	var setAnim;
+	setTimeout(triggerSingleCureDraw, Math.floor(startDelayPortion));
 
-	setInterval(sayHi, 1000);
-
-	function sayHi() {
-		console.log('hi');
+	function triggerSingleCureDraw() {
+		setAnim = setInterval(drawCurve, 40);
 	}
-
-	(function drawFrame(){
-		animateCurveId = window.requestAnimationFrame(drawFrame, canvas);
-		if (i < dataLength) {
-			xPosition = Math.sin(dateScaleAngle(data[i].standardTime)) * rScale(data[i].totalValue) + canvasWidth/2;;
-			yPosition = -Math.cos(dateScaleAngle(data[i].standardTime)) * rScale(data[i].totalValue)+ canvasHeight/2;
-			console.log('{' + xPosition + ', ' + yPosition + '}');
-			context.lineTo(xPosition, yPosition);
+	function drawCurve() {
+		if (i < (dataLength-1)) {
+			xPosition_start = Math.sin(dateScaleAngle(data[i].standardTime)) * rScale(data[i].totalValue) + canvasWidth/2;;
+			yPosition_start = -Math.cos(dateScaleAngle(data[i].standardTime)) * rScale(data[i].totalValue)+ canvasHeight/2;
+			xPosition_end = Math.sin(dateScaleAngle(data[i+1].standardTime)) * rScale(data[i+1].totalValue) + canvasWidth/2;;
+			yPosition_end = -Math.cos(dateScaleAngle(data[i+1].standardTime)) * rScale(data[i+1].totalValue)+ canvasHeight/2;
+			// console.log('{' + xPosition + ', ' + yPosition + '}');
+			context.moveTo(xPosition_start, yPosition_start);
+			context.lineTo(xPosition_end, yPosition_end);
 			context.stroke();
 
 			i++;
 		} else{
-			window.cancelAnimationFrame(animateCurveId);
+			clearInterval(setAnim);
 		}
-	}());
+	}
 
-	context.closePath();
+	//request animation mode ======================================
+	// setTimeout(triggerDrawFrame, Math.floor(startDelayPortion));
+	
+	// function triggerDrawFrame() {
+	// 	(function drawFrame(){
+	// 		animateCurveId = window.requestAnimationFrame(drawFrame, canvas);
+	// 		if (i < (dataLength-1)) {
+	// 			xPosition_start = Math.sin(dateScaleAngle(data[i].standardTime)) * rScale(data[i].totalValue) + canvasWidth/2;;
+	// 			yPosition_start = -Math.cos(dateScaleAngle(data[i].standardTime)) * rScale(data[i].totalValue)+ canvasHeight/2;
+	// 			xPosition_end = Math.sin(dateScaleAngle(data[i+1].standardTime)) * rScale(data[i+1].totalValue) + canvasWidth/2;;
+	// 			yPosition_end = -Math.cos(dateScaleAngle(data[i+1].standardTime)) * rScale(data[i+1].totalValue)+ canvasHeight/2;
+	// 			// console.log('{' + xPosition + ', ' + yPosition + '}');
+	// 			context.moveTo(xPosition_start, yPosition_start);
+	// 			context.lineTo(xPosition_end, yPosition_end);
+	// 			context.stroke();
+
+	// 			i++;
+	// 		} else{
+	// 			window.cancelAnimationFrame(animateCurveId);
+	// 		}
+	// 	}());
+	// }
+	
+
 }
 
 // 计算数据日期角度极值
