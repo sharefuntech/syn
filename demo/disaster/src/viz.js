@@ -156,20 +156,8 @@ function changeDataView(selectedOption) {
 		.key(function(d) {
 			return d[selectedOption];
 		})
+		.sortKeys(d3.ascending)
 		.key(function(d) { 
-			//按季度分类
-			// return d.month; //暂时直接用已知变量
-			// if (d.month>=1 && d.month<=3) {
-			// 	return 1;
-			// } else if (d.month>=4 && d.month<=6) {
-			// 	return 2;
-			// } else if (d.month>=7 && d.month<=9) {
-			// 	return 3;
-			// } else if (d.month>=10 && d.month<=12) {
-			// 	return 4;
-			// }
-
-			//按年度分
 			return d.year;
 		})
 		.entries(rawData);
@@ -555,7 +543,7 @@ function checkElementOfArray(targetElement, hostArray) {
 // 将省份归入地区
 function setProvinceArea(d) {
 	var provinceArea;
-	var provinceAreaList = ['东部沿海地区', '中部内陆地区', '西部边远地区', '东北地区'];
+	var provinceAreaList = ['1.东部沿海地区', '2.中部内陆地区', '3.西部边远地区', '4.东北地区'];
 	var provinceList = [['北京','天津','河北','上海','江苏','浙江','福建','山东','广东','广西','海南','重庆'], 
 		['山西','内蒙古','安徽','江西','河南','湖北','湖南'], 
 		['四川','贵州','云南','西藏','陕西','甘肃','青海','宁夏','新疆'], 
@@ -577,7 +565,7 @@ function setProvinceArea(d) {
 // 数据添加季度属性
 function setSeason(d) {
 	var season;
-	var seasonList = ['第一季度','第二季度','第三季度','第四季度'];
+	var seasonList = ['1.第一季度','2.第二季度','3.第三季度','4.第四季度'];
 	var monthList = [[1,2,3], [4,5,6], [7,8,9], [10,11,12]];
 
 	if(checkElementOfArray(d, monthList[0])) {
@@ -596,7 +584,7 @@ function setSeason(d) {
 // 数据添加死亡人数级别属性
 function setDisasterLevel(d) {
 	var level;
-	var levelList = ['死亡小于20人','死亡21～30人','死亡31～40人','死亡超过40人'];
+	var levelList = ['1.死亡小于20人','2.死亡21～30人','3.死亡31～40人','4.死亡超过40人'];
 	var deathList = [0, 20, 30, 40];
 
 	if(d>=deathList[0] && d<=deathList[1]) {
