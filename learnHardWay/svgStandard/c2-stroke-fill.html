@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>stroke fill</title>
+	<script src='lib/d3.js'></script>
+	<style>
+		.strokeText {
+			font-size: 64px;
+			font-family: sans-serif, arial;
+			font-weight: bold;
+			fill: #ccc;
+			stroke: #999;
+			stroke-width: 5;
+		}
+	</style>
+</head>
+<body>
+	<script>
+		var svg; //svg canvas
+		var vizG; //顶层svg元素容器，偏移到margin圆点
+		var svgwWidth = 580;
+		var svgHeight = 580;
+		var svgMargins = {top:10, right:10, bottom:10, left:10};
+		//ini svg 
+		iniSvg(svgwWidth, svgHeight);
+
+		vizG.append('text')
+			.attr('class', 'strokeText')
+			.attr('transform', 'translate(50,200)')
+			.text('GREAT NAVY');
+
+		// svg画布初始化
+		function iniSvg(svgwWidth, svgHeight) {
+			svg = d3.select('body')
+				.append('svg')
+				.attr('id', 'svgCanvas')
+				.attr('width', svgwWidth + svgMargins.right + svgMargins.left)
+				.attr('height', svgHeight + svgMargins.top + svgMargins.bottom);
+
+			vizG = svg.append('g') //总g，移动到margin原点
+				.attr('id', 'vizG')
+				.attr('transform', 'translate(' + svgMargins.left + ',' + svgMargins.top + ')');
+
+			return vizG;	
+		}
+
+	</script>
+</body>
+</html>
