@@ -1,0 +1,28 @@
+svg {
+	width: 500;
+	height: 500;
+	border: 1px lightgray solid;
+}
+
+text {
+	font-size: 10px;
+	fill: black;
+}
+
+g > text.active {
+	font-size: 30px;
+}
+
+circle {
+	fill: pink;
+	stroke: gray;
+	stroke-width: 1px;
+}
+
+circle.active {
+	fill: red;
+}
+
+circle.inactive {
+	fill: gray;
+}

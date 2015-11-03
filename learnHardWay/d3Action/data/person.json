@@ -1,0 +1,18 @@
+{
+	"person": [
+		{
+			"user": "Ben",
+			"age": 33,
+			"gender": "male",
+			"job": "cook",
+			"location": "shanghai"
+		},
+		{
+			"user": "Lily",
+			"age": 25,
+			"gender": "female",
+			"job": "writter",
+			"location": "jiangsu"
+		}
+	]
+}

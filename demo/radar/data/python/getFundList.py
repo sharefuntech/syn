@@ -26,7 +26,7 @@ targetUrl = 'http://quote.eastmoney.com/center/fundlist.html#0,1_4_0'
 # getAllFundList() 入口程序======================================
 def getAllFundList(targetUrl):
 	# iniAllFundListCsv() #初始化基金业绩存储csv文件(放弃初始化添加字段名称，防止excel打开后将00开头字符串截去)
-	pageConnection = setupConnection(targetUrl, 'phantomjs') #建立连接
+	pageConnection = setupConnection(targetUrl, 'browser') #建立连接
 	totalPageNumber = calculateTotalPage(pageConnection) #计算所有页面数量
 	scrapper(pageConnection, totalPageNumber) #抓取单个页面基金信息
 #---------------------------------------------------------------
