@@ -164,6 +164,10 @@ function renderData(vizG, data, dataLineClass){
 	// 渲染数据曲线开始前需要delay的时间长度
 	var startDelayPortion = dateScaleAngleExtent[0]/(Math.PI*2)*animateTime;
 
+	// 填色根据延迟时间而定
+	var strokeScale = d3.scale.linear()
+			.domain([0, animateTime])
+			.range(['#000', '#ccc']);
 	//===================================================================
 	//单条曲线方式，不能实现delay动画 =======================================
 	// var lineCircle = d3.svg.line.radial()
@@ -217,7 +221,8 @@ function renderData(vizG, data, dataLineClass){
 		})
 		.attr('y2', function(d, i) {
 			return -Math.cos(dateScaleAngle(data[i+1].standardTime)) * rScale(data[i+1].totalValue);
-		});
+		})
+		.style('stroke', strokeScale(startDelayPortion)); //根据时间生成不同的填色
 	//---------------------------------------------------------------------
 }
 
