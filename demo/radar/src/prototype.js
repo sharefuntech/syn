@@ -167,7 +167,7 @@ function renderData(vizG, data, dataLineClass){
 	// 填色根据延迟时间而定
 	var strokeScale = d3.scale.linear()
 			.domain([0, animateTime])
-			.range(['#000', '#ccc']);
+			.range(['#000', 'teal']);
 	//===================================================================
 	//单条曲线方式，不能实现delay动画 =======================================
 	// var lineCircle = d3.svg.line.radial()

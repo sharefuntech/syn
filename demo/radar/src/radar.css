@@ -90,9 +90,9 @@ canvas {
 /*鼠标经过，高亮曲线*/
 .highLightLine {
 	stroke:#f00;
-	stroke-width:2;
+	stroke-width:3;
 	fill:none;
-	stroke-opacity: 0.7;
+	stroke-opacity: 1;
 }
 
 /*走珠*/
