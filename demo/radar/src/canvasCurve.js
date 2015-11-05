@@ -5,8 +5,9 @@ var animateTime = 7000;
 d3.csv('data/allFundQuoteLess.csv', function(data) {
 	// console.log(data);
 	data = iniData(data);
-	console.log(data);
-	renderCanvas(data);
+	// console.log(data);
+	// renderCanvas(data);
+	prepareRenderData(data); 
 });
 
 // canvas render
@@ -79,51 +80,51 @@ function renderSingleCanvasCurve(canvas, context, data) {
 
 	//set interval mode ============================================
 	
-	var setAnim;
-	setTimeout(triggerSingleCureDraw, Math.floor(startDelayPortion));
+	// var setAnim;
+	// setTimeout(triggerSingleCureDraw, Math.floor(startDelayPortion));
 
-	function triggerSingleCureDraw() {
-		setAnim = setInterval(drawCurve, 40);
-	}
-	function drawCurve() {
-		if (i < (dataLength-1)) {
-			xPosition_start = Math.sin(dateScaleAngle(data[i].standardTime)) * rScale(data[i].totalValue) + canvasWidth/2;;
-			yPosition_start = -Math.cos(dateScaleAngle(data[i].standardTime)) * rScale(data[i].totalValue)+ canvasHeight/2;
-			xPosition_end = Math.sin(dateScaleAngle(data[i+1].standardTime)) * rScale(data[i+1].totalValue) + canvasWidth/2;;
-			yPosition_end = -Math.cos(dateScaleAngle(data[i+1].standardTime)) * rScale(data[i+1].totalValue)+ canvasHeight/2;
-			// console.log('{' + xPosition + ', ' + yPosition + '}');
-			context.moveTo(xPosition_start, yPosition_start);
-			context.lineTo(xPosition_end, yPosition_end);
-			context.stroke();
+	// function triggerSingleCureDraw() {
+	// 	setAnim = setInterval(drawCurve, 40);
+	// }
+	// function drawCurve() {
+	// 	if (i < (dataLength-1)) {
+	// 		xPosition_start = Math.sin(dateScaleAngle(data[i].standardTime)) * rScale(data[i].totalValue) + canvasWidth/2;;
+	// 		yPosition_start = -Math.cos(dateScaleAngle(data[i].standardTime)) * rScale(data[i].totalValue)+ canvasHeight/2;
+	// 		xPosition_end = Math.sin(dateScaleAngle(data[i+1].standardTime)) * rScale(data[i+1].totalValue) + canvasWidth/2;;
+	// 		yPosition_end = -Math.cos(dateScaleAngle(data[i+1].standardTime)) * rScale(data[i+1].totalValue)+ canvasHeight/2;
+	// 		// console.log('{' + xPosition + ', ' + yPosition + '}');
+	// 		context.moveTo(xPosition_start, yPosition_start);
+	// 		context.lineTo(xPosition_end, yPosition_end);
+	// 		context.stroke();
 
-			i++;
-		} else{
-			clearInterval(setAnim);
-		}
-	}
+	// 		i++;
+	// 	} else{
+	// 		clearInterval(setAnim);
+	// 	}
+	// }
 
 	//request animation mode ======================================
-	// setTimeout(triggerDrawFrame, Math.floor(startDelayPortion));
+	setTimeout(triggerDrawFrame, Math.floor(startDelayPortion));
 	
-	// function triggerDrawFrame() {
-	// 	(function drawFrame(){
-	// 		animateCurveId = window.requestAnimationFrame(drawFrame, canvas);
-	// 		if (i < (dataLength-1)) {
-	// 			xPosition_start = Math.sin(dateScaleAngle(data[i].standardTime)) * rScale(data[i].totalValue) + canvasWidth/2;;
-	// 			yPosition_start = -Math.cos(dateScaleAngle(data[i].standardTime)) * rScale(data[i].totalValue)+ canvasHeight/2;
-	// 			xPosition_end = Math.sin(dateScaleAngle(data[i+1].standardTime)) * rScale(data[i+1].totalValue) + canvasWidth/2;;
-	// 			yPosition_end = -Math.cos(dateScaleAngle(data[i+1].standardTime)) * rScale(data[i+1].totalValue)+ canvasHeight/2;
-	// 			// console.log('{' + xPosition + ', ' + yPosition + '}');
-	// 			context.moveTo(xPosition_start, yPosition_start);
-	// 			context.lineTo(xPosition_end, yPosition_end);
-	// 			context.stroke();
+	function triggerDrawFrame() {
+		(function drawFrame(){
+			animateCurveId = window.requestAnimationFrame(drawFrame, canvas);
+			if (i < (dataLength-1)) {
+				xPosition_start = Math.round(Math.sin(dateScaleAngle(data[i].standardTime)) * rScale(data[i].totalValue) + canvasWidth/2);
+				yPosition_start = Math.round(-Math.cos(dateScaleAngle(data[i].standardTime)) * rScale(data[i].totalValue)+ canvasHeight/2);
+				xPosition_end = Math.round(Math.sin(dateScaleAngle(data[i+1].standardTime)) * rScale(data[i+1].totalValue) + canvasWidth/2);
+				yPosition_end = Math.round(-Math.cos(dateScaleAngle(data[i+1].standardTime)) * rScale(data[i+1].totalValue)+ canvasHeight/2);
+				// console.log('{' + xPosition_start + ', ' + yPosition_start + '}');
+				context.moveTo(xPosition_start, yPosition_start);
+				context.lineTo(xPosition_end, yPosition_end);
+				context.stroke();
 
-	// 			i++;
-	// 		} else{
-	// 			window.cancelAnimationFrame(animateCurveId);
-	// 		}
-	// 	}());
-	// }
+				i++;
+			} else{
+				window.cancelAnimationFrame(animateCurveId);
+			}
+		}());
+	}
 	
 
 }
@@ -171,7 +172,56 @@ function iniData(data) {
 	});
 
 	// console.log('fun iniData: ');
-	console.log(nestedData);
+	// console.log(nestedData);
 	return nestedData;
 }
 
+//pre calculate the position of each data
+function prepareRenderData(data) {
+	
+
+	var positionDataAll = [];
+	data.forEach(function(eData) {
+		// 股价极值
+		var totalValueExtent = d3.extent(eData.values, function(d) {
+			return d.totalValue;
+		});
+		// console.log(totalValueExtent);
+		// 时间极值
+		var dateExtent = d3.extent(eData.values, function(d) {
+			return d.standardTime;
+		});
+		// console.log(dateExtent);
+		//设定日期范围
+		var rScale = d3.scale.linear()
+				// .domain(totalValueExtent)
+				.domain([0,6])
+				.range([0, 280]);
+
+		var fullDateTime = ['2001/1/1', '2016/12/31'];
+		//当前数据日期跨度占元周角度
+		var dateScaleAngleExtent = caculateDateAngleExtent(fullDateTime, dateExtent);
+		var dateScaleAngle = d3.time.scale()
+				.domain(dateExtent)
+				.range(dateScaleAngleExtent);
+
+		// 渲染数据曲线开始前需要delay的时间长度
+		var startDelayPortion = dateScaleAngleExtent[0]/(Math.PI*2)*animateTime;
+		// console.log(d.values);
+		var singleDataSet = eData.values;
+		var singleDataSetLength = singleDataSet.length;
+		// console.log(singleDataSetLength);
+		var positionData = [];
+		for(var i=0; i<singleDataSetLength; i++) {
+			// console.log(singleDataSet[i]);
+			var singleDataPoint = {};
+			singleDataPoint.x = Math.round(Math.sin(dateScaleAngle(singleDataSet[i].standardTime)) * rScale(singleDataSet[i].totalValue)) + Math.round(canvasWidth/2);
+			singleDataPoint.y = Math.round(-Math.cos(dateScaleAngle(singleDataSet[i].standardTime)) * rScale(singleDataSet[i].totalValue))+ Math.round(canvasHeight/2);
+			console.log(singleDataPoint.x);
+			console.log(singleDataPoint.y);
+			positionData.push(singleDataPoint);
+		}
+		positionDataAll.push(positionData);
+	});
+	// console.log(positionDataAll);
+}

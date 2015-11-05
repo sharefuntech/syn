@@ -23,14 +23,14 @@ def setupConnection(targetUrl, driverMode):
 			driver = webdriver.PhantomJS(executable_path='/Users/guowei/Documents/tools/phantomjs/bin/phantomjs')
 		#windows not test yet
 		else : 
-			driver = ''
+			driver = webdriver.PhantomJS()
 		return driver
 	# -------------------------------------------
 
 	# --------checkSystem() 检测操作系统类型========
 	def checkSystem():
 	    systemType = platform.system()
-	    # print systemType
+	    print systemType
 	    return systemType
 	# -------------------------------------------
 
@@ -56,4 +56,4 @@ def setupConnection(targetUrl, driverMode):
 
 targetUrl = 'http://www.atool.org/useragent.php'
 
-setupConnection(targetUrl, 'browser')
+setupConnection(targetUrl, 'phantomjs')
