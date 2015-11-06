@@ -87,9 +87,9 @@ def selectPhantomjs():
 	# macOS
 	elif systemType == 'Darwin':
 		driver = webdriver.PhantomJS(executable_path='/Users/guowei/Documents/tools/phantomjs/bin/phantomjs')
-	#windows not test yet
-	else : 
-		driver = ''
+	#windows
+	elif systemType == 'Windows': 
+			driver = webdriver.PhantomJS(executable_path='C:\\bin\\phantomjs\\bin\\phantomjs')
 	return driver
 # ---------------------------------------------------------------
 

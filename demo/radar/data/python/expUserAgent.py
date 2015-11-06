@@ -21,9 +21,9 @@ def setupConnection(targetUrl, driverMode):
 		# macOS
 		elif systemType == 'Darwin':
 			driver = webdriver.PhantomJS(executable_path='/Users/guowei/Documents/tools/phantomjs/bin/phantomjs')
-		#windows not test yet
-		else : 
-			driver = webdriver.PhantomJS()
+		#windows
+		elif systemType == 'Windows': 
+			driver = webdriver.PhantomJS(executable_path='C:\\bin\\phantomjs\\bin\\phantomjs')
 		return driver
 	# -------------------------------------------
 
