@@ -46,8 +46,8 @@ var sampleData = [d3.range(360).map(function (i) {
 
 var rawData, dataView;
 
-d3.csv('data/allFundQuoteLess.csv', function(data) {
-	// console.log(data);
+d3.csv('data/processedFundQuote.csv', function(data) {
+	console.log(data);
 	rawData = data;
 	dataView = iniData(rawData);
 	// console.log(dataView);
@@ -115,6 +115,8 @@ function iniData(data) {
 		// d.month = monthFormat(d.standardTime);
 		// d.day = dayFormat(d.standardTime);
 		d.totalValue = +d.totalValue;
+		d.xPosition = +d.xPosition;
+		d.yPosition = +d.yPosition;
 	});
 
 	var nestedData = d3.nest()
@@ -196,7 +198,7 @@ function renderData(vizG, data, dataLineClass){
 
 	vizG.append("g")
 		.attr('id', 'dataLineGroup')
-		.attr("transform", "translate(" + svgwWidth / 2 + "," + svgHeight / 2 + ")")
+		// .attr("transform", "translate(" + svgwWidth / 2 + "," + svgHeight / 2 + ")")
 		.selectAll("line.dataLine")
 		.data(dataVirtual)//需要存入数组进行操作
 		.enter()
@@ -211,16 +213,20 @@ function renderData(vizG, data, dataLineClass){
 		})
 		// .attr("class", 'dataLine')
 		.attr('x1', function(d, i) {
-			return Math.sin(dateScaleAngle(data[i].standardTime)) * rScale(data[i].totalValue);
+			// return Math.sin(dateScaleAngle(data[i].standardTime)) * rScale(data[i].totalValue);
+			return data[i].xPosition;
 		})
 		.attr('y1', function(d, i) {
-			return -Math.cos(dateScaleAngle(data[i].standardTime)) * rScale(data[i].totalValue);
+			// return -Math.cos(dateScaleAngle(data[i].standardTime)) * rScale(data[i].totalValue);
+			return data[i].yPosition;
 		})
 		.attr('x2', function(d, i) {
-			return Math.sin(dateScaleAngle(data[i+1].standardTime)) * rScale(data[i+1].totalValue);
+			// return Math.sin(dateScaleAngle(data[i+1].standardTime)) * rScale(data[i+1].totalValue);
+			return data[i+1].xPosition;
 		})
 		.attr('y2', function(d, i) {
-			return -Math.cos(dateScaleAngle(data[i+1].standardTime)) * rScale(data[i+1].totalValue);
+			// return -Math.cos(dateScaleAngle(data[i+1].standardTime)) * rScale(data[i+1].totalValue);
+			return data[i+1].yPosition;
 		})
 		.style('stroke', strokeScale(startDelayPortion)); //根据时间生成不同的填色
 	//---------------------------------------------------------------------
