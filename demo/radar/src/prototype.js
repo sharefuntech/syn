@@ -30,6 +30,12 @@ var svgwWidth = 1000;
 var svgHeight = 1000;
 var svgMargins = {top:10, right:10, bottom:10, left:10};
 
+// 鼠标提示框
+var mouseTooltip = d3.select("body")
+        .append("div")
+        .attr("class", "mouseTooltip")
+        .style("opacity", 0);
+
 //雷达背景参数
 var numCircle = 15; //雷达圈数
 var rInterpolateCircle = 50; //雷达圈之间间隔距离
@@ -47,7 +53,7 @@ var sampleData = [d3.range(360).map(function (i) {
 var rawData, dataView;
 
 d3.csv('data/processedFundQuote.csv', function(data) {
-	console.log(data);
+	// console.log(data);
 	rawData = data;
 	dataView = iniData(rawData);
 	// console.log(dataView);
@@ -55,9 +61,9 @@ d3.csv('data/processedFundQuote.csv', function(data) {
 	iniSvg(svgwWidth, svgHeight);
 	// 渲染雷达背景
 	renderRadar(vizG, svgwWidth, svgHeight);
-	//渲染canvas动态连接曲线
+	//渲染canvas动态连接曲线，canvas锯齿太严重
 	// renderCanvas(dataView);
-	// 渲染svg静态曲线
+	//渲染svg动态连接曲线
 	dataView.forEach(function(d) {
 		return renderData(vizG, d.values, d.key);
 	});
@@ -129,7 +135,7 @@ function iniData(data) {
 	});
 
 	// console.log('fun iniData: ');
-	console.log(nestedData);
+	// console.log(nestedData);
 	return nestedData;
 }
 
@@ -169,7 +175,7 @@ function renderData(vizG, data, dataLineClass){
 	// 填色根据延迟时间而定
 	var strokeScale = d3.scale.linear()
 			.domain([0, animateTime])
-			.range(['#000', 'teal']);
+			.range(['#000', '#ccc']);
 	//===================================================================
 	//单条曲线方式，不能实现delay动画 =======================================
 	// var lineCircle = d3.svg.line.radial()
@@ -203,10 +209,21 @@ function renderData(vizG, data, dataLineClass){
 		.data(dataVirtual)//需要存入数组进行操作
 		.enter()
 		.append('line')
-		.on('mouseover', hightLightDataLine)
-		.on('mouseout', unHightLightDataLine)
+		// .on('mouseover', hightLightDataLine)
+		//  .on('mouseover', function(d, i) {
+		//  	console.log(data[i+1]);
+		//  	// return hightLightDataLine();
+		//  })
+		// .on('mouseout', unHightLightDataLine)
 		.classed(dataLineClass, true)
 		.classed("dataLine", true)
+		.on('mouseover', function(d, i) {
+		 	// console.log(data[i+1].date + data[i+1].fundName + data[i+1].totalValue);
+		 	showMouseTooltip(data[i+1].date, data[i+1].fundName, data[i+1].fundCode, data[i+1].totalValue);
+		})
+		.on('mouseout', function(d, i) {
+			hideMouseTooltip(data[i+1].fundName);
+		})
 		.transition()
 		.delay(function(d, i) {
 			return i*singleDelayTime + startDelayPortion;
@@ -228,7 +245,8 @@ function renderData(vizG, data, dataLineClass){
 			// return -Math.cos(dateScaleAngle(data[i+1].standardTime)) * rScale(data[i+1].totalValue);
 			return data[i+1].yPosition;
 		})
-		.style('stroke', strokeScale(startDelayPortion)); //根据时间生成不同的填色
+		.style('stroke', strokeScale(startDelayPortion))
+		.style('stroke-opacity', 0.8); //根据时间生成不同的填色
 	//---------------------------------------------------------------------
 }
 
@@ -303,10 +321,15 @@ function renderSingleCanvasCurve(canvas, context, data) {
 	(function drawFrame(){
 		animateCurveId = window.requestAnimationFrame(drawFrame, canvas);
 		if (i < dataLength) {
-			xPosition = Math.sin(dateScaleAngle(data[i].standardTime)) * rScale(data[i].totalValue) + svgwWidth/2 + svgMargins.left;;
-			yPosition = -Math.cos(dateScaleAngle(data[i].standardTime)) * rScale(data[i].totalValue)+ svgHeight/2 + svgMargins.top;
-
-			context.lineTo(xPosition, yPosition);
+			// xPosition = Math.sin(dateScaleAngle(data[i].standardTime)) * rScale(data[i].totalValue) + svgwWidth/2 + svgMargins.left;
+			// yPosition = -Math.cos(dateScaleAngle(data[i].standardTime)) * rScale(data[i].totalValue)+ svgHeight/2 + svgMargins.top;
+			// context.lineTo(xPosition, yPosition);
+			xPosition_start = data[i].xPosition;
+			yPosition_start = data[i].yPosition;
+			xPosition_end = data[i+1].xPosition;
+			yPosition_end = data[i+1].yPosition;
+			context.moveTo(xPosition_start, yPosition_start);
+			context.lineTo(xPosition_end, yPosition_end);
 			context.stroke();
 
 			i++;
@@ -662,6 +685,58 @@ function caculateDateLength(d1, d2) {
 	return dateLenth;
 }
 
+//出现提示框
+function showMouseTooltip(date, fundName, fundCode, totalValue) {
+	// console.log();
+	//选中后高亮此类基金线条样式
+	var selectedClass = '.' + fundName;
+	// console.log(d3.selectAll(selectedClass));
+	d3.selectAll(selectedClass).classed('highLightLine', true);
+
+	// var hoverClass = d3.select(this).attr('class');
+	// var classList = hoverClass.split(' ');
+	// // console.log(classList[0]);
+	// d3.selectAll('.' + classList[0])
+	// 	.classed('highLightLine', true);
+
+	// 选中后设置透明度为1
+	mouseTooltip.style("opacity", 1)
+		.style('z-index', 10);
+
+	mouseTooltip.html(generateMouseTipContent (date, fundName, fundCode, totalValue))
+        .style("left", function() {
+        	var screenWidth = screen.width;
+        	if (d3.event.pageX < screenWidth/2) {
+        		return d3.event.pageX + "px";
+        	} else{
+        		return (d3.event.pageX - 160) + "px";
+        	}
+        	return d3.event.pageX + "px";
+        })
+        .style("top", (d3.event.pageY) + "px");
+}
+
+// 隐藏提示框
+function hideMouseTooltip(fundName) {
+	//取消选中后恢复此类基金线条样式
+	var selectedClass = '.' + fundName;
+	// console.log(d3.selectAll(selectedClass));
+	d3.selectAll(selectedClass).classed('highLightLine', false);
+	// 隐藏提示框
+	mouseTooltip.style("opacity", 0);
+}
+
+//生成提示框内容
+function generateMouseTipContent (date, fundName, fundCode, totalValue) {
+	var dateList = date.split('/');
+	// console.log(dateList[0]);
+	return "<div id='dateTooltip'>" + dateList[0] + '年' + dateList[1] + '月' + dateList[2] + '日' + "</div>" + 
+	"<div class='lineTooltip'><hr id='lineInTooltip'></div>" +
+	"<div id='fundCodeTooltip'>代码：" + fundCode + "</div>" +
+	"<div id='fundNameTooltip'>" + fundName + "</div>" +
+	"<div class='lineTooltip'><hr id='lineInTooltip'></div>" +
+	"<div id='totalValueTooltip'>累计收益：" + totalValue + "元</div>";
+}
 
 
 

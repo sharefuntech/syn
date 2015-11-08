@@ -27,7 +27,7 @@ def readAllFundQuote(csvFile):
 
 	# 日期极值
 	startDate = convertStringDateToFloat('2001/1/1', '%Y/%m/%d')
-	endDate = convertStringDateToFloat('2015/12/31', '%Y/%m/%d')
+	endDate = convertStringDateToFloat('2016/12/31', '%Y/%m/%d')
 	distanceDate = endDate - startDate
 	# 雷达有效半径
 	rRada = 450

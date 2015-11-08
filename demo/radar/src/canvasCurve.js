@@ -2,6 +2,12 @@ var canvasWidth = 600;
 var canvasHeight = 600;
 var animateTime = 7000;
 
+// 鼠标提示框
+var mouseTooltip = d3.select("body")
+        .append("div")
+        .attr("class", "mouseTooltip")
+        .style("opacity", 0);
+
 d3.csv('data/allFundQuoteLess.csv', function(data) {
 	// console.log(data);
 	data = iniData(data);
