@@ -52,13 +52,22 @@ var sampleData = [d3.range(360).map(function (i) {
 
 var rawData, dataView;
 
+// 初始化画布
+iniSvg(svgwWidth, svgHeight);
+// 数据载入提示
+vizG.append("text")
+	.attr("id", "loading")
+	.attr("x", svgwWidth / 2)
+	.attr("y", svgHeight / 3)
+	.text("数据正在载入，请稍候......");
+
 d3.csv('data/processedFundQuote.csv', function(data) {
 	// console.log(data);
 	rawData = data;
 	dataView = iniData(rawData);
 	// console.log(dataView);
 	// 初始化画布
-	iniSvg(svgwWidth, svgHeight);
+	// iniSvg(svgwWidth, svgHeight);
 	// 渲染雷达背景
 	renderRadar(vizG, svgwWidth, svgHeight);
 	//渲染canvas动态连接曲线，canvas锯齿太严重
@@ -69,6 +78,8 @@ d3.csv('data/processedFundQuote.csv', function(data) {
 	});
 	//渲染走时红点
 	renderTick();
+	//to remove the loading state words
+	d3.select("#loading").remove();
 });
 
 // function renderHighlightLine() {
