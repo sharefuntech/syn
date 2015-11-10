@@ -1,0 +1,104 @@
+body{
+	background-color: #000;
+	padding: 0;
+	margin: 0;
+	font-family: arial, 'Microsoft Yahei', simHei;
+}
+
+#svgCanvas {
+	/*position: absolute;*/
+}
+
+canvas {
+	/*position: absolute;*/
+}
+
+/*雷达圆圈*/
+.radarStructureCircle {
+	fill: none;
+	stroke: #ccc;
+	stroke-opacity: 0.15;
+	/*stroke-width: 0.5px;*/
+}
+
+/*外侧黑色圆圈*/
+.radarStructureCircleOutBlack {
+	fill: none;
+	stroke: #3AAE49;
+	stroke-width: 1.5px;
+}
+
+/*雷达半径射线*/
+.radarStructureLine {
+	fill: none;
+	stroke: #ccc;
+	stroke-opacity: 0.15;
+	/*stroke-width: 0.5px;*/
+}
+
+/*刻度*/
+.radarStructureLineMarkerYear {
+	fill: none;
+	stroke: #3AAE49;
+	stroke-width: 1.5px;
+}
+
+.radarStructureLineMarkerMonth {
+	fill: none;
+	stroke: #3AAE49;
+	stroke-width: 1px;
+}
+
+/*时间刻度标签*/
+.radarMarkerYearLabel {
+	font-family: arial, 'Microsoft Yahei', simHei;
+	font-size: 12px;
+	fill:#3AAE49;
+	text-anchor: middle;
+}
+
+.radarMarkerMonthLabel {
+	font-family: arial, 'Microsoft Yahei', simHei;
+	font-size: 10px;
+	fill:#3AAE49;
+	text-anchor: middle;
+}
+
+/*收益刻度标签*/
+.radarLabelRevenue {
+	font-family: arial, 'Microsoft Yahei', simHei;
+	font-size: 10px;
+	fill:#3AAE49;
+	text-anchor: middle;
+}
+
+/*数据曲线样本*/
+/*单条整条曲线*/
+.dataPath {
+	stroke: #000;
+	stroke-opacity: 0.7;
+	stroke-width:1;
+	fill:none;
+}
+/*单独每条动画生成直线*/
+.dataLine {
+	stroke: #000;
+	stroke-opacity: 0.7;
+	stroke-width:1;
+	fill:none;
+}
+/*鼠标经过，高亮曲线*/
+.highLightLine {
+	stroke:#f00;
+	stroke-width:3;
+	fill:none;
+	stroke-opacity: 1;
+}
+
+/*走珠*/
+#radarTickGroup {
+	stroke:none;
+	fill:#f00;
+}
+
+
