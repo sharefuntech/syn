@@ -693,8 +693,8 @@ data_r_no_10.forEach(function(d, j) {
 		.attr('d', pieArc)
 		.attr('fill', '#fff')
 		.transition()
-		.delay(j * 100)
-		.duration(1000)
+		.delay(j * 500)
+		.duration(5000)
 		.style('fill', '#000')
 		.style('fill-opacity', .2);
 });
