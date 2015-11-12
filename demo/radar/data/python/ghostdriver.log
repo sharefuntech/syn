@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [INFO  - 2015-11-11T09:27:54.417Z] GhostDriver - Main - running on port 56288
 [INFO  - 2015-11-11T09:27:54.706Z] Session [7cc9e7c0-8856-11e5-a3f2-771c796895f9] - page.settings - {"XSSAuditingEnabled":false,"javascriptCanCloseWindows":true,"javascriptCanOpenWindows":true,"javascriptEnabled":true,"loadImages":true,"localToRemoteUrlAccessEnabled":false,"userAgent":"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/538.1 (KHTML, like Gecko) PhantomJS/2.0.0 Safari/538.1","webSecurityEnabled":true}
 [INFO  - 2015-11-11T09:27:54.706Z] Session [7cc9e7c0-8856-11e5-a3f2-771c796895f9] - page.customHeaders:  - {}
@@ -81,3 +82,11 @@
 [ERROR - 2015-11-11T09:30:08.275Z] WebElementLocator - _handleLocateCommand - Element(s) NOT Found: GAVE UP. Search Stop Time: 1447234208225
 
   :262 in error
+=======
+PhantomJS is launching GhostDriver...
+[INFO  - 2015-11-11T14:41:56.161Z] GhostDriver - Main - running on port 57513
+[INFO  - 2015-11-11T14:41:56.504Z] Session [5b62b630-8882-11e5-8852-89dfc195f0b0] - page.settings - {"XSSAuditingEnabled":false,"javascriptCanCloseWindows":true,"javascriptCanOpenWindows":true,"javascriptEnabled":true,"loadImages":true,"localToRemoteUrlAccessEnabled":false,"userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X) AppleWebKit/534.34 (KHTML, like Gecko) PhantomJS/1.9.7 Safari/534.34","webSecurityEnabled":true}
+[INFO  - 2015-11-11T14:41:56.504Z] Session [5b62b630-8882-11e5-8852-89dfc195f0b0] - page.customHeaders:  - {}
+[INFO  - 2015-11-11T14:41:56.504Z] Session [5b62b630-8882-11e5-8852-89dfc195f0b0] - Session.negotiatedCapabilities - {"browserName":"phantomjs","version":"1.9.7","driverName":"ghostdriver","driverVersion":"1.1.0","platform":"mac-unknown-32bit","javascriptEnabled":true,"takesScreenshot":true,"handlesAlerts":false,"databaseEnabled":false,"locationContextEnabled":false,"applicationCacheEnabled":false,"browserConnectionEnabled":false,"cssSelectorsEnabled":true,"webStorageEnabled":false,"rotatable":false,"acceptSslCerts":false,"nativeEvents":true,"proxy":{"proxyType":"direct"}}
+[INFO  - 2015-11-11T14:41:56.504Z] SessionManagerReqHand - _postNewSessionCommand - New Session Created: 5b62b630-8882-11e5-8852-89dfc195f0b0
+>>>>>>> c36048124450e7794547e4e04d2e137cfe390900

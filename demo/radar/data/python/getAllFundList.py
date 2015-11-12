@@ -30,14 +30,14 @@ LOF http://quote.eastmoney.com/center/fundlist.html#0,4_4_0
 ETF http://quote.eastmoney.com/center/fundlist.html#0,5_4_0
 QDII http://quote.eastmoney.com/center/fundlist.html#0,6_4_0
 '''
-fundCategary = ['股票型']
-# fundCategary = ['股票型', '混合型', '债券型', 'LOF', 'ETF', 'QDII']
+# fundCategary = ['股票型']
+fundCategary = ['股票型', '混合型', '债券型', 'LOF', 'ETF', 'QDII']
 # targetUrl = 'http://quote.eastmoney.com/center/fundlist.html#0,1_4_0'
 targetUrlBaseHead = 'http://quote.eastmoney.com/center/fundlist.html#0,'
 targetUrlBaseTail = '_4_0'
 # print targetUrl
 
-#getAllFundList() 抓取所有类别基金列表======================================
+#getAllFundList() 抓取所有类别基金列表=============================
 def getAllFundList():
 	iniAllFundListCsv()
 	fundCategaryQuantity = len(fundCategary)
@@ -50,11 +50,9 @@ def getAllFundList():
 		# windows命令行输出需要将utf8内码转为gb2312外码
 		# print fundCategary[x].decode('utf-8').encode('gb2312') ,currentTargetUrl
 		getSingleFundList(currentTargetUrl, currentFundCategary)
+#---------------------------------------------------------------
 
-
-
-
-# getSingleFundList() 抓取一类基金列表======================================
+# getSingleFundList() 抓取一类基金列表============================
 def getSingleFundList(targetUrl, currentFundCategary):
 	# iniAllFundListCsv() #初始化基金业绩存储csv文件(放弃初始化添加字段名称，防止excel打开后将00开头字符串截去)
 	pageConnection = setupConnection(targetUrl, 'phantomjs') #建立连接
@@ -152,27 +150,30 @@ def getSinglePageFundList(pageConnection, currentFundCategary):
 				# ./表示直属元素 .//表示之后所有元素
 				dataList = tr.find_elements_by_xpath('./td')
 				
-				# fundCategary = currentFundCategary.decode('utf-8').encode('utf-8')
-				# fundCode = str(dataList[1].text.encode('utf-8'))
-				# fundName = dataList[2].find_element_by_xpath('./a').text.encode('utf-8')
-				# # 每天下午更新数据，所以下午爬取只能用上一日数据
-				# # currentValue = dataList[6].text.encode('utf-8')
-				# # totalValue = dataList[7].text.encode('utf-8')
+				fundCategary = currentFundCategary
+				fundCode = str(dataList[1].text.encode('utf-8'))
+				fundName = dataList[2].find_element_by_xpath('./a').text.encode('utf-8')
+				# 每天下午更新数据，所以下午爬取只能用上一日数据
+				currentValue = dataList[4].text.encode('utf-8')
+				totalValue = dataList[5].text.encode('utf-8')
 				# currentValue = dataList[6].text.encode('utf-8')
 				# totalValue = dataList[7].text.encode('utf-8')
+				# if currentValue is None or totalValue is None:
+				# 	print 'no value updated, throw this record away'
+				# 	continue
 
 				# windows用gb2312编码
-				fundCategary = currentFundCategary.decode('utf-8').encode('gb2312')
-				fundCode = dataList[1].text.decode('utf-8').encode('gb2312')
-				fundName = dataList[2].find_element_by_xpath('./a').text.decode('utf-8').encode('gb2312')
-				currentValue = dataList[6].text.decode('utf-8').encode('gb2312')
-				totalValue = dataList[7].text.decode('utf-8').encode('gb2312')
+				# fundCategary = currentFundCategary.decode('utf-8').encode('gb2312')
+				# fundCode = dataList[1].text.decode('utf-8').encode('gb2312')
+				# fundName = dataList[2].find_element_by_xpath('./a').text.decode('utf-8').encode('gb2312')
+				# currentValue = dataList[6].text.decode('utf-8').encode('gb2312')
+				# totalValue = dataList[7].text.decode('utf-8').encode('gb2312')
 
 				print fundCategary, fundCode, fundName, currentValue, totalValue
 				# print fundCategary, fundCode
 				print '---------------------------------------------------'
 				#start写入csv文件
-				# writeScrappedQuote(fundCategary, fundCode, fundName, currentValue, totalValue)
+				writeScrappedQuote(fundCategary, fundCode, fundName, currentValue, totalValue)
 			except Exception, e:
 				print 'not data tr'
 				continue
