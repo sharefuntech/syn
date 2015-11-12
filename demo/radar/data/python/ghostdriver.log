@@ -1,6 +1,20 @@
 PhantomJS is launching GhostDriver...
-[INFO  - 2015-11-11T14:41:56.161Z] GhostDriver - Main - running on port 57513
-[INFO  - 2015-11-11T14:41:56.504Z] Session [5b62b630-8882-11e5-8852-89dfc195f0b0] - page.settings - {"XSSAuditingEnabled":false,"javascriptCanCloseWindows":true,"javascriptCanOpenWindows":true,"javascriptEnabled":true,"loadImages":true,"localToRemoteUrlAccessEnabled":false,"userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X) AppleWebKit/534.34 (KHTML, like Gecko) PhantomJS/1.9.7 Safari/534.34","webSecurityEnabled":true}
-[INFO  - 2015-11-11T14:41:56.504Z] Session [5b62b630-8882-11e5-8852-89dfc195f0b0] - page.customHeaders:  - {}
-[INFO  - 2015-11-11T14:41:56.504Z] Session [5b62b630-8882-11e5-8852-89dfc195f0b0] - Session.negotiatedCapabilities - {"browserName":"phantomjs","version":"1.9.7","driverName":"ghostdriver","driverVersion":"1.1.0","platform":"mac-unknown-32bit","javascriptEnabled":true,"takesScreenshot":true,"handlesAlerts":false,"databaseEnabled":false,"locationContextEnabled":false,"applicationCacheEnabled":false,"browserConnectionEnabled":false,"cssSelectorsEnabled":true,"webStorageEnabled":false,"rotatable":false,"acceptSslCerts":false,"nativeEvents":true,"proxy":{"proxyType":"direct"}}
-[INFO  - 2015-11-11T14:41:56.504Z] SessionManagerReqHand - _postNewSessionCommand - New Session Created: 5b62b630-8882-11e5-8852-89dfc195f0b0
+[INFO  - 2015-11-12T14:18:16.345Z] GhostDriver - Main - running on port 50845
+[INFO  - 2015-11-12T14:18:16.364Z] Session [37547280-8948-11e5-8f71-ffd9d30c8b8e] - page.settings - {"XSSAuditingEnabled":false,"javascriptCanCloseWindows":true,"javascriptCanOpenWindows":true,"javascriptEnabled":true,"loadImages":true,"localToRemoteUrlAccessEnabled":false,"userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X) AppleWebKit/534.34 (KHTML, like Gecko) PhantomJS/1.9.7 Safari/534.34","webSecurityEnabled":true}
+[INFO  - 2015-11-12T14:18:16.364Z] Session [37547280-8948-11e5-8f71-ffd9d30c8b8e] - page.customHeaders:  - {}
+[INFO  - 2015-11-12T14:18:16.364Z] Session [37547280-8948-11e5-8f71-ffd9d30c8b8e] - Session.negotiatedCapabilities - {"browserName":"phantomjs","version":"1.9.7","driverName":"ghostdriver","driverVersion":"1.1.0","platform":"mac-unknown-32bit","javascriptEnabled":true,"takesScreenshot":true,"handlesAlerts":false,"databaseEnabled":false,"locationContextEnabled":false,"applicationCacheEnabled":false,"browserConnectionEnabled":false,"cssSelectorsEnabled":true,"webStorageEnabled":false,"rotatable":false,"acceptSslCerts":false,"nativeEvents":true,"proxy":{"proxyType":"direct"}}
+[INFO  - 2015-11-12T14:18:16.364Z] SessionManagerReqHand - _postNewSessionCommand - New Session Created: 37547280-8948-11e5-8f71-ffd9d30c8b8e
+[INFO  - 2015-11-12T14:23:16.349Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2015-11-12T14:28:16.354Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2015-11-12T14:33:16.359Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2015-11-12T14:38:16.359Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2015-11-12T14:39:20.759Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+Session [0ca0b450-8947-11e5-962d-197af5b16e3f] - page.onError - msg: TypeError: 'null' is not an object (evaluating 'dataInfo.result')
+[ERROR - 2015-11-12T14:19:29.332Z] Session [0ca0b450-8947-11e5-962d-197af5b16e3f] - page.onError - stack:
+  (anonymous function) (http://stock.finance.sina.com.cn/fundInfo/view/FundInfo_LSJZ.php?symbol=165511:636)
+  b (http://i0.sinaimg.cn/jslib/jquery-1.4.2.min.js:124)
+  (anonymous function) (http://i0.sinaimg.cn/jslib/jquery-1.4.2.min.js:129)
+[INFO  - 2015-11-12T14:19:54.313Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2015-11-12T14:24:54.315Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2015-11-12T14:29:54.320Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2015-11-12T14:34:54.325Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW

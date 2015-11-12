@@ -230,7 +230,14 @@ function renderData(vizG, data, dataLineClass){
 		.classed("dataLine", true)
 		.on('mouseover', function(d, i) {
 		 	// console.log(data[i+1].date + data[i+1].fundName + data[i+1].totalValue);
-		 	showMouseTooltip(data[i+1].date, data[i+1].fundName, data[i+1].fundCode, data[i+1].totalValue);
+		 	//generate data for mini trend curve
+		 	var dataPastYear = [];
+		 	for(var j = 12; j>0; j--) {
+		 		dataPastYear.push(data[1+i-j].totalValue);
+		 	}
+		 	// console.log(dataPastYear);
+
+		 	showMouseTooltip(dataPastYear, data[i+1].date, data[i+1].fundName, data[i+1].fundCode, data[i+1].totalValue);
 		})
 		.on('mouseout', function(d, i) {
 			hideMouseTooltip(data[i+1].fundName);
@@ -697,7 +704,7 @@ function caculateDateLength(d1, d2) {
 }
 
 //出现提示框
-function showMouseTooltip(date, fundName, fundCode, totalValue) {
+function showMouseTooltip(dataTrend, date, fundName, fundCode, totalValue) {
 	// console.log();
 	//选中后高亮此类基金线条样式
 	var selectedClass = '.' + fundName;
@@ -725,6 +732,43 @@ function showMouseTooltip(date, fundName, fundCode, totalValue) {
         	return d3.event.pageX + "px";
         })
         .style("top", (d3.event.pageY) + "px");
+
+    //display quote trend in tooltip
+    mouseTooltip.append('svg')
+    	.attr('id', 'valueTrend')
+    	.attr('width', '150')
+    	.attr('width', '100')
+    	.append('g')
+    	.attr('id', 'trendContainer');
+
+    var dataExtent = d3.extent(dataTrend);
+    console.log(dataExtent);
+
+    var xScale = d3.scale.linear()
+			.domain([0, 11])
+			.range([0, 150]);
+
+	var yScale = d3.scale.linear()
+			.domain(dataExtent)
+			.range([0, 100]);
+
+    var lineTrend = d3.svg.line()
+		.x(function(d, i) { return xScale(i); })
+		.y(function(d, i) { return 100 - yScale(d); })
+		.interpolate('basis');
+
+	d3.select('#trendContainer')
+		.selectAll('path.trend')
+		.data([dataTrend])
+		.enter()
+		.append('path')
+		.attr('class', 'trend')
+		.attr('d', function(d) {
+			return lineTrend(d);
+		})
+		.attr('fill', 'none')
+		.attr('stroke', 'white')
+		.attr('stroke-width', 2);
 }
 
 // 隐藏提示框
