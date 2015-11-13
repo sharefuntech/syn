@@ -218,7 +218,13 @@ def universalPrint(printObj):
 				# convertedObjGroup.append(convertedObj)
 			# print convertedObjGroup
 	else:
-		print printObj
+		if len(printObj) == 1:
+			print printObj
+		elif len(printObj) == 0:
+			print 'no print object'
+		else:
+			for obj in printObj:
+				print obj
 	
 # ---------------------------------------------------------------
 
