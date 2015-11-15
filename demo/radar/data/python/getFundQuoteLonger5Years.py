@@ -8,6 +8,7 @@ import time
 import urllib
 import json
 import platform
+import gc
 
 '''
 读入csv格式保存的基金代码，获取每个基金的历史业绩
@@ -24,33 +25,42 @@ getAllFundQuote() 入口程序
 ------turnPage() 翻页器
 '''
 
+allFundListCsv = 'allFundList.csv'
+fundQuoteLongerThreeYearsCsv = 'fundQuoteLonger5Years.csv'
+
 # getAllFundQuote() 入口程序====================================
-def getAllFundQuote():
-	iniAllFundQuoteCsv()
-	readAllFundQuote()
+def getAllFundQuote(allFundListCsv, fundQuoteLongerThreeYearsCsv):
+	csvName = fundQuoteLongerThreeYearsCsv
+	writeMode = 'a'
+	csvHead = ['fundCategary', 'fundCode', 'fundName', 'date', 'currentValue', 'totalValue']
+	iniAllFundQuoteCsv(csvName, writeMode, csvHead)
+	readAllFundQuote(allFundListCsv)
 # -------------------------------------------------------------
 
 # --iniAllFundQuoteCsv() 初始化基金业绩存储csv文件================
-def iniAllFundQuoteCsv():
-	allFundQuoteCsv = open('./allFundQuoteLess.csv', 'a')
+def iniAllFundQuoteCsv(csvName, writeMode, csvHead):
+	allFundQuoteCsv = open(csvName, writeMode)
 	try:
 		writer = csv.writer(allFundQuoteCsv)
-		writer.writerow(('fundCode','fundName','date','currentValue','totalValue'))
+		writer.writerow((csvHead))
+		print 'successfully initial csv: ', csvName
 	finally:
 		allFundQuoteCsv.close()
 # ---------------------------------------------------------------
 
 # --readAllFundQuote()  读入基金名称列表=========================
-def readAllFundQuote():
-	csvReader = open('./expFundListLess.csv', 'rb')
+def readAllFundQuote(allFundListCsv):
+	csvReader = open(allFundListCsv, 'rb')
 	fundList = csv.reader(csvReader)
 	# 根据基金代码名单抓取每个基金业绩
 	for fund in fundList:
-		# 读入基金代码，基金代码在csv文件第一列
-		fundCode = fund[0].decode('utf-8').encode('utf-8')
-		fundName = fund[1].decode('utf-8').encode('utf-8')
+		# 读入基金代码，基金代码在csv文件第一列,delete csv head first!!!!!! or use try/catch just can ignore the error?
+		fundCategary = fund[0]
+		fundCode = fund[1]
+		fundName = fund[2]
+		print 'read in fund: ', fundCategary, fundCode, fundName
 		# 抓取单个基金业绩
-		getSingleFundQuote(fundCode, fundName)
+		getSingleFundQuote(fundCategary, fundCode, fundName)
 	csvReader.close()
 # ---------------------------------------------------------------
 
@@ -73,6 +83,7 @@ def setupConnection(fundCode, driverMode):
 	# 需要返回driver而不是driver.get(url)，才能实现传递抓取页面对象
 	pageConnection = driver
 	time.sleep(3)
+	print 'connection established for fund: ', fundCode
 	# 测试内部应用calculateTotalPage通过
 	# calculateTotalPage(driver) 
 	return pageConnection
@@ -101,24 +112,41 @@ def checkSystem():
 # ---------------------------------------------------------------
 
 # ----getSingleFundQuote() 抓取单个基金业绩======================
-def getSingleFundQuote(fundCode, fundName):
+def getSingleFundQuote(fundCategary, fundCode, fundName):
 	try:
 		# 载入单个基金页面
-		pageConnection = setupConnection(fundCode, 'phantomjs')
+		pageConnection = setupConnection(fundCode, 'browser')
 		totalPageNumber = calculateTotalPage(pageConnection)
+
+		# if established year less than 5 years, abort digging
+		if totalPageNumber < 60:
+			print 'less than 5 years, drop this fund!'
+			return
+			
 		for x in range(totalPageNumber):
-			scrapQuote(pageConnection, fundCode, fundName)
+			scrapQuote(fundCategary, fundCode, fundName, pageConnection)
 			turnPage(pageConnection)
+		# close webdriver connection
+		# quit() for firefox
+		# pageConnection.quit()
 	except Exception, e:
 		print 'fail to load the specific fund'
+		# quit() for firefox
+		# pageConnection.quit()
 		return
+	# try to release memory
+	finally:
+		# quit() for firefox
+		pageConnection.quit()
+		# gc.collect()
+		# return
 # ---------------------------------------------------------------
 
 # ------calculateTotalPage() 计算单个基金业绩内容所有页面数量========
 def calculateTotalPage(pageConnection):
 	try:
 		totalPageNumber = pageConnection.find_element_by_xpath('//div[@id = "right"]//div[@class = "pb"]//em[@class = "page_total"]').text.encode('utf-8')
-		# print totalPageNumber
+		print 'total quote page of this fund is: ', totalPageNumber
 		return int(totalPageNumber)
 	except Exception, e:
 		print 'fail to calculate total page for single fund'
@@ -136,6 +164,7 @@ def turnPage(pageConnection):
 		# print nextPage.text.encode('utf-8')
 		# 翻页间隔，防止被封杀
 		time.sleep(2)
+		print 'turn page successfully! '
 	except Exception, e:
 		print 'turn page fail'
 		time.sleep(random.randint(3,5)) #避免翻页失败快速连接，引发下一次被据
@@ -143,7 +172,7 @@ def turnPage(pageConnection):
 # ---------------------------------------------------------------
 
 # ------scrapQuote() 抓取单个页面数据==============================
-def scrapQuote(pageConnection, fundCode, fundName):
+def scrapQuote(fundCategary, fundCode, fundName, pageConnection):
 	try:
 		#提取单页数据
 		trList = pageConnection.find_elements_by_xpath('//div[@id = "right"]//tbody//tr')
@@ -153,51 +182,25 @@ def scrapQuote(pageConnection, fundCode, fundName):
 		date = dataList[0].text.encode('utf-8')
 		currentValue = dataList[1].text.encode('utf-8')
 		totalValue = dataList[2].text.encode('utf-8')
-		print fundCode, fundName, date, currentValue, totalValue
+		print fundCategary, fundCode, fundName, date, currentValue, totalValue
+		# print fundCategary
 		print '---------------------------------------------------'
 		#写入csv文件===============
-		writeScrappedQuote(fundCode, fundName, date, currentValue, totalValue)
-		# try:
-		# 	# ./表示直属元素 .//表示之后所有元素
-			# dataList = trTarget.find_elements_by_xpath('./td[@class = "f005"]')
-		# 	date = dataList[0].text.encode('utf-8')
-		# 	currentValue = dataList[1].text.encode('utf-8')
-		# 	totalValue = dataList[2].text.encode('utf-8')
-		# 	print fundCode, fundName, date, currentValue, totalValue
-		# 	print '---------------------------------------------------'
-		# 	#start写入csv文件===============
-		# 	writeScrappedQuote(fundCode, fundName, date, currentValue, totalValue)
-		# except Exception, e:
-		# 	print 'fail to get data on this page'
-		# 	return
-
-		#取消抓取单页所有行数的数据======================
-		# for tr in trList:
-		# 	# 提取单日数据
-		# 	try:
-		# 		# ./表示直属元素 .//表示之后所有元素
-		# 		dataList = tr.find_elements_by_xpath('./td[@class = "f005"]')
-		# 		date = dataList[0].text.encode('utf-8')
-		# 		currentValue = dataList[1].text.encode('utf-8')
-		# 		totalValue = dataList[2].text.encode('utf-8')
-		# 		print fundCode, fundName, date, currentValue, totalValue
-		# 		print '---------------------------------------------------'
-		# 		#start写入csv文件===============
-		# 		writeScrappedQuote(fundCode, fundName, date, currentValue, totalValue)
-		# 	except Exception, e:
-		# 		print 'not data tr'
-		# 		continue
-		# ============================================
+		writeScrappedQuote(fundCategary, fundCode, fundName, date, currentValue, totalValue)
 	except Exception, e:
 		print 'could not fetch data on this page'
 		return #出错中断抓取避免数据重复错误
+	# try to release memory
+	finally:
+		gc.collect()
+		return
 # ---------------------------------------------------------------
 
-def writeScrappedQuote(fundCode, fundName, date, currentValue, totalValue):
-	allFundQuote = open('./allFundQuoteLess.csv', 'a')
+def writeScrappedQuote(fundCategary, fundCode, fundName, date, currentValue, totalValue):
+	allFundQuote = open(fundQuoteLongerThreeYearsCsv, 'a')
 	try:
 		writer = csv.writer(allFundQuote)
-		writer.writerow((fundCode, fundName, date, currentValue, totalValue))
+		writer.writerow((fundCategary, fundCode, fundName, date, currentValue, totalValue))
 	finally:
 		allFundQuote.close()
 # ---------------------------------------------------------------
@@ -205,4 +208,13 @@ def writeScrappedQuote(fundCode, fundName, date, currentValue, totalValue):
 #================================================================
 #================================================================
 # run
-getAllFundQuote()
+getAllFundQuote(allFundListCsv, fundQuoteLongerThreeYearsCsv)
+
+# flag = 4
+# if flag < 5:
+#  	print 'too small'
+
+# csvName = 'test.csv'
+# writeMode = 'a'
+# csvHead = ['date', 'value', 'name']
+# iniAllFundQuoteCsv(csvName, writeMode, csvHead)

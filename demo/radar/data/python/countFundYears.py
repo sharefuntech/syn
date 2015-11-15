@@ -8,7 +8,9 @@ import time
 import urllib
 import json
 import platform
+import gc
 
+# to count fund of over 3years, 5 years, 7 years, 10 years
 '''
 读入csv格式保存的基金代码，获取每个基金的历史业绩
 运行流程：
@@ -25,14 +27,19 @@ getAllFundQuote() 入口程序
 '''
 
 allFundListCsv = 'allFundList.csv'
-fundQuoteLongerThreeYearsCsv = 'fundQuoteLongerThreeYears.csv'
+fundQuoteLongerThreeYearsCsv = 'fundQuoteLongerTenYears.csv'
+
+numFundsOver3Years = 0
+numFundsOver5Years = 0
+numFundsOver7Years = 0
+numFundsOver10Years = 0
 
 # getAllFundQuote() 入口程序====================================
 def getAllFundQuote(allFundListCsv, fundQuoteLongerThreeYearsCsv):
 	csvName = fundQuoteLongerThreeYearsCsv
 	writeMode = 'a'
 	csvHead = ['fundCategary', 'fundCode', 'fundName', 'date', 'currentValue', 'totalValue']
-	iniAllFundQuoteCsv(csvName, writeMode, csvHead)
+	# iniAllFundQuoteCsv(csvName, writeMode, csvHead)
 	readAllFundQuote(allFundListCsv)
 # -------------------------------------------------------------
 
@@ -117,8 +124,9 @@ def getSingleFundQuote(fundCategary, fundCode, fundName):
 		pageConnection = setupConnection(fundCode, 'phantomjs')
 		totalPageNumber = calculateTotalPage(pageConnection)
 
-		if totalPageNumber < 42:
-			print 'less than 3 years, drop this fund!'
+		# if established year less than 10 years, abort digging
+		if totalPageNumber < 121:
+			print 'less than 10 years, drop this fund!'
 			return
 			
 		for x in range(totalPageNumber):
@@ -126,6 +134,10 @@ def getSingleFundQuote(fundCategary, fundCode, fundName):
 			turnPage(pageConnection)
 	except Exception, e:
 		print 'fail to load the specific fund'
+		return
+	# try to release memory
+	finally:
+		gc.collect()
 		return
 # ---------------------------------------------------------------
 
@@ -137,6 +149,10 @@ def calculateTotalPage(pageConnection):
 		return int(totalPageNumber)
 	except Exception, e:
 		print 'fail to calculate total page for single fund'
+		return
+	# try to release memory
+	finally:
+		gc.collect()
 		return
 # ---------------------------------------------------------------
 
@@ -177,6 +193,10 @@ def scrapQuote(fundCategary, fundCode, fundName, pageConnection):
 	except Exception, e:
 		print 'could not fetch data on this page'
 		return #出错中断抓取避免数据重复错误
+	# try to release memory
+	finally:
+		gc.collect()
+		return
 # ---------------------------------------------------------------
 
 def writeScrappedQuote(fundCategary, fundCode, fundName, date, currentValue, totalValue):
