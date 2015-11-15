@@ -70,7 +70,7 @@ def readAllFundQuote(csvFile):
 
 # --writeProcessedCsv() 将处理后的坐标写入存储csv文件================
 def writeProcessedCsv(fundCode, fundName, date, currentValue, totalValue, xPosition, yPosition):
-	processedCsv = open('./processedFundQuote.csv', 'a')
+	processedCsv = open('./processedStockFundQuote.csv', 'a')
 	try:
 		writer = csv.writer(processedCsv)
 		writer.writerow((fundCode, fundName, date, currentValue, totalValue, xPosition, yPosition))
@@ -80,7 +80,7 @@ def writeProcessedCsv(fundCode, fundName, date, currentValue, totalValue, xPosit
 
 # --iniProcessedCsv() 初始化基金业绩存储csv文件================
 def iniProcessedCsv():
-	processedCsv = open('./processedFundQuote.csv', 'a')
+	processedCsv = open('./processedStockFundQuote.csv', 'a')
 	try:
 		writer = csv.writer(processedCsv)
 		writer.writerow(('fundCode','fundName','date','currentValue','totalValue', 'xPosition', 'yPosition'))
@@ -142,7 +142,7 @@ def convertDateToAngle(dateArray, quoteArray):
 		arrayCounter += 1
 # ---------------------------------------------------------------
 
-readAllFundQuote('./allFundQuoteLess.csv')
+readAllFundQuote('./stockFundQuote.csv')
 
 # testDate = time.strptime('2015/3/7', '%Y/%m/%d')
 # testFloatDate = time.mktime(testDate)

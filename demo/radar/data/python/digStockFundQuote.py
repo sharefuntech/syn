@@ -119,6 +119,9 @@ def getSingleFundQuote(fundCode, fundName):
 	except Exception, e:
 		print 'fail to load the specific fund'
 		return
+	finally:
+		# quit phtomjs to stop memory leak
+		pageConnection.quit()
 # ---------------------------------------------------------------
 
 # ------calculateTotalPage() 计算单个基金业绩内容所有页面数量========

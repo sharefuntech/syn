@@ -115,7 +115,7 @@ def checkSystem():
 def getSingleFundQuote(fundCategary, fundCode, fundName):
 	try:
 		# 载入单个基金页面
-		pageConnection = setupConnection(fundCode, 'browser')
+		pageConnection = setupConnection(fundCode, 'phantomjs')
 		totalPageNumber = calculateTotalPage(pageConnection)
 
 		# if established year less than 5 years, abort digging
@@ -131,15 +131,10 @@ def getSingleFundQuote(fundCategary, fundCode, fundName):
 		# pageConnection.quit()
 	except Exception, e:
 		print 'fail to load the specific fund'
-		# quit() for firefox
-		# pageConnection.quit()
 		return
 	# try to release memory
 	finally:
-		# quit() for firefox
 		pageConnection.quit()
-		# gc.collect()
-		# return
 # ---------------------------------------------------------------
 
 # ------calculateTotalPage() 计算单个基金业绩内容所有页面数量========
@@ -190,10 +185,6 @@ def scrapQuote(fundCategary, fundCode, fundName, pageConnection):
 	except Exception, e:
 		print 'could not fetch data on this page'
 		return #出错中断抓取避免数据重复错误
-	# try to release memory
-	finally:
-		gc.collect()
-		return
 # ---------------------------------------------------------------
 
 def writeScrappedQuote(fundCategary, fundCode, fundName, date, currentValue, totalValue):

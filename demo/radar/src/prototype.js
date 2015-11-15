@@ -61,7 +61,7 @@ vizG.append("text")
 	.attr("y", svgHeight / 3)
 	.text("数据正在载入，请稍候......");
 
-d3.csv('data/processedFundQuote.csv', function(data) {
+d3.csv('data/processedStockFundQuote.csv', function(data) {
 	// console.log(data);
 	rawData = data;
 	dataView = iniData(rawData);
@@ -230,7 +230,6 @@ function renderData(vizG, data, dataLineClass){
 		.classed("dataLine", true)
 		.on('mouseover', function(d, i) {
 		 	// console.log(data[i+1].date + data[i+1].fundName + data[i+1].totalValue);
-<<<<<<< HEAD
 		 	//generate data for mini trend curve
 		 	var dataPastYear = [];
 		 	for(var j = 12; j>0; j--) {
@@ -239,9 +238,6 @@ function renderData(vizG, data, dataLineClass){
 		 	// console.log(dataPastYear);
 
 		 	showMouseTooltip(dataPastYear, data[i+1].date, data[i+1].fundName, data[i+1].fundCode, data[i+1].totalValue);
-=======
-		 	showMouseTooltip(data[i+1].date, data[i+1].fundName, data[i+1].fundCode, data[i+1].totalValue);
->>>>>>> e24184e84aa6ce708f1d212223bb092bdf8c2cc7
 		})
 		.on('mouseout', function(d, i) {
 			hideMouseTooltip(data[i+1].fundName);
@@ -708,11 +704,7 @@ function caculateDateLength(d1, d2) {
 }
 
 //出现提示框
-<<<<<<< HEAD
 function showMouseTooltip(dataTrend, date, fundName, fundCode, totalValue) {
-=======
-function showMouseTooltip(date, fundName, fundCode, totalValue) {
->>>>>>> e24184e84aa6ce708f1d212223bb092bdf8c2cc7
 	// console.log();
 	//选中后高亮此类基金线条样式
 	var selectedClass = '.' + fundName;
@@ -740,7 +732,6 @@ function showMouseTooltip(date, fundName, fundCode, totalValue) {
         	return d3.event.pageX + "px";
         })
         .style("top", (d3.event.pageY) + "px");
-<<<<<<< HEAD
 
     //display quote trend in tooltip
     mouseTooltip.append('svg')
@@ -778,8 +769,6 @@ function showMouseTooltip(date, fundName, fundCode, totalValue) {
 		.attr('fill', 'none')
 		.attr('stroke', 'white')
 		.attr('stroke-width', 2);
-=======
->>>>>>> e24184e84aa6ce708f1d212223bb092bdf8c2cc7
 }
 
 // 隐藏提示框

@@ -10,7 +10,7 @@ import json
 import platform
 import gc
 
-inputCsv = 'allFundList.csv'
+inputCsv = 'stockFundList.csv'
 outputCsv = 'fundQuoteLonger5Years.csv'
 
 # --iniAllFundQuoteCsv() 初始化基金业绩存储csv文件================
@@ -26,7 +26,7 @@ def iniAllFundQuoteCsv(csvName, writeMode, csvHead):
 
 csvName = outputCsv
 writeMode = 'a'
-csvHead = ['fundCategary', 'fundCode', 'fundName', 'date', 'currentValue', 'totalValue']
+csvHead = ['fundCode', 'fundName', 'date', 'currentValue', 'totalValue']
 iniAllFundQuoteCsv(csvName, writeMode, csvHead)
 
 # --readAllFundQuote()  读入基金名称列表=========================
@@ -39,6 +39,7 @@ for fund in fundList:
 	fundCode = fund[1]
 	fundName = fund[2]
 	print 'read in fund: ', fundCategary, fundCode, fundName
-	# 抓取单个基金业绩
-	getSingleFundQuote(fundCategary, fundCode, fundName)
+
+	
+
 csvReader.close()
