@@ -77,7 +77,7 @@ d3.csv('data/processedStockFundQuote.csv', function(data) {
 		return renderData(vizG, d.values, d.key);
 	});
 	//渲染走时红点
-	renderTick();
+	// renderTick();
 	//to remove the loading state words
 	d3.select("#loading").remove();
 });
@@ -186,7 +186,7 @@ function renderData(vizG, data, dataLineClass){
 	// 填色根据延迟时间而定
 	var strokeScale = d3.scale.linear()
 			.domain([0, animateTime])
-			.range(['#000', '#ccc']);
+			.range(['#000', '#fff']);
 	//===================================================================
 	//单条曲线方式，不能实现delay动画 =======================================
 	// var lineCircle = d3.svg.line.radial()
@@ -231,13 +231,13 @@ function renderData(vizG, data, dataLineClass){
 		.on('mouseover', function(d, i) {
 		 	// console.log(data[i+1].date + data[i+1].fundName + data[i+1].totalValue);
 		 	//generate data for mini trend curve
-		 	var dataPastYear = [];
-		 	for(var j = 12; j>0; j--) {
-		 		dataPastYear.push(data[1+i-j].totalValue);
-		 	}
+		 	// var dataPastYear = [];
+		 	// for(var j = 12; j>0; j--) {
+		 	// 	dataPastYear.push(data[1+i-j].totalValue);
+		 	// }
 		 	// console.log(dataPastYear);
 
-		 	showMouseTooltip(dataPastYear, data[i+1].date, data[i+1].fundName, data[i+1].fundCode, data[i+1].totalValue);
+		 	showMouseTooltip(data[i+1].date, data[i+1].fundName, data[i+1].fundCode, data[i+1].totalValue);
 		})
 		.on('mouseout', function(d, i) {
 			hideMouseTooltip(data[i+1].fundName);
@@ -704,7 +704,7 @@ function caculateDateLength(d1, d2) {
 }
 
 //出现提示框
-function showMouseTooltip(dataTrend, date, fundName, fundCode, totalValue) {
+function showMouseTooltipMiniMap(dataTrend, date, fundName, fundCode, totalValue) {
 	// console.log();
 	//选中后高亮此类基金线条样式
 	var selectedClass = '.' + fundName;
@@ -769,6 +769,31 @@ function showMouseTooltip(dataTrend, date, fundName, fundCode, totalValue) {
 		.attr('fill', 'none')
 		.attr('stroke', 'white')
 		.attr('stroke-width', 2);
+}
+
+//出现提示框
+function showMouseTooltip(date, fundName, fundCode, totalValue) {
+	// console.log();
+	//选中后高亮此类基金线条样式
+	var selectedClass = '.' + fundName;
+	// console.log(d3.selectAll(selectedClass));
+	d3.selectAll(selectedClass).classed('highLightLine', true);
+
+	// 选中后设置透明度为1
+	mouseTooltip.style("opacity", 1)
+		.style('z-index', 10);
+
+	mouseTooltip.html(generateMouseTipContent (date, fundName, fundCode, totalValue))
+        .style("left", function() {
+        	var screenWidth = screen.width;
+        	if (d3.event.pageX < screenWidth/2) {
+        		return d3.event.pageX + "px";
+        	} else{
+        		return (d3.event.pageX - 160) + "px";
+        	}
+        	return d3.event.pageX + "px";
+        })
+        .style("top", (d3.event.pageY) + "px");
 }
 
 // 隐藏提示框

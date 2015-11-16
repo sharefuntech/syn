@@ -3,16 +3,17 @@ body{
 	padding: 0;
 	margin: 0;
 	font-family: arial, 'Microsoft Yahei', simHei;
-	/*text-align: center;*/
+	text-align: center;
 }
 
 #svgCanvas {
-	position: absolute;
+	/*position: absolute;*/
+	/*float: left;*/
 }
 
-canvas {
+/*canvas {
 	position: absolute;
-}
+}*/
 
 /*雷达圆圈*/
 .radarStructureCircle {
@@ -105,6 +106,7 @@ canvas {
 /*start 浮动文本框=====================================*/
 div.mouseTooltip {
     position: absolute;
+    /*position: relative;*/
     width: 150px;
     height: auto;
     padding: 10px;
@@ -161,8 +163,9 @@ div.mouseTooltip {
 /*项目标题*/
 #titleHolder {
 	padding: 20px;
+	margin: 30px;
 	color: #444;
-	font-size: 36px;
+	font-size: 28px;
 	font-weight: bold;
 }
 

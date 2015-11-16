@@ -33,7 +33,7 @@ def getAllFundQuote():
 
 # --iniAllFundQuoteCsv() 初始化基金业绩存储csv文件================
 def iniAllFundQuoteCsv():
-	allFundQuoteCsv = open('./stockFundQuote.csv', 'a')
+	allFundQuoteCsv = open('./stockFundQuote_2.csv', 'a')
 	try:
 		writer = csv.writer(allFundQuoteCsv)
 		writer.writerow(('fundCode','fundName','date','currentValue','totalValue'))
@@ -43,7 +43,7 @@ def iniAllFundQuoteCsv():
 
 # --readAllFundQuote()  读入基金名称列表=========================
 def readAllFundQuote():
-	csvReader = open('./stockFundList.csv', 'rb')
+	csvReader = open('./stockFundList_2.csv', 'rb')
 	fundList = csv.reader(csvReader)
 	# 根据基金代码名单抓取每个基金业绩
 	for fund in fundList:
@@ -179,7 +179,7 @@ def scrapQuote(pageConnection, fundCode, fundName):
 # ---------------------------------------------------------------
 
 def writeScrappedQuote(fundCode, fundName, date, currentValue, totalValue):
-	allFundQuote = open('./stockFundQuote.csv', 'a')
+	allFundQuote = open('./stockFundQuote_2.csv', 'a')
 	try:
 		writer = csv.writer(allFundQuote)
 		writer.writerow((fundCode, fundName, date, currentValue, totalValue))

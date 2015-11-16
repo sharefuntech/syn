@@ -46,7 +46,7 @@ var sampleData = [d3.range(360).map(function (i) {
 
 var rawData, dataView;
 
-d3.csv('data/processedFundQuote.csv', function(data) {
+d3.csv('data/processedStockFundQuote.csv', function(data) {
 	console.log(data);
 	rawData = data;
 	dataView = iniData(rawData);
@@ -169,7 +169,7 @@ function renderData(vizG, data, dataLineClass){
 	// 填色根据延迟时间而定
 	var strokeScale = d3.scale.linear()
 			.domain([0, animateTime])
-			.range(['#E3AE2E', '#CA4C36']);
+			.range(['white', 'darkred']);
 	//===================================================================
 	//单条曲线方式，不能实现delay动画 =======================================
 	// var lineCircle = d3.svg.line.radial()
