@@ -53,7 +53,7 @@ var sampleData = [d3.range(360).map(function (i) {
 var rawData, dataView;
 
 // 初始化画布
-iniSvg(svgwWidth, svgHeight);
+iniSvg('#vizContainer', svgwWidth, svgHeight);
 // 数据载入提示
 vizG.append("text")
 	.attr("id", "loading")
@@ -632,8 +632,9 @@ function renderRadar(vizG, svgwWidth, svgHeight) {
 	}
 }
 // svg画布初始化
-function iniSvg(svgwWidth, svgHeight) {
+function iniSvg(vizContainer, svgwWidth, svgHeight) {
 	svg = d3.select('body')
+		.select(vizContainer)
 		.append('svg')
 		.attr('id', 'svgCanvas')
 		.attr('width', svgwWidth + svgMargins.right + svgMargins.left)
@@ -691,9 +692,6 @@ function caculateDateAngle(date, data) {
 //计算日期间隔长度，以uts标准时间计算
 function caculateDateLength(d1, d2) {
 	var dateFormat = d3.time.format('%Y/%m/%d');
-	// var yearFormat = d3.time.format('%Y');
-	// var monthFormat = d3.time.format('%m');
-	// var dayFormat = d3.time.format('%d');
 
 	var standardTime_1 = dateFormat.parse(d1);
 	var standardTime_2 = dateFormat.parse(d2);
