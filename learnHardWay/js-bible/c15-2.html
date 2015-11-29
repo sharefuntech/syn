@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>c15-2 select element</title>
+	<style type="text/css">
+		html,body {
+			margin: 0;
+			padding: 0;
+		}
+
+		#aDiv {
+			position: relative;
+			top: 0px;
+			left: 0px;
+			width: 100px;
+			height: 100px;
+			background-color: steelblue;
+		}
+
+		p.first {
+			position: relative;
+			top: 0px;
+			left: 0px;
+			margin: 0;
+			padding: 50;
+			color: white;
+		}
+	</style>
+</head>
+<body>
+	<div id="aDiv" class='woop'>
+		<p class='first'>Hello</p>
+	</div>
+	<div id="bDiv">
+		<p class='second'>World</p>
+	</div>
+	<div id="cDiv">Black Jack</div>
+	<script type="text/javascript">
+		function getElementsByIds() {
+			var elements = {};
+			for (var i = 0; i < arguments.length; i++) {
+				var id = arguments[i];
+				var element = document.getElementById(id);
+
+				if (element == null) {
+					throw new Error('no element with id: ' + id);
+				}
+
+				elements[id] = element;
+			}
+			return elements;
+		}
+
+		function grabText(e) {
+			var child;
+			var nodeType;
+			var textContent = '';
+
+			for(child = e.firstChild; child != null; child = child.nextSibling) {
+				nodeType = child.nodeType;
+				// if (nodeType == 3 || nodeType == 4) {
+				if (nodeType == 3) {
+					textContent += child.nodeValue;
+				} else if (nodeType == 1) {
+					//if node is element, excute grabtext on it
+					textContent += grabText(child);
+				}
+			}
+			return textContent;
+		}
+
+		var aDiv = document.getElementById('aDiv');
+		var divBound = aDiv.getBoundingClientRect();
+		console.log(divBound);
+
+		// console.log(window.innerHeight);
+		// console.log(document.documentElement.clientHeight);
+		// var aDiv = document.getElementById('aDiv');
+		// // console.log(aDiv);
+		// var newP = document.createElement('p');
+		// aDiv.appendChild(newP);
+		// var aDivP = aDiv.getElementsByTagName('p')[1];
+		// // console.log(aDivP);
+		// aDivP.innerHTML = 'Hey Jack!';
+		// var bDivP = aDiv.getElementsByTagName('p')[0];
+		// aDiv.removeChild(bDivP);
+
+		// var domDocument = document.getElementsByTagName('body')[0];
+		// var allText = grabText(domDocument);
+		// console.log(allText);
+
+		// var elements = getElementsByIds('aDiv', 'bDiv', 'cDiv');
+		// console.log(elements);
+
+		// Array.prototype.map.call(document.getElementsByTagName('div'), function(d) { console.log(d.innerHTML) });
+
+		// var eltCn = document.getElementsByClassName('first second');
+		// console.log(eltCn);
+
+		// var cssQ = document.querySelectorAll('div');
+		// var cssQ = document.querySelectorAll('#aDiv');
+		// var cssQ = document.querySelectorAll('*');
+
+		// var domListDocument = document.getElementsByTagName('body')[0].children;
+		// var target = document.getElementById('aDiv').attributes;
+		// var target = document.getElementById('aDiv').getAttribute('wolf');
+		// console.log(target);
+		//  document.getElementById('aDiv').setAttribute('wolf', 'winter');
+		// console.log(document.getElementById('aDiv').getAttribute('wolf'));
+	</script>
+</body>
+</html>

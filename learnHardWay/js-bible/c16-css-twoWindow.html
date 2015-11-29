@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>two window - c16 css</title>
+	<style type="text/css">
+		div.window {
+			position: absolute;
+			width: 300px;
+			height: 200px;
+			border: 3px outset gray;
+		}
+
+		div.titlebar {
+			position: absolute;
+			top: 0px;
+			height: 18px;
+			width: 290px;
+			background-color: steelblue;
+			border-bottom: groove gray 2px;
+			padding: 3px 5px 2px 5px;
+			font: bold 11pt sans-serif;
+			color: white;
+		}
+
+		div.content {
+			position: absolute;
+			top: 25px;
+			height: 165px;
+			width: 290px;
+			padding: 5px;
+			overflow: auto;
+			background-color: white;
+		}
+
+		div.translucent {
+			opacity: 0.75;
+		}
+	</style>
+</head>
+<body>
+	<div class="window" style="left:10px; top:10px; z-index:10;">
+		<div class="titlebar"> test window</div>
+		<div class="content">
+			1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>
+		</div>
+	</div>
+	
+	<div class="window" style="left:80px; top:110px; z-index:20;">
+		<div class="titlebar"> top window</div>
+		<div class="content translucent" style="background-color:#ccc; font-weight:bold;">
+			Hello world!
+		</div>
+	</div>
+</body>
+</html>
