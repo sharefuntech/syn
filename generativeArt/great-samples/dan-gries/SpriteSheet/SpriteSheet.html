@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+
+<title>HTML5 Canvas</title>
+
+<script src="../Modernizr/modernizr-2.0.6.js"></script>
+
+<script type="text/javascript">
+
+/*
+Dan Gries, www.rectangleworld.com.
+*/
+
+window.addEventListener("load", windowLoadHandler, false);
+
+function windowLoadHandler() {
+	canvasApp();
+}
+
+function canvasSupport() {
+	return Modernizr.canvas;
+}
+
+function canvasApp() {
+	if (!canvasSupport()) {
+		return;
+	}
+	
+	var theCanvas = document.getElementById("canvasOne");
+	var context = theCanvas.getContext("2d");
+	
+	var displayWidth;
+	var displayHeight;
+	var spriteSheetCanvas;
+	var spriteSheetContext;
+	var numStages;
+	var numDots;
+	var dotDiam;
+	var dotRad;
+	var firstDot;
+	
+	init();
+	
+	function init() {
+		numStages = 60; //number of animation stages (frames) used for the evolving dots
+		dotDiam = 60; 
+		numDots = 800; 
+		
+		dotRad = Math.floor(dotDiam/2);
+		displayWidth = theCanvas.width;
+		displayHeight = theCanvas.height;
+		
+		makeSpriteSheet();
+		
+		setDots();
+			
+		setInterval(update, 1000/24);
+	}
+	
+	function setDots() {
+		var lastDot;
+		var sign;
+		
+		//we create a linked list of abstract objects which record positions, current stage, and change rates for each dot.
+		
+		for (var i = 0; i < numDots; i++) {
+			
+			if (Math.random() < 0.5) {
+				sign = 1;
+			}
+			else {
+				sign = -1;
+			}
+			
+			var thisDot = { x: Math.floor(Math.random()*displayWidth),
+							y: Math.floor(Math.random()*displayHeight),
+							stage: Math.floor(Math.random()*numStages),
+							increment: sign*(0.25 + 0.5*Math.random())};
+			if (i == 0) {
+				firstDot = thisDot;
+			}
+			else {
+				lastDot.next = thisDot; //linked list: using 'next' attribute to point to next dot in the list.
+			}
+			lastDot = thisDot;
+		}
+			
+	}
+	
+	function makeSpriteSheet() {
+		var colorAmt;
+		var centerX;
+		var centerY;
+		var param;
+		
+		//we create an off-screeen canvas which can contain the different stages of the animation.
+		spriteSheetCanvas = document.createElement('canvas');
+		spriteSheetCanvas.width = dotDiam*numStages;
+		spriteSheetCanvas.height = dotDiam;
+		spriteSheetContext = spriteSheetCanvas.getContext("2d");
+
+		for (var i = 0; i < numStages; i++) {
+			param = i/(numStages-1)
+			colorAmt = Math.floor(param*255);
+			centerX = dotRad + i*dotDiam;
+			centerY = dotRad;
+			spriteSheetContext.fillStyle = 	"rgba("+colorAmt+",0,0,0.5)"; //reds of varying darkness
+			spriteSheetContext.beginPath();
+			spriteSheetContext.arc(centerX,centerY,param*dotRad,0,Math.PI*2,false);
+			spriteSheetContext.closePath();
+			spriteSheetContext.fill();
+		}
+	}
+	
+	function update() {
+		
+		//background
+		context.fillStyle = "#FFFFFF";
+		context.fillRect(0,0,displayWidth,displayHeight);
+		
+		//dots
+		var d = firstDot;
+		while (d != null) {
+			
+			//move ahead in the animation, go backwards if we reach the end
+			d.stage += d.increment;
+			if (d.stage > numStages - 1) {
+				d.stage = numStages - 1;
+				d.increment *= -1;
+			}
+			else if (d.stage < 0) {
+				d.stage = 0;
+				d.increment *= -1;
+			}
+			
+			//copy from the sprite sheet: arguments specify source image, source rectangle, and destination rectangle.
+			context.drawImage(spriteSheetCanvas,Math.round(d.stage)*dotDiam,0,dotDiam,dotDiam,d.x - dotRad,d.y - dotRad,dotDiam,dotDiam);
+			
+			//move ahead in the linked list:
+			d = d.next;
+		}
+	}
+		
+}
+
+</script>
+
+<title>HTML5 Canvas - sprite sheets</title>
+
+<style type="text/css">
+	body {background-color:#FFFFFF; color:#000000;} 
+	h4 {font-family: sans-serif; color:#000000;}
+	h3 {font-family: sans-serif; color:#000000;}
+	p {font-family: sans-serif; color:#333333; font-size:14px}
+	a {font-family: sans-serif; color:#c53803; text-decoration:none;}
+</style>
+
+</head>
+<body>
+<div style="margin-top: 50px; text-align:center">
+<canvas id="canvasOne" width="480" height="480">
+Your browser does not support HTML5 canvas.
+</canvas>
+<p>HTML5 Canvas - generating and copying from a sprite sheet</p>
+<p><a href="http://www.rectangleworld.com">rectangleworld.com</a></p>
+</div>
+</body>
+</html>

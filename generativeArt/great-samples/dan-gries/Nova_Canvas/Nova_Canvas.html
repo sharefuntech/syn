@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+
+<script src="../Modernizr/modernizr-2.0.6.js"></script>
+<script src="FastBlur.js"></script>
+
+<script type="text/javascript">
+
+/*
+Particle effect by Dan Gries, rectangleworld.com.
+The FastBlur is created by Mario Klingemann, quasimondo.com. Sincere thanks to Mario for publicly sharing the code!
+*/
+
+//for debug messages
+window.addEventListener("load", windowLoadHandler, false);
+var Debugger = function() { };
+Debugger.log = function(message) {
+	try {
+		console.log(message);
+	}
+	catch (exception) {
+		return;
+	}
+}
+
+function windowLoadHandler() {
+	canvasApp();
+}
+
+function canvasSupport() {
+	return Modernizr.canvas;
+}
+
+function canvasApp() {
+	if (!canvasSupport()) {
+		return;
+	}
+	
+	var theCanvas = document.getElementById("canvasOne");
+	var context = theCanvas.getContext("2d");
+		
+	var timer;
+	var wait;
+	var count;
+	var particleList;
+	var recycleBin;
+	var emitX;
+	var emitY;
+	var displayWidth;
+	var displayHeight;
+	var particleAlpha;
+	var baseColorR;
+	var baseColorG;
+	var baseColorB;
+	var r;
+	var g;
+	var b;
+	var phaseR;
+	var phaseG;
+	var phaseB;
+	var targetPhaseR;
+	var targetPhaseG;
+	var targetPhaseB;
+	var lastTargetPhaseR;
+	var lastTargetPhaseG;
+	var lastTargetPhaseB;
+	var phaseShiftDuration;
+	var phaseShiftCount;
+	var particleColor;
+	var numToAddEachFrame;
+	
+	init();
+	
+	function init() {
+		bgColor = "#000000";
+		context.fillStyle = bgColor;
+		context.fillRect(0,0,theCanvas.width,theCanvas.height);
+
+		wait = 1;
+		count = wait - 1;
+		numToAddEachFrame = 2;
+		
+		particleAlpha = 1;
+		targetPhaseR = 4;
+		targetPhaseG = 3;
+		targetPhaseB = 0;
+		phaseShiftDuration = 2000;
+		phaseShiftCount = phaseShiftDuration - 1;
+
+		displayWidth = theCanvas.width;
+		displayHeight = theCanvas.height;
+		emitX = displayWidth/2;
+		emitY = displayHeight/2;
+		particleList = {};
+		recycleBin = {};
+		
+		timer = setInterval(onTimer, 1000/24);
+	}
+	
+	function onTimer() {
+		count++;
+			if (count >= wait) {
+			//The red, green and blur color components are changed according to sinusoidal
+			//functions.  However, to add some randomness while maintaining smoothness, these
+			//sinusoidal functions have phase shifts which gradually change to randomly
+			//chosen target values.
+			var time = Date.now();
+			phaseShiftCount++;
+			if (phaseShiftCount >= phaseShiftDuration) {		
+				phaseShiftCount = 0;
+				lastTargetPhaseR = targetPhaseR;
+				lastTargetPhaseG = targetPhaseG;
+				lastTargetPhaseB = targetPhaseB;
+				targetPhaseR = Math.random()*6.283;
+				targetPhaseG = Math.random()*6.283;
+				targetPhaseB = Math.random()*6.283;		
+			}
+			
+			phaseR = lastTargetPhaseR + phaseShiftCount/phaseShiftDuration*(targetPhaseR - lastTargetPhaseR);
+			phaseG = lastTargetPhaseG + phaseShiftCount/phaseShiftDuration*(targetPhaseG - lastTargetPhaseG);
+			phaseB = lastTargetPhaseB + phaseShiftCount/phaseShiftDuration*(targetPhaseB - lastTargetPhaseB);
+		
+			baseColorR = 32 + (0.5+0.5*Math.cos(phaseR+time*0.00017))*223;
+			baseColorG = 32 + (0.5+0.5*Math.cos(phaseG-time*0.00027))*223;
+			baseColorB = 32 + (0.5+0.5*Math.cos(phaseB+time*0.00035))*223;
+			
+			r = Math.floor(baseColorR+Math.random()*Math.random()*(255-baseColorR));
+			g =  Math.floor(baseColorG+Math.random()*Math.random()*(255-baseColorG));
+			b =  Math.floor(baseColorB+Math.random()*Math.random()*(255-baseColorB));
+			
+			count = 0;
+			for (i = 0; i < numToAddEachFrame; i++) {
+				var mag = 0.5+0.5*(Math.random());
+				var angle = Math.random()*2*Math.PI;
+				var p = addParticle(emitX, emitY, mag*Math.cos(angle), mag*Math.sin(angle));
+				p.color = "rgba("+r+","+g+","+b+","+particleAlpha+")";
+				p.setEnvelope(10,100,50,
+								4,10,10,
+								0,0.4+0.8*Math.random(),0);
+			}
+
+		}
+		
+		
+		updateParticles();
+		
+		drawScreen();
+		
+	}
+	
+	Particle.prototype.setEnvelope = function(a, h, d, av, hv, dv, r0, r1, r2) {
+		this.attack = a+(2*Math.random()-1)*av;
+		this.hold = h+(2*Math.random()-1)*hv;
+		this.decay = d+(2*Math.random()-1)*dv;
+		this.rInit = r0;
+		this.rHold = r1;
+		this.rLast = r2;
+		this.rad = this.rInit;
+	}
+
+	
+	function updateParticles() {
+		var p = particleList.first;
+		var outsideTest;
+		var nextParticle;
+		while (p != null) {
+			//before list is altered record next particle
+			nextParticle = p.next;
+			
+			//add air resistance later
+			p.x += p.velX;
+			p.y += p.velY;
+						
+			//update age
+			p.age++;
+			
+			//update size
+			if (p.age < p.attack+p.hold+p.decay) {
+				if (p.age < p.attack) {
+					p.rad = (p.rHold - p.rInit)/p.attack*p.age + p.rInit;
+				}
+				else if (p.age < p.attack+p.hold) {
+					p.rad = p.rHold;
+				}
+				else if (p.age < p.attack+p.hold+p.decay) {
+					p.rad = (p.rLast - p.rHold)/p.decay*(p.age-p.attack-p.hold) + p.rHold;
+				}
+			}
+			else {
+				p.dead = true;
+			}	
+							
+			//test if particle is outside of window
+			outsideTest = (p.x + p.rad < 0) || (p.y + p.rad < 0) || (p.x > displayWidth - p.rad) || (p.y > displayWidth - p.rad);
+			
+			if (outsideTest||p.dead) {
+				recycle(p);
+			}
+			
+			p = nextParticle;
+		}
+	}
+	
+	function Particle() {
+		//The particle class does not need anything in the constructor. Properties will be added dynamically.
+		//This class is being used ony for organizational purposes - the "setEnvelope" function is attached to the prototype object
+		//later.
+	}
+	
+	function addParticle(x0,y0,vx0,vy0) {
+		var newParticle;
+		var color;
+		
+		//check recycle bin for available drop:
+		if (recycleBin.first != null) {
+			newParticle = recycleBin.first;
+			//remove from bin
+			if (newParticle.next != null) {
+				recycleBin.first = newParticle.next;
+				newParticle.next.prev = null;
+			}
+			else {
+				recycleBin.first = null;
+			}
+		}
+		//if the recycle bin is empty, create a new particle:
+		else {
+			newParticle = new Particle();
+		}
+		
+		//add to beginning of particle list
+		if (particleList.first == null) {
+			particleList.first = newParticle;
+			newParticle.prev = null;
+			newParticle.next = null;
+		}
+		else {
+			newParticle.next = particleList.first;
+			particleList.first.prev = newParticle;
+			particleList.first = newParticle;
+			newParticle.prev = null;
+		}
+		
+		//initialize
+		newParticle.x = x0;
+		newParticle.y = y0;
+		newParticle.velX = vx0;
+		newParticle.velY = vy0;
+		newParticle.color = color;
+		newParticle.age = 0;
+		newParticle.dead = false;
+		
+		return newParticle;		
+	}
+	
+	function recycle(p) {
+		//remove from particleList
+		if (particleList.first == p) {
+			if (p.next != null) {
+				p.next.prev = null;
+				particleList.first = p.next;
+			}
+			else {
+				particleList.first = null;
+			}
+		}
+		else {
+			if (p.next == null) {
+				p.prev.next = null;
+			}
+			else {
+				p.prev.next = p.next;
+				p.next.prev = p.prev;
+			}
+		}
+		//add to recycle bin
+		if (recycleBin.first == null) {
+			recycleBin.first = p;
+			p.prev = null; //may be unnecessary
+			p.next = null;
+		}
+		else {
+			p.next = recycleBin.first;
+			recycleBin.first.prev = p;  //may be unnecessary
+			recycleBin.first = p;
+			p.prev = null; //may be unnecessary
+		}
+		
+		//reset accel
+	}	
+			
+	function drawScreen() {
+
+		//stack blur by Mario Klingemann, quasimondo.com
+		boxBlurCanvasRGB("canvasOne",0,0,theCanvas.width,theCanvas.height,2);
+		
+		var p = particleList.first;
+		var pcount = 0;
+		while (p != null) {
+			pcount++;
+			context.fillStyle = p.color;
+			context.beginPath();
+			context.arc(p.x, p.y, p.rad, 0, 2*Math.PI, false);
+			context.closePath();
+			context.fill();
+			p = p.next;
+		}
+	}
+}
+
+</script>
+
+<title>Nova - HTML5 Canvas Particles</title>
+
+<style type="text/css">
+	body {background-color:#000000; color:#555555;} 
+	h4 {font-family: sans-serif; color:#555555; font-size:16px;}
+	h3 {font-family: sans-serif; color:#555555;}
+	p {font-family: sans-serif; color:#555555; font-size:14px;}
+	a {font-family: sans-serif; color:#d15423; text-decoration:none;}
+</style>
+
+</head>
+<body>
+<div style="top: 50px; text-align:center">
+
+<canvas id="canvasOne" width="320" height="320">
+Your browser does not support HTML5 canvas.
+</canvas>
+<h4><i>Nova</i> - HTML5 Canvas Particles</h4>
+<p>The image is blurred in between frames using the excellent <a href="http://www.quasimondo.com/BoxBlurForCanvas/FastBlurDemo.html">Fast Blur</a> by Mario Klingemann, a.k.a. <a href="http://quasimondo.com">quasimondo</a></p>
+<p><a href="http://www.rectangleworld.com">rectangleworld.com</a></p>
+</div>
+</body>
+</html>

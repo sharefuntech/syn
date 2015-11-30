@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>c15-9 form and input</title>
+</head>
+<body>
+	<form action="" name="shipping">
+		<fieldset>
+			<legend>shipping method</legend>
+			<lavel><input type="radio" name="method" value="1st">1st</lavel>
+			<lavel><input type="radio" name="method" value="2days" checked='checked'>2days</lavel>
+			<lavel><input type="radio" name="method" value="overnight">overnight</lavel>
+		</fieldset>
+	</form>
+
+	<form action="">
+		<input type="text">
+		<input type="file">
+		<input type="password">
+	</form>
+
+	<div id="editor" contenteditable>edit it</div>
+	<script>
+	var methods = document.forms.shipping.elements.method;
+	// console.log(methods);
+	var shipping_method;
+	for (var i = 0; i < methods.length; i++) {
+		if (methods[i].checked) {
+			shipping_method = methods[i].value;
+			console.log(shipping_method);
+		}
+	}
+	</script>
+</body>
+</html>

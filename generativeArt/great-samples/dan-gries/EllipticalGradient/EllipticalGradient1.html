@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+
+<title>HTML5 Canvas Elliptical Gradient</title>
+
+<script src="../Modernizr/modernizr-2.0.6.js"></script>
+
+<script type="text/javascript">
+
+//for debug messages
+window.addEventListener("load", windowLoadHandler, false);
+var Debugger = function() { };
+Debugger.log = function(message) {
+	try {
+		console.log(message);
+	}
+	catch (exception) {
+		return;
+	}
+}
+
+function windowLoadHandler() {
+	canvasApp();
+}
+
+function canvasSupport() {
+	return Modernizr.canvas;
+}
+
+function canvasApp() {
+	if (!canvasSupport()) {
+		return;
+	}
+	
+	var theCanvas = document.getElementById("canvasOne");
+	var context = theCanvas.getContext("2d");
+	
+	/*
+	The code below will fill a rectangle of width rectW and height rectH with an elliptical gradient.
+	The gradient will be centered at (cx, cy),
+	the radius in the x direction will be rx,
+	the radius in the y direction will be ry. 
+	
+	The particular chosen parameters cx and cy below create a gradient centered at the center of the rectangle.
+	The choices for radii rx and ry create a gradient with proportions matching the proportions of the rectangle,
+	with the final gradient color achieved at the corners of the rectangle.
+	*/
+	var rectW = 1000;
+	var rectH = 480;
+	
+	var rx = rectW/Math.sqrt(2);
+	var ry = rectH/Math.sqrt(2);
+	var cx = rectW/2;
+	var cy = rectH/2;
+	
+	var scaleX;
+	var scaleY;
+	var invScaleX;
+	var invScaleY;
+	var grad;
+	
+	//If rx or ry is zero, this doesn't create much of a gradient, but we'll allow it in the code, just in case.
+	//we will handle these zero lengths by changing them to 0.25 pixel, which will create a gradient indistinguishable from
+	//just a solid fill with the outermost gradient color.
+	rx = (rx == 0) ? 0.25 : rx;
+	rr = (ry == 0) ? 0.25 : ry;
+	
+	//we create a circular gradient, but after transforming it properly (by shrinking in either the x or y direction),
+	//we will have an alliptical gradient.
+	if (rx >= ry) {
+		scaleX = 1;
+		invScaleX = 1;
+		scaleY = ry/rx;
+		invScaleY = rx/ry;
+		grad = context.createRadialGradient(cx, cy*invScaleY, 0, cx, cy*invScaleY, rx);
+	}
+	else {
+		scaleY = 1;
+		invScaleY = 1;
+		scaleX = rx/ry;
+		invScaleX = ry/rx;
+		grad = context.createRadialGradient(cx*invScaleX, cy, 0, cx*invScaleX, cy, ry);
+	}
+	
+	context.fillStyle = grad;
+	
+	//add desired colors
+	grad.addColorStop(0,"#AA6130");
+	grad.addColorStop(1,"#100500");
+	
+	context.setTransform(scaleX,0,0,scaleY,0,0);
+	
+	//draw region to be gradient filled, making sure to inverse-scale any coordinates used for the drawing.
+	context.fillRect(0,0,rectW*invScaleX,rectH*invScaleY);
+	
+	//text on top, with shadow.
+	context.setTransform(1,0,0,1,0,0);
+	context.shadowColor = "rgba(0,0,0,0.75)";
+	context.shadowOffsetX = 4;
+	context.shadowOffsetY = 4;
+	context.shadowBlur = 6;
+	context.font = '46px "Trebuchet MS", Helvetica, sans-serif';
+	context.fillStyle = "#FFFFFF";
+	context.lineWidth = 1;
+	context.textAlign = "center";
+	context.textBaseLine = "middle";
+	context.fillText("Elliptical Gradient", rectW/2, rectH/2);	
+}
+
+
+</script>
+
+<style type="text/css">
+	body {background-color:#000000; color:#EEEEEE;} 
+	h4 {font-family: sans-serif; color:#EEEEEE;}
+	h3 {font-family: sans-serif; color:#EEEEEE;}
+	p {font-family: sans-serif; color:#EEEEEE;}
+	a {font-family: sans-serif; color:#AD6F44; text-decoration:none;}
+</style>
+
+</head>
+<body>
+<div style="margin-top: 10px; text-align:center">
+<canvas id="canvasOne" width="1000" height="480">
+Your browser does not support HTML5 canvas.
+</canvas>
+<p>HTML5 Canvas Tutorial. &nbsp;&nbsp;<a href="http://www.rectangleworld.com">rectangleworld.com.</a></p>
+</div>
+</body>
+</html>
