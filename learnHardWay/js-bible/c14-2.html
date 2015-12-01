@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>c14-2</title>
+	<style>
+		html, body {
+			margin: 0;
+			padding: 0;
+		}
+		#flag {
+			width: 400px;
+			height: 200px;
+			background-color: orange;
+		}
+
+		#flag.hasBorder {
+			border: solid black 2px;
+			width: 600px;
+			height: 300px;
+			background-color: darkred;
+		}
+	</style>
+</head>
+<body>
+	<div id="flag"></div>
+	<!-- <input type="button" value="new" id="opennew">
+	<input type="button" value="close" id="closenew"> -->
+	<script>
+	var flag = document.getElementById('flag');
+
+	flag.onmouseover = function() {
+		// document.preventDefault();
+		// this.stopPropagation();
+		this.className = 'hasBorder';
+		var attrs = this.getBoundingClientRect();
+		console.log(attrs.width);
+		console.log(attrs.height);
+	}
+
+	flag.onmouseout = function() {
+		this.className = '';
+	}
+
+	// var newWin;
+	// var newButton = document.getElementById('opennew');
+	// var closeButton = document.getElementById('closenew');
+
+	// newButton.addEventListener('click', openNewWindow, false);
+	// closeButton.addEventListener('click', closeNewWindow, false);
+
+	// function openNewWindow() {
+	// 	newWin = window.open('c16-3.html', 'newwin');
+	// }
+
+	// function closeNewWindow() {
+	// 	newWin.close();
+	// }
+
+	// console.log(flag);
+	// do {
+	// 	var name = prompt('what is your name ?');
+	// 	var correct = confirm('you entered"' + name + '".\n' + 'click ok to proceed or cancel to re-enter');
+	// } while (!correct)
+
+	// alert('hello, ' + name);
+
+	// var screen = window.screen;
+	// for (key in screen) {
+	// 	console.log(key + ' : ' + screen[key]);
+	// }
+
+	// var nav = window.navigator;
+	// for (key in nav) {
+	// 	console.log(key + ' : ' + nav[key]);
+	// }
+
+	// var history = window.history;
+	// for (key in history) {
+	// 	console.log(history[key]);
+	// }
+	// history.go(-2);
+	// console.log(typeof(window.history));
+	// var newUrl = 'c16-3.html';
+	// var cnbeta = 'http://www.cnbeta.com';
+	// // setTimeout(redirec, 1000);
+	// function redirec() {
+	// 	window.location.replace(newUrl);
+	// 	// window.location = cnbeta;
+	// }
+	// var location = window.location;
+	// // console.log(location);
+	// for (key in location) {
+	// 	console.log(location[key]);
+	// }
+	</script>
+</body>
+</html>
