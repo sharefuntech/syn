@@ -1,0 +1,27 @@
+body {
+	font-family: verdana, geneva, sans-serif;
+}
+div {
+	border: 1px solid #333;
+}
+
+p {
+	color: #36c;
+	font-weight: bold;
+}
+
+img {
+	float: left;
+	margin-right: 1em;
+}
+
+.cc {
+	border: 1px solid #333;
+	/*background-color: rgba(89, 0, 33, 0.2);*/
+	background-color: hsla(0, 70%, 50%, 1);
+}
+
+.c1 {
+	border: inherit;
+}
+
