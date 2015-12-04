@@ -1,0 +1,50 @@
+
+p[class^='p'] {
+	color: orange;
+}
+
+/*p[class] {
+	color: teal;
+}*/
+
+/*.sp:first-line {
+	font-size: 32px;
+	color: red;
+}
+*/
+/*p:first-letter {
+	font-size: 32px;
+	color: red;
+}*/
+
+/*div p {
+	border: 2px solid #ccc;
+}*/
+
+/*img[alt='woof'] {
+	border: 2px solid #0ff;
+}
+
+.p1.p2 {
+	background-color: red;
+}*/
+
+/*.architect > p {
+	background-color: blue;
+}*/
+
+/*.architect p+p {
+	color: teal;
+}*/
+
+/*.architect > p:first-child {
+	background-color: teal;
+}
+
+.architect p:last-child {
+	color: red;
+}
+
+div:first-child {
+	border: 2px solid #ccc;
+}*/
