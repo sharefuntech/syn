@@ -44,6 +44,15 @@ img {
 
 /*GENERAL (APPLYED TO ELEMENTS)
 --------------------------------------------*/
+h1 {
+	color: #212121;
+	font-family: sans-serif;
+	font-size: 3.25em;
+	font-weight: 300;
+	letter-spacing: -2px;
+	line-height: 0.975;
+}
+
 .about h2,
 .mod h2,
 .nav-main a {
@@ -64,10 +73,13 @@ img {
 	width: 960px;
 }
 main {
+	float: left;
 	width: 600px;
 }
 
 .sidebar {
+	float: right;
+	margin-top: 1.875em;
 	width: 300px;
 }
 
@@ -103,8 +115,44 @@ main {
 	padding: .5em 1.15em .5em 1.4em;
 }
 
+.social-sites li {
+	display: inline;
+}
+
+.social-sites a {
+	color: #019443;
+	font-family: 'Social Icons', sans-serif;
+	font-size: 46px;
+	line-height: .8;
+	vertical-align: middle;
+}
+
+.nav-main li {
+	display: inline-block;
+}
+
+.nav-main a {
+	color: #292929;
+	display: inline-block;
+	font-family: sans-serif;
+	font-size: 1.125em;
+	font-weight: 700;
+	text-transform: uppercase;
+}
+
 /*MAIN CONTENT
 --------------------------------------------*/
+h1 {
+	margin-bottom: .4125em;
+}
+
+.post-photo {
+	float: left;
+	margin-bottom: 2px;
+	margin-right: 22px;
+	max-width: 61.667%;
+}
+
 /* ::: Blog Post Footer ::: */
 .post-footer {
 	border-bottom: 1px solid #dbdbdb;
@@ -139,35 +187,45 @@ main {
 	border: 5px solid #bebebe;
 }
 
+.map {
+	margin: 1.438em 0 0.813em;
+}
 /* ::: Previous and Shared Posts ::: */
 .links {
+	margin: 1.5em 0 4.125em;
 	padding-left: 0;
+	width: 270px;
+}
+
+links li {
+	margin-bottom: 1.1em;
+}
+
+.links a {
+	font-size: 1.125em;
+	line-height: 1.195;
 }
 
 /*FOOTER
 --------------------------------------------*/
-
-.social-sites li {
-	display: inline;
+footer[role='contentinfo'] {
+	border-top: 1px solid #cacbcb;
 }
 
-.social-sites a {
-	color: #019443;
-	font-family: 'Social Icons', sans-serif;
-	font-size: 46px;
-	line-height: .8;
-	vertical-align: middle;
+/*FOOTER
+--------------------------------------------*/
+.clearfix:before,
+.clearfix:after {
+	content: " ";
+	display: table;
 }
 
-.nav-main li {
-	display: inline-block;
+.clearfix:after {
+	clear: both;
 }
 
-.nav-main a {
-	color: #292929;
-	display: inline-block;
-	font-family: sans-serif;
-	font-size: 1.125em;
-	font-weight: 700;
-	text-transform: uppercase;
-}
+
+
+
+
+
