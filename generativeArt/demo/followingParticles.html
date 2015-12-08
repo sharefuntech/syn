@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>following particles</title>
+	<script src='lib/jquery-2.1.4.min.js'></script>
+	<script src='lib/stats.min.js'></script>
+	<style>
+		body {
+			margin: 0;
+		}
+
+		#wrapper {
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			overflow: hidden;
+		}
+
+		canvas {
+			background: #000;
+		}
+	</style>
+</head>
+<body>
+	<div id="wrapper">
+		<canvas></canvas>
+	</div>
+<script>
+var stageWidth;
+var stageHeight;
+var context = $('canvas')[0].getContext('2d');
+var objectList;
+var timeout;
+var isMouseOnStage = false;
+var mouseX = 0;
+var mouseY = 0;
+var stats;
+
+var prms = {
+	fps: 60,
+	dotCount: 1000,
+	dotV: 5,
+	circleRadius: 50,
+	dotRotationRandom: 0.1,
+	dotRotationMouse: 10
+};
+
+monitorStats();
+
+function monitorStats() {
+	stats = new Stats();
+	stats.setMode(0);
+	stats.domElement.style.position = 'absolute';
+	stats.domElement.style.left = '0px';
+	stats.domElement.style.top = '0px';
+	document.body.appendChild(stats.domElement);
+}
+
+function init() {
+	$('#wrapper')
+		.bind('mousemove', function(e) {
+			mouseX = e.clientX;
+			mouseY = e.clientY;
+			isMouseOnStage = true;
+		})
+		.bind('mouseleave touchend touchcancel', function(e) {
+			isMouseOnStage = false;
+		})
+		.bind('touchstart', function(e) {
+			var touches = e.touches;
+			if(touches[0]) {
+				var touch = touches[0];
+				mouseX = touch.clientX;
+				mouseY = touch.clientY;
+				isMouseOnStage = true;
+			}
+		});
+
+		$(window).resize(reset);
+		reset();
+}
+
+function reset() {
+	// body...
+}
+</script>
+</body>
+</html>

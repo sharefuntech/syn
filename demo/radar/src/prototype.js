@@ -61,6 +61,9 @@ vizG.append("text")
 	.attr("y", svgHeight / 3)
 	.text("数据正在载入，请稍候......");
 
+//monitor fps
+// monitorStats();
+
 d3.csv('data/processedStockFundQuote.csv', function(data) {
 	// console.log(data);
 	rawData = data;
@@ -85,6 +88,16 @@ d3.csv('data/processedStockFundQuote.csv', function(data) {
 // function renderHighlightLine() {
 // 	// body...
 // }
+
+function monitorStats() {
+	stats = new Stats();
+	stats.setMode(0);
+	stats.domElement.style.position = 'absolute';
+	stats.domElement.style.left = '0px';
+	stats.domElement.style.top = '0px';
+	document.body.appendChild( stats.domElement );
+}
+
 //渲染走时红点
 function renderTick(){
 	var radarTickGroup = vizG.append('g')
