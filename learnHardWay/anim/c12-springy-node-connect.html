@@ -20,12 +20,12 @@
 		var context = canvas.getContext('2d');
 
 		var particles = [];
-		var numParticles = 30;
+		var numParticles = 3;
 		var minDist = 100;
 		var springAmount = 0.001;
 
 		for(var particle, i = 0; i < numParticles; i++) {
-			particle = new Ball(5, '#ffffff');
+			particle = new Ball(10, '#ffffff');
 			particle.x = Math.random() * canvas.width;
 			particle.y = Math.random() * canvas.height;
 			particle.vx = Math.random() * 2 - 1;
@@ -52,7 +52,8 @@
 
 			if (dist < minDist) {
 				var alpha = 1 - dist / minDist;
-				context.strokeStyle = utils.colorToRGB('#ffffff', alpha);
+				// context.strokeStyle = utils.colorToRGB('#ffffff', alpha);
+				context.strokeStyle = '#fff';
 				context.beginPath();
 				context.moveTo(partA.x, partA.y);
 				context.lineTo(partB.x, partB.y)
