@@ -12,27 +12,38 @@
 
 <script type="text/javascript">
 var canvas = document.getElementById('vizContainer');
-// var canvas.width = 600;
-// var canvas.height = 400;
+
+canvas.setAttribute('width', 600);
+canvas.setAttribute('height', 400);
+
 var c = canvas.getContext('2d');
-
-c.strokeStyle ='gray';
-c.lineWidth = 5;
-c.fillStyle = 'red';
-
-c.beginPath();
-c.moveTo(50, 50);
-c.lineTo(100, 100);
-c.lineTo(50, 100);
-c.closePath();
-
-c.fill();
-c.stroke();
 
 function polygon(c, n ,x, y, r, angle, counterclockwise) {
     angle = angle || 0;
     counterclockwise = counterclockwise || false;
+    c.moveTo(x + r * Math.sin(angle), y - r * Math.cos(angle));
+    var delta = Math.PI * 2 / n;
+    for (var i = 1; i < n; i++) {
+    	angle += counterclockwise ? -delta : delta;
+    	c.lineTo(x + r * Math.sin(angle), y - r * Math.cos(angle));
+    }
+    c.closePath(); 
 }
+
+c.beginPath();
+polygon(c, 3, 50, 70, 50);
+polygon(c, 6, 300, 100, 50, Math.PI/6);
+
+c.fillStyle = 'teal';
+c.strokeStyle = 'gray';
+c.lineWidth = 5;
+
+c.fill();
+c.stroke();
+
+
+
+
 </script>
 
 </body>
