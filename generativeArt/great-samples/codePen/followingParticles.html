@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>following Particles</title>
+	<title>following Particles 流星彩色线条</title>
 	<script src='lib/jquery-2.1.4.min.js'></script>
 	<script src='lib/stats.min.js'></script>
 	<style>
@@ -48,7 +48,7 @@
 	};
 
 	monitorStats();
-	
+
 	init();
 
 	function monitorStats() {
@@ -155,7 +155,7 @@
 		this.y += Math.sin(this.rotation) * this.v;
 
 		if(this.x < 0){
-			// bounceLeftWall  
+			// bounceLeftWall
 			this.rotation = Math.PI - this.rotation;
 		}else if(this.x > stageWidth){
 			// bounceRightWall
@@ -163,7 +163,7 @@
 		}
 		if(this.y < 0){
 			this.rotation = -this.rotation;
-			// bounceTopWall  
+			// bounceTopWall
 		}else if(this.y > stageHeight){
 			this.rotation = -this.rotation;
 			// bounceBottomWall

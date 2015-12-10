@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>c21-1</title>
+    <!-- <script src='c21-1.js'></script> -->
+</head>
+<body>
+    <img src="images/default.png" alt="" data-rollover="images/sub.png">
+    <!-- <img src="images/default.png" alt="#" onmouseover="this.src='images/sub.png'" onmouseout="this.src='images/default.png'"> -->
+    <script type="text/javascript">
+        for (var i = 0; i < document.images.length; i++) {
+            var img = document.images[i];
+            var rollover = img.getAttribute('data-rollover');
+
+            if (!rollover) continue;
+
+            (new Image()).src = rollover;
+
+            img.setAttribute('data-rollout', img.src);
+
+            img.onmouseover = function() {
+                this.src = this.getAttribute('data-rollover');
+            };
+
+            img.onmouseout = function() {
+                this.src = this.getAttribute('data-rollout');
+            };
+        }
+    </script>
+</body>
+</html>
