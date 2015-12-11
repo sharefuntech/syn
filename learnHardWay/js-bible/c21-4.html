@@ -8,15 +8,135 @@
     </style>
 </head>
 <body>
+    <!-- <img src="images/sub.png" alt="" id="myImage"> -->
     <canvas id="vizContainer"></canvas>
+
 
 <script type="text/javascript">
 var canvas = document.getElementById('vizContainer');
 
-canvas.setAttribute('width', 600);
-canvas.setAttribute('height', 400);
+canvas.setAttribute('width', 800);
+canvas.setAttribute('height', 600);
+// canvas.width = 1000;
+// console.log(canvas.width);
 
 var c = canvas.getContext('2d');
+
+var bgfade = c.createLinearGradient(0, 0, 300, 300);
+//color space of: purble, black, white
+var colorSpace = ['hsla(300, 50%, 50%, 0.7)', 'hsla(300, 0%, 0%, 0.9)', 'hsla(300, 70%, 90%, 0.9)'];
+bgfade.addColorStop(0.0, colorSpace[0]);
+bgfade.addColorStop(1.0, colorSpace[1]);
+
+// c.fillStyle = bgfade;
+// c.rect(100, 100, 200, 300);
+// c.fill();
+// c.fillRect(50, 50, 200, 300);
+
+// c.moveTo(500, 200);
+c.translate(300, 300);
+var radialGradientColor = c.createRadialGradient(80, -80, 30, 0, 0, 200);
+radialGradientColor.addColorStop(0.0, colorSpace[2]);
+radialGradientColor.addColorStop(0.3, colorSpace[0]);
+radialGradientColor.addColorStop(1.0, colorSpace[1]);
+
+c.fillStyle = radialGradientColor;
+
+c.arc(0, 0, 200, 0, rads(360), false);
+c.fill();
+
+// c.restore();
+c.translate(-300, -300);
+c.rect(0, 0, 100, 100);
+c.stroke();
+
+
+
+
+// // c.fillStyle = 'teal';
+// var image = document.getElementById('myImage');
+// // console.log(image);
+// // console.log(c);
+// c.fillStyle = c.createPattern(image, 'repeat');
+// c.strokeStyle = 'gray';
+// c.lineWidth = 5;
+//
+// c.rect(50, 50, 200, 300);
+// c.fill();
+// c.stroke();
+
+// c.moveTo(75, 250);
+// c.quadraticCurveTo(100, 200, 175, 250);
+// c.fillRect(100-3, 200-3, 6, 6);
+// c.stroke();
+
+// c.moveTo(75, 250);
+// c.bezierCurveTo(220, 220, 280, 280, 300, 250);
+// c.fillRect(220-3, 220-3, 6, 6);
+// c.fillRect(280-3, 280-3, 6, 6);
+// // c.closePath();
+// c.stroke();
+
+// c.moveTo(450, 50);
+// c.arcTo(500, 50, 500, 150 ,30);
+// c.arcTo(500, 150, 400, 150 ,20);
+// c.arcTo(400, 150, 400, 50 ,10);
+// c.arcTo(400, 50, 500, 50 ,40);
+// c.closePath();
+// c.stroke();
+
+//draw curve and arc
+// c.beginPath();
+// c.arc(50, 50, 40, 0, rads(360), false);
+// c.closePath();
+// c.stroke();
+//
+// c.moveTo(150, 50);
+// // c.beginPath();
+// c.arcTo(150, 50, 200, 100, 30);
+// c.closePath();
+// c.stroke();
+
+function rads(x) {
+    return Math.PI * x / 180;
+}
+
+//snow sample for transform theory
+// var deg = Math.PI / 180;
+function snowflake(c, n, x, y, len) {
+    c.save();
+    c.translate(x, y);
+    c.moveTo(0, 0);
+    leg(n);
+    c.rotate(-120 * deg);
+    leg(n);
+    c.rotate(-120 * deg);
+    leg(n);
+    c.closePath();
+    c.restore();
+    c.stroke();
+
+    function leg(n) {
+        c.save();
+        if (n == 0) {
+            c.lineTo(len, 0);
+        } else {
+            c.scale(1/3, 1/3);
+            leg(n - 1);
+            c.rotate(60 * deg);
+            leg(n - 1);
+            c.rotate(-120 * deg);
+            leg(n - 1);
+            c.rotate(60 * deg);
+            leg(n - 1);
+        }
+        c.restore();
+        c.translate(len, 0);
+    }
+}
+
+// snowflake(c, 4, 200, 200, 200);
+// c.stroke();
 
 function polygon(c, n ,x, y, r, angle, counterclockwise) {
     angle = angle || 0;
@@ -27,19 +147,19 @@ function polygon(c, n ,x, y, r, angle, counterclockwise) {
     	angle += counterclockwise ? -delta : delta;
     	c.lineTo(x + r * Math.sin(angle), y - r * Math.cos(angle));
     }
-    c.closePath(); 
+    c.closePath();
 }
 
-c.beginPath();
-polygon(c, 3, 50, 70, 50);
-polygon(c, 6, 300, 100, 50, Math.PI/6);
-
-c.fillStyle = 'teal';
-c.strokeStyle = 'gray';
-c.lineWidth = 5;
-
-c.fill();
-c.stroke();
+// c.beginPath();
+// polygon(c, 3, 50, 70, 50);
+// polygon(c, 6, 300, 100, 50, Math.PI/6);
+//
+// c.fillStyle = 'teal';
+// c.strokeStyle = 'gray';
+// c.lineWidth = 5;
+//
+// c.fill();
+// c.stroke();
 
 
 
