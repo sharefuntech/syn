@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <title>c21-4 canvas</title>
     <style media="screen">
-
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
     </style>
 </head>
 <body>
@@ -17,41 +20,123 @@ var canvas = document.getElementById('vizContainer');
 
 canvas.setAttribute('width', 800);
 canvas.setAttribute('height', 600);
-// canvas.width = 1000;
-// console.log(canvas.width);
 
 var c = canvas.getContext('2d');
+//draw background grid
+drawGridBackground(c);
 
-var bgfade = c.createLinearGradient(0, 0, 300, 300);
-//color space of: purble, black, white
-var colorSpace = ['hsla(300, 50%, 50%, 0.7)', 'hsla(300, 0%, 0%, 0.9)', 'hsla(300, 70%, 90%, 0.9)'];
-bgfade.addColorStop(0.0, colorSpace[0]);
-bgfade.addColorStop(1.0, colorSpace[1]);
+c.shadowColor = 'rgba(100, 100, 100, 0.4)';
+c.shadowOffsetX = c.shadowOffsetY = 5;
+c.shadowBlur = 8;
 
-// c.fillStyle = bgfade;
-// c.rect(100, 100, 200, 300);
+c.lineWidth = 10;
+c.lineJoin = 'round';
+c.strokeStyle = 'orange';
+c.strokeRect(100, 100, 300, 200);
+c.font = 'bold 60pt sans-serif';
+c.fillText('Bevel', 150, 200);
+
+// c.font = 'bold 60pt sans-serif';
+// c.lineWidth = 2;
+// c.strokeStyle = 'teal';
+
+// c.strokeRect(175, 25, 50, 325);
+// c.strokeText('canvas', 15, 330);
+
+// polygon(c, 3, 200, 225, 200);
+// // polygon(c, 3, 200, 100, 0, true);
+// // drawCircle (c);
+
+// c.clip();
+// // c.stroke();
+
+// c.strokeRect(300, 300, 50, 50);
+// c.fillRect(175, 25, 50, 325);
+
+// c.strokeStyle = 'gray';
+// c.lineWidth = 15;
+// c.lineCap = 'round';
+// c.lineJoin = 'round';
+//
+// c.beginPath();
+// c.moveTo(100, 100);
+// c.lineTo(300, 300);
+// c.lineTo(300, 100);
+// c.closePath();
+// // c.scale(2, 1);
+// c.stroke();
+
+function drawCircle (c) {
+    c.save();
+
+    c.strokeStyle = 'hsla(360, 50%, 50%, 1)';
+    c.lineWidth = 5;
+    c.moveTo(100, 100);
+    c.beginPath();
+    c.arc(200, 200, 100, 0, rads(360), false);
+    c.closePath();
+    c.stroke();
+
+    c.restore();
+}
+
+function drawGridBackground(c) {
+    c.save();
+    var canvasWidth = canvas.width;
+    var canvasHeight = canvas.height;
+    // console.log(canvasWidth, canvasHeight);
+
+    var gridWidth = 20;
+    var gridHeight = 20;
+
+    var rowNum = canvasHeight / gridHeight;
+    var colNum = canvasWidth / gridWidth;
+
+    c.beginPath();
+
+    for (var i = 1; i <= rowNum; i++) {
+        c.moveTo(0, i * gridHeight);
+        c.lineTo(gridWidth * colNum, i * gridHeight);
+    }
+
+    for (var j = 1; j <= colNum; j++) {
+        c.moveTo(j * gridWidth, 0);
+        c.lineTo(j * gridWidth, rowNum * gridHeight);
+    }
+
+    c.strokeStyle = 'hsla(300, 10%, 0%, 1)';
+    c.lineWidth = 0.1;
+    c.stroke();
+
+    c.restore();
+}
+// var bgfade = c.createLinearGradient(0, 0, 300, 300);
+// //color space of: purble, black, white
+// var colorSpace = ['hsla(300, 50%, 50%, 0.7)', 'hsla(300, 0%, 0%, 0.9)', 'hsla(300, 70%, 90%, 0.9)'];
+// bgfade.addColorStop(0.0, colorSpace[0]);
+// bgfade.addColorStop(1.0, colorSpace[1]);
+//
+// // c.fillStyle = bgfade;
+// // c.rect(100, 100, 200, 300);
+// // c.fill();
+// // c.fillRect(50, 50, 200, 300);
+//
+// // c.moveTo(500, 200);
+// c.translate(300, 300);
+// var radialGradientColor = c.createRadialGradient(80, -80, 30, 0, 0, 200);
+// radialGradientColor.addColorStop(0.0, colorSpace[2]);
+// radialGradientColor.addColorStop(0.3, colorSpace[0]);
+// radialGradientColor.addColorStop(1.0, colorSpace[1]);
+//
+// c.fillStyle = radialGradientColor;
+//
+// c.arc(0, 0, 200, 0, rads(360), false);
 // c.fill();
-// c.fillRect(50, 50, 200, 300);
-
-// c.moveTo(500, 200);
-c.translate(300, 300);
-var radialGradientColor = c.createRadialGradient(80, -80, 30, 0, 0, 200);
-radialGradientColor.addColorStop(0.0, colorSpace[2]);
-radialGradientColor.addColorStop(0.3, colorSpace[0]);
-radialGradientColor.addColorStop(1.0, colorSpace[1]);
-
-c.fillStyle = radialGradientColor;
-
-c.arc(0, 0, 200, 0, rads(360), false);
-c.fill();
-
-// c.restore();
-c.translate(-300, -300);
-c.rect(0, 0, 100, 100);
-c.stroke();
-
-
-
+//
+// // c.restore();
+// c.translate(-300, -300);
+// c.rect(0, 0, 100, 100);
+// c.stroke();
 
 // // c.fillStyle = 'teal';
 // var image = document.getElementById('myImage');
