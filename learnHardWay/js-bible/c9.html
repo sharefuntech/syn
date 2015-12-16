@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>c9 class and module</title>
+</head>
+<body>
+<script>
+
+var objA = {
+    name: 'william',
+    age: 23,
+    sayName: function() {
+        console.log(this.name);
+    }
+}
+
+var objB = inherit(objA);
+objB.name = 'cook';
+objB.sayName();
+
+// function range(from, to) {
+//     var r = inherit(range.methods);
+//     r.from = from;
+//     r.to = to;
+//     return r;
+// }
+//
+// range.methods = {
+//     toString: function() {
+//         return '(' + this.from + '...' + this.to + ')';
+//     }
+// }
+//
+// var r1 = range(1, 100);
+// console.log(r1.toString());
+
+//*******************************************************
+//define inherit function
+function inherit(p) {
+    if (p == null) {
+        throw TypeError();
+    }
+
+    if (Object.create) {
+        return Object.create(p);
+    }
+
+    var t = typeof p;
+    if (t !== 'object' && t != 'function') {
+        throw TypeError();
+    }
+    function f() {};
+    f.prototype = p;
+    return new f();
+}
+
+</script>
+</body>
+</html>
