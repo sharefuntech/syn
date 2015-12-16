@@ -7,17 +7,30 @@
 <body>
 <script>
 
-var objA = {
-    name: 'william',
-    age: 23,
-    sayName: function() {
-        console.log(this.name);
+function Range(from, to) {
+    this.from = from;
+    this.to = to;
+}
+
+Range.prototype = {
+    toString: function() {
+        return '(' + this.from + '...' + this.to + ')';
     }
 }
 
-var objB = inherit(objA);
-objB.name = 'cook';
-objB.sayName();
+var r2 = new Range(2, 7);
+console.log(r2.toString());
+// var objA = {
+//     name: 'william',
+//     age: 23,
+//     sayName: function() {
+//         console.log(this.name);
+//     }
+// }
+//
+// var objB = inherit(objA);
+// objB.name = 'cook';
+// objB.sayName();
 
 // function range(from, to) {
 //     var r = inherit(range.methods);
