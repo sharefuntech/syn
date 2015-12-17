@@ -6,20 +6,106 @@
 </head>
 <body>
 <script>
+var collections;
+if (!collections) {
+    collections = {};
+}
+
+collections.sets = (function namespace() {
+    function say() {
+        console.log('say it!');
+    }
+
+    return {
+        say: say
+    };
+}());
+
+collections.sets.say();
+
+// var Ppt = (function privateFun() {
+//     function Ppt() {
+//         this.name = 'will';
+//         this.age = 33;
+//     }
+//
+//     Ppt.prototype.sayName = function() {
+//         console.log(this.name);
+//     };
+//     console.log('auto run');
+//     return Ppt;
+// }());
+//
+// // Ppt.sayName();
+// console.log(Ppt);
 
 function Range(from, to) {
-    this.from = from;
-    this.to = to;
+    this.from = function () { return from; };
+    this.to = function () { return to; };
 }
 
 Range.prototype = {
     toString: function() {
-        return '(' + this.from + '...' + this.to + ')';
+        return '(' + this.from() + '...' + this.to() + ')';
     }
 }
 
-var r2 = new Range(2, 7);
-console.log(r2.toString());
+// var r2 = new Range(4, 5);
+// console.log(r2.toString());
+// console.log(r2.from());
+
+var objE = {
+    name: 'will',
+    age: 33,
+    sayName: function() {
+        console.log(this.name);
+    }
+}
+
+var objF = {
+    name: 'cook',
+    age: 33
+}
+
+objF.say = objE.sayName;
+// objF.say();
+
+// var objD = {
+//     name: 'will',
+//     age: 33
+// }
+//
+// console.log(objD.constructor);
+
+// function Range(from, to) {
+//     this.from = from;
+//     this.to = to;
+// }
+//
+// Range.prototype = {
+//     constructor: Range,
+//     toString: function() {
+//         return '(' + this.from + '...' + this.to + ')';
+//     }
+// }
+
+// var r2 = new Range(3, 6);
+// console.log(r2.constructor);
+
+function Set() {
+    this.values = {};
+    this.n = 0;
+    this.add.apply(this.arguments);
+}
+
+Set.prototype.add = function() {
+    for (var i = 0; i < arguments.length; i++) {
+        var val = arguments[i];
+        var str = Set._v2s(val);
+    }
+}
+// var r2 = new Range(2, 7);
+// console.log(r2.toString());
 // var objA = {
 //     name: 'william',
 //     age: 23,
