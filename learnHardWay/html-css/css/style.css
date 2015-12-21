@@ -85,6 +85,10 @@ main {
 
 /*MASTHEAD
 --------------------------------------------*/
+.masthead {
+	padding-top: 10px;
+	position: relative;
+}
 
 /*::: Main Navigation :::*/
 .nav-main {
@@ -113,6 +117,15 @@ main {
 	display: inline-block;
 	font-size: 1.125em;
 	padding: .5em 1.15em .5em 1.4em;
+}
+
+/*::: Social site icons :::*/
+.social-sites {
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	right: -3px;
+	top: 41px;
 }
 
 .social-sites li {
