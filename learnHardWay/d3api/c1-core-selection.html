@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>c1 core selection</title>
+    <script type="text/javascript" src='lib/d3.js'></script>
+    <style media="screen">
+        .box {
+            display: inline-block;
+            width: 100px;
+            height: 100px;
+            /*background-color: teal;*/
+            border: 2px solid gray;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- <div class="parent">
+        <div class="child"></div>
+    </div> -->
+
+    <!-- <ul id="list">
+        <li data-username="shawnbot">Shawn Allen</li>
+        <li data-username="mbostock">Mike Bostock</li>
+    </ul> -->
+<script type="text/javascript">
+
+// var data = [3, 1, 6, 2, 8, 4];
+// data.forEach(function(d) {
+//     console.log(d);
+// });
+
+// var datum = d3.selectAll('#list li')
+//         .datum(function() {
+//             return this.dataset;
+//         });
+//
+// datum.forEach(function(d) {
+//     console.log(d.username);
+// });
+// console.log(datum[0][0]);
+
+//======================================================
+//selection ========================
+// d3.select('.parent').text('hello');
+// d3.select('.child').text('hello');
+// var htmlTemp = '<input type="button" value="html">';
+// d3.select('.parent').html(htmlTemp);
+// d3.select('.parent').append('div');
+// d3.select('.child').insert('span', ':first-child');
+// var rm = d3.select('.child').remove();
+// console.log(rm);
+
+//======================================================
+//selection.sort() ========================
+var data = [3, 1, 6, 2, 8, 4];
+
+d3.selectAll('div')
+    .data(data)
+    .enter()
+    .append('div')
+    .attr('class', 'box')
+    .style('background-color', function(d) {
+        return '#' + d * 111;
+    })
+    .text(function(d) {
+        return d;
+    });
+
+// d3.selectAll('.box')
+//     .sort(d3.ascending);
+
+d3.selectAll('.box')
+    .filter(function(d) {
+        return d % 2 == 0 ;
+    })
+    .text('hey we odd');
+
+</script>
+</body>
+</html>
