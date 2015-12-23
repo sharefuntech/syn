@@ -9,8 +9,9 @@
             display: inline-block;
             width: 100px;
             height: 100px;
-            /*background-color: teal;*/
-            border: 2px solid gray;
+            background-color: #eee;
+            /*opacity: 0.4;*/
+            border: 1px solid gray;
             margin: 5px;
         }
     </style>
@@ -26,32 +27,44 @@
     </ul> -->
 <script type="text/javascript">
 
-var data = [3, 1, 6, 2, 8, 4];
-
-d3.selectAll('div')
-    .data(data)
-    .enter()
+var box = d3.select('body')
     .append('div')
-    .attr('class', 'box')
-    // .style('background-color', function(d) {
-    //     return '#' + d * 111;
-    // })
-    .text(function(d) {
-        return d;
-    });
+    .attr('class', 'box');
 
-var data_2 = [2, 1, 3, 5, 9];
-var divUpdate = d3.selectAll('div')
-    .data(data_2, function(d) { return d; });
+var pos = d3.mouse(box);
+console.log(pos);
 
-divUpdate.enter()
-    .append('div')
-    .attr('class', 'box')
-    .text(function(d) {
-        return d;
-    });
-
-divUpdate.exit().remove();
+// var data = [3, 1, 6, 2, 8, 4];
+//
+// d3.selectAll('div')
+//     .data(data)
+//     .enter()
+//     .append('div')
+//     .on('click', sayHey)
+//     .attr('class', 'box')
+//     // .style('background-color', function(d) {
+//     //     return '#' + d * 111;
+//     // })
+//     .text(function(d) {
+//         return d;
+//     });
+//
+// function sayHey() {
+//     console.log('hey');
+// }
+//==============exit
+// var data_2 = [2, 1, 3, 5, 9];
+// var divUpdate = d3.selectAll('div')
+//     .data(data_2, function(d) { return d; });
+//
+// divUpdate.enter()
+//     .append('div')
+//     .attr('class', 'box')
+//     .text(function(d) {
+//         return d;
+//     });
+//
+// divUpdate.exit().remove();
 
 
 // var matrix = [

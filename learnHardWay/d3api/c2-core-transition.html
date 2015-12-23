@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>c2 core transition</title>
+    <!-- <script type="text/javascript" src="http://hq.sinajs.cn/list=sh601006" charset="gb2312"></script> -->
+    <!-- <script type="text/javascript" src='http://open.taobao.com/apitools/ajax_props.do'></script> -->
+    <script type="text/javascript" src='lib/jquery.js'></script>
+    <script type="text/javascript" src='lib/d3.js'></script>
+    <style media="screen">
+        .box {
+            display: inline-block;
+            width: 100px;
+            height: 100px;
+            background-color: #eee;
+            border: 1px solid gray;
+            margin: 5px;
+        }
+
+        .smallWord {
+            font-size: 64px;
+            color: #999;
+        }
+
+        .largeWord {
+            font-size: 96px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+<script type="text/javascript">
+
+// //首先要引入jquery的js包
+ jQuery(document).ready(function(){
+     $.ajax({
+         type: "get",
+        //  async: false,
+         url: "http://api.taobao.com/apitools/ajax_props.do",
+         dataType: "jsonp",
+        //  jsonp: "jsoncallback",
+        //  jsonpCallback: "success_jsonpCallback",
+         success: function(json){
+             console.log(json);
+         }
+     });
+ });
+
+// var dataurl = "http://hq.sinajs.cn/list=sh601006";
+// $.ajax({
+//         type: "GET",
+//         url: dataurl,
+//         dataType: 'jsonp',
+//         success: function (data) {
+//            var pos_data = data;
+//         //    div_name = "div.histogram";
+//         //    draw_histogram(div_name, pos_data);
+//             console.log(pos_data);
+//         },
+//         error: function (result) {
+//             console.log(result);
+//         }
+// });
+
+    // var elements=hq_str_sh601006.split(",");
+    // console.log(elements);
+
+    // var url = "http://hq.sinajs.cn/list=sh601006";
+    // var url = "http://api.taobao.com/apitools/ajax_props.do";
+    // d3.json(url, function(data) {
+    //     console.log(data);
+    // });
+
+    // var word = d3.select('body')
+    //     .append('div')
+    //     .text('hello')
+        // .style('font-size', '32px')
+    //     // .transition()
+    //     // .duration(3000)
+    //     // .style('font-size', '96px')
+    //     // .style('color', '#999');
+    //
+    // // console.log(setStyle('small'));
+    //
+    // word
+    //     // .style({'font-size': '32px', 'color': 'teal'})
+    //     .style(function(d) {
+    //         return setStyle('small')
+    //     })
+    //     // .attr('style', setStyle('small'))
+    //     .transition()
+    //     .duration(3000)
+    //     .style(function(d) {
+    //         return setStyle('large')
+    //     })
+    //     // .style(setStyle('large'));
+
+    // word.attr('class', 'smallWord')
+    //     .transition()
+    //     .duration(3000)
+    //     .attr('class', 'largeWord');
+
+    function setStyle(mode) {
+        switch (mode) {
+            case 'small':
+                return "{'font-size': '32px', 'color': 'red'}";
+                break;
+            case 'large':
+                return "{'font-size': '96px', 'color': '#999'}";
+                break;
+        }
+    }
+
+</script>
+</body>
+</html>

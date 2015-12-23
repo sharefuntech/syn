@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>svg overflow</title>
+    <script type="text/javascript" src='lib/d3.js'></script>
+    <style media="screen">
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 400px;
+            height: 400px;
+            overflow: scroll;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+    </div>
+    <script>
+        var svg = d3.select('.container')
+            .append('svg')
+            .attr('width', 600)
+            .attr('height', 600);
+
+        var drag = d3.behavior.drag();
+
+        svg.append('circle')
+            .attr('r', 300)
+            .attr('cx', 300)
+            .attr('cy', 300)
+            .attr('fill', 'teal');
+
+        svg.call(drag);
+    </script>
+</body>
+</html>
