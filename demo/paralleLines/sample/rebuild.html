@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<title>paralle demo</title>
+<title>Map Projections</title>
 <style>
 
 svg {
@@ -59,7 +59,7 @@ var color = d3.scale.category10();
 
 var dimensions = [
   {
-    name: "国家",
+    name: "区域",
     scale: d3.scale.ordinal().rangePoints([0, height]),
     type: String
   },
@@ -69,17 +69,22 @@ var dimensions = [
     type: Number
   },
   {
-    name: "收入",
+    name: "单位GDP用水总量_立方米每万元",
     scale: d3.scale.linear().range([height, 0]),
     type: Number
   },
   {
-    name: "人口",
+    name: "单位GDP能源消耗总量_公斤每万元",
     scale: d3.scale.linear().range([height, 0]),
     type: Number
   },
   {
-    name: "幸福指数",
+    name: "单位产值建设用地消耗_亩每亿元",
+    scale: d3.scale.linear().range([height, 0]),
+    type: Number
+  },
+  {
+    name: "单位GDP固定资产投资_元每万元",
     scale: d3.scale.linear().range([height, 0]),
     type: Number
   }
@@ -107,8 +112,57 @@ var dimension = svg.selectAll(".dimension")
     .attr("class", "dimension")
     .attr("transform", function(d) { return "translate(" + x(d.name) + ")"; });
 
-d3.tsv("./happy.tsv", function(data) {
-  console.log(data);
+d3.csv("./sample.csv", function(data) {
+    // console.log(data);
+    var dataProcessed = [];
+    data.forEach(function(d) {
+        d.年份 = +d.年份;
+        d.指标值 = +d.指标值;
+        d[d.指标名称] = d.指标值;
+        var obj = {};
+        obj['区域'] = d.区域;
+        obj['年份'] = d.年份;
+        obj[d.指标名称] = d.指标值;
+        dataProcessed.push(obj);
+    });
+    // console.log(dataProcessed);
+
+    var dataNested = d3.nest()
+        .key(function(d) {
+            return d.区域;
+        })
+        .key(function(d) {
+            return d.年份;
+        })
+        .entries(dataProcessed);
+    // console.log(dataNested);
+
+    var dataParallel = [];
+    dataNested.forEach(function(d) {
+        var place = d.key;
+        d.values.forEach(function(e) {
+            // console.log(e);
+            var year = +e.key;
+            var obj = {};
+            obj['年份'] = year;
+            obj['区域'] = place;
+            e.values.forEach(function(f) {
+                for(key in f) {
+                    if (key != '区域' && key != '年份') {
+                        // console.log(key + ': ' + f[key]);
+                        obj[key] = f[key];
+                    }
+                }
+            });
+            dataParallel.push(obj);
+        });
+    });
+    // console.log(dataParallel);
+
+  //*****************************************
+  data = dataParallel;
+  // console.log(data);
+
   dimensions.forEach(function(dimension) {
     dimension.scale.domain(dimension.type === Number
         ? d3.extent(data, function(d) { return +d[dimension.name]; })
@@ -128,7 +182,7 @@ d3.tsv("./happy.tsv", function(data) {
       .data(data)
     .enter().append("path").attr({
 	 	fill: "none",
-	 		stroke:function(d,i){ console.log(color(d.国家)); return color(d.国家); },
+	 		stroke:function(d,i){ console.log(color(d.区域)); return color(d.区域); },
 		"stroke-width": "1.5px"
 	  })
       .attr("d", draw);
