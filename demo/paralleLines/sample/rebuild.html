@@ -51,9 +51,9 @@ svg {
 <script src="d3.v3.min.js"></script>
 <script>
 
-var margin = {top: 30, right: 40, bottom: 20, left: 200},
-    width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+var margin = {top: 30, right: 40, bottom: 20, left: 100},
+    width = 1000 - margin.left - margin.right,
+    height = 600 - margin.top - margin.bottom;
 
 var color = d3.scale.category10();
 
@@ -113,54 +113,9 @@ var dimension = svg.selectAll(".dimension")
     .attr("transform", function(d) { return "translate(" + x(d.name) + ")"; });
 
 d3.csv("./sample.csv", function(data) {
-    // console.log(data);
-    var dataProcessed = [];
-    data.forEach(function(d) {
-        d.年份 = +d.年份;
-        d.指标值 = +d.指标值;
-        d[d.指标名称] = d.指标值;
-        var obj = {};
-        obj['区域'] = d.区域;
-        obj['年份'] = d.年份;
-        obj[d.指标名称] = d.指标值;
-        dataProcessed.push(obj);
-    });
-    // console.log(dataProcessed);
 
-    var dataNested = d3.nest()
-        .key(function(d) {
-            return d.区域;
-        })
-        .key(function(d) {
-            return d.年份;
-        })
-        .entries(dataProcessed);
-    // console.log(dataNested);
 
-    var dataParallel = [];
-    dataNested.forEach(function(d) {
-        var place = d.key;
-        d.values.forEach(function(e) {
-            // console.log(e);
-            var year = +e.key;
-            var obj = {};
-            obj['年份'] = year;
-            obj['区域'] = place;
-            e.values.forEach(function(f) {
-                for(key in f) {
-                    if (key != '区域' && key != '年份') {
-                        // console.log(key + ': ' + f[key]);
-                        obj[key] = f[key];
-                    }
-                }
-            });
-            dataParallel.push(obj);
-        });
-    });
-    // console.log(dataParallel);
-
-  //*****************************************
-  data = dataParallel;
+    data = iniParallesData(data);
   // console.log(data);
 
   dimensions.forEach(function(dimension) {
@@ -204,20 +159,76 @@ d3.csv("./sample.csv", function(data) {
       .on("mouseover", mouseover)
       .on("mouseout", mouseout);
 
-  function mouseover(d) {
-    svg.classed("active", true);
-    projection.classed("inactive", function(p) { return p !== d; });
-    projection.filter(function(p) { return p === d; }).each(moveToFront);
-  }
+    function iniParallesData(data) {
+      // console.log(data);
+      var dataProcessed = [];
+      data.forEach(function(d) {
+          d.年份 = +d.年份;
+          d.指标值 = +d.指标值;
+          d[d.指标名称] = d.指标值;
+          var obj = {};
+          obj['区域'] = d.区域;
+          obj['年份'] = d.年份;
+          obj[d.指标名称] = d.指标值;
+          dataProcessed.push(obj);
+      });
+      // console.log(dataProcessed);
 
-  function mouseout(d) {
-    svg.classed("active", false);
-    projection.classed("inactive", false);
-  }
+      var dataNested = d3.nest()
+          .key(function(d) {
+              return d.区域;
+          })
+          .key(function(d) {
+              return d.年份;
+          })
+          .entries(dataProcessed);
+      // console.log(dataNested);
 
-  function moveToFront() {
-    this.parentNode.appendChild(this);
-  }
+      var dataParallel = [];
+      var keyYear = '年份';
+      var keyPlace = '区域';
+
+      dataNested.forEach(function(d) {
+          var place = d.key;
+          d.values.forEach(function(e) {
+              // console.log(e);
+              var year = +e.key;
+              var obj = {};
+              // obj['年份'] = year;
+              // obj['区域'] = place;
+              obj[keyYear] = year;
+              obj[keyPlace] = place;
+              e.values.forEach(function(f) {
+                  for(key in f) {
+                      if (key != keyPlace && key != keyYear) {
+                          // console.log(key + ': ' + f[key]);
+                          obj[key] = f[key];
+                      }
+                  }
+              });
+              dataParallel.push(obj);
+          });
+      });
+
+      return dataParallel;
+    }
+
+    function mouseover(d) {
+        svg.classed("active", true);
+        projection.classed("inactive", function(p) { return p !== d; });
+        projection.filter(function(p) { return p === d; }).each(moveToFront);
+    }
+
+    function mouseout(d) {
+        svg.classed("active", false);
+        projection.classed("inactive", false);
+    }
+
+    function moveToFront() {
+        this.parentNode.appendChild(this);
+    }
+
+
 });
 
 function draw(d) {
