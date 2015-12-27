@@ -4,6 +4,7 @@ svg {
 
 .background path {
     fill: none;
+    /*stroke: teal;*/
     stroke: none;
     stroke-width: 20px;
     pointer-events: stroke;

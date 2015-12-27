@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>c1</title>
+    <script type="text/javascript" src="lib/vue.js"></script>
+</head>
+<body>
+    <!-- <div id="app">
+  <ul>
+    <li v-for="todo in todos">
+      {{ todo.task }}
+    </li>
+  </ul>
+</div> -->
+    <!-- <div id="app">
+        <ul>
+            <li v-for='place in China'>
+                {{ place.province }}
+            </li>
+        </ul>
+    </div> -->
+    <div id="app">
+        <span>{{ message }}</span>
+        <span>{{ sound }}</span>
+        <button v-on:click='say'>say</button>
+    </div>
+
+    <script type="text/javascript">
+        var dataObj = {
+            China: [
+                { province: 'zhejiang'},
+                { province: 'jiangsu'},
+                { province: 'shanghai'}
+            ],
+            data: {
+                message: 'hello vue',
+                sound: '爵士名伶'
+            },
+            methods: {
+                say: function() {
+                    console.log(this.message = this.sound);
+                }
+            }
+        };
+
+        new Vue({
+            el: '#app',
+            data: dataObj.data,
+            methods: dataObj.methods
+        });
+
+        // var note = {
+        //       todos: [
+        //         { task: 'Learn JavaScript' },
+        //         { task: 'Learn Vue.js' },
+        //         { task: 'Build Something Awesome' }
+        //       ]
+        //   };
+        //
+        // new Vue({
+        //   el: '#app',
+        //   data: note
+        // })
+
+        // var dataObj = {
+        //     China: {
+        //         GDP: 15723,
+        //         population: 13,
+        //         capital: 'Beijing',
+        //         flights: [
+        //             { airline: 'beijing-shanghai' },
+        //             { airline: 'hongkong-newyork' },
+        //             { airline: 'bankoke-paris' }
+        //         ]
+        //         // say: (function() {
+        //         //     this.Capital = '北京';
+        //         //     console.log('hello vue');
+        //         // }())
+        //     },
+        //     Japan: {
+        //         GDP: 72343,
+        //         population: 7,
+        //         capital: 'Tokyo'
+        //     },
+        //     India: {
+        //         GDP: 14175,
+        //         population: 18,
+        //         capital: 'Dehel'
+        //     }
+        // };
+    </script>
+</body>
+</html>
