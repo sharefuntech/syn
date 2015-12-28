@@ -77,6 +77,15 @@
 			.style('stroke-width', para.strokeWidth);
 	}
 
+	var circlePara = {
+		cx:100,
+		cy: 100,
+		r: 50,
+		fill: 'orange',
+		stroke: 'gray',
+		strokeWidth: 5
+	};
+
 	//data object is model
 	var dataObj = {
 		data: {
@@ -89,14 +98,15 @@
 				{ country: 'japan', city: ['tokyo', 'kyoto']},
 				{ country: 'USA', city: ['newyork', 'losangle', 'wasionton']}
 			],
-			circle: {
-				cx:100,
-				cy: 100,
-				r: 50,
-				fill: 'orange',
-				stroke: 'gray',
-				strokeWidth: 5
-			}
+			circle: circlePara
+			// circle: {
+			// 	cx:100,
+			// 	cy: 100,
+			// 	r: 50,
+			// 	fill: 'orange',
+			// 	stroke: 'gray',
+			// 	strokeWidth: 5
+			// }
 		},
 		methods: {
 			addTodo: function() {
