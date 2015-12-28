@@ -4,46 +4,138 @@
 	<meta charset="UTF-8">
 	<title>C1</title>
 	<script src="lib/vue.js"></script>
+	<script src="lib/d3.js"></script>
+	<style media="screen">
+		#app {
+			width: 400px;
+			height: auto;
+			background-color: #efefef;
+			border: 1px solid gray;
+			padding-right: 10px;
+			padding-left: 5px;
+			padding-top: 10px;
+		}
+		.todolist {
+			font-size: 1em;
+			line-height: 1.5em;
+			color: gray;
+			clear:both;
+		}
+
+		.deleteButton {
+			float: right;
+			/*position: relative;*/
+		}
+
+		#addTodo {
+			width: 400px;
+			height: 30px;
+		}
+	</style>
 </head>
 <body>
+	<!-- dom is view -->
 	<div id="app">
-		<!-- <p>{{message}}</p> -->
-		<input v-model='newTodo' v-on:keyup.enter='addTodo'>
-		<!-- <button v-on:click='reverseMessage'>reverseMessage</button> -->
+		<!-- <input id='addTodo' v-model='newTodo' v-on:keyup.enter='addTodo'>
 		<ul>
-			<li v-for='todo in todos'>
-				<span>{{todo.text}}</span>
-				<button v-on:click='removeTodo($index)'>删除</button>
+			<li class='todolist' v-for='todo in todos'>
+				<span>{{ todo.summary }}</span>
+				<button class='deleteButton' v-on:click='removeTodo($index)'>Delete</button>
 			</li>
 		</ul>
+		<ul>
+			<li v-for='bt in info'>
+				<button @click='draw(this.circle)'>{{bt.country}}</button>
+			</li>
+		</ul> -->
+		<div id='controlPanel'>
+			<!-- <p>cx: {{ circle.cx }} <input v-model='circle.cx'></p>
+			<p>cy: {{ circle.cy }} <input v-model='circle.cy'></p>
+			<p>r: {{ circle.r }} <input v-model='circle.r'></p>
+			<p>fill: {{ circle.fill }} <input v-model='circle.fill'></p>
+			<p>stroke: {{ circle.stroke }} <input v-model='circle.stroke'></p>
+			<p>strokeWidth: {{ circle.strokeWidth }} <input v-model='circle.strokeWidth'></p> -->
+		</div>
+		<div>
+			<button @click='draw(this.circle)'>draw circle</button>
+		</div>
 	</div>
 <script>
-	new Vue({
-		el: '#app',
+	var iniG = d3.select('body')
+		.append('svg')
+		.attr('width', 400)
+		.attr('height', 400)
+		.append('g');
+
+	function drawCircle(container, para) {
+		container.append('circle')
+			.attr('cx', para.cx)
+			.attr('cy', para.cy)
+			.attr('r', para.r)
+			.style('fill', para.fill)
+			.style('stroke', para.stroke)
+			.style('stroke-width', para.strokeWidth);
+	}
+
+	//data object is model
+	var dataObj = {
 		data: {
-			// message: 'Hello Vue'
 			newTodo: '',
 			todos: [
-				{text: 'javascript'},
-				{text: 'vue'},
-				{text: 'd3'}
-			]
+				{ summary: 'Add your first todo'}
+			],
+			info: [
+				{ country: 'china', city: ['shanghai', 'beijing', 'hangzhou']},
+				{ country: 'japan', city: ['tokyo', 'kyoto']},
+				{ country: 'USA', city: ['newyork', 'losangle', 'wasionton']}
+			],
+			circle: {
+				cx:100,
+				cy: 100,
+				r: 50,
+				fill: 'orange',
+				stroke: 'gray',
+				strokeWidth: 5
+			}
 		},
 		methods: {
 			addTodo: function() {
-				var text = this.newTodo.trim();
-				if(text) {
-					this.todos.push({text:text});
+				var summary = this.newTodo.trim();
+				if (summary) {
+					this.todos.push({ summary: summary});
+					this.newTodo = '';
 				}
 			},
 			removeTodo: function(index) {
 				this.todos.splice(index, 1);
+			},
+			consoleLog: function() {
+				console.log(this.todos[0].summary);
+			},
+			draw: function(para) {
+				// var para = {cx: 100, cy: 100, r: 50};
+				return drawCircle(iniG, para);
 			}
-			// reverseMessage: function() {
-			// 	this.message = this.message.split('').reverse().join('');
-			// }
 		}
+	};
+
+	for(attr in dataObj.data.circle) {
+		var controlViewer = attr + ': {{circle.' + attr + '}} <input v-model="circle.' + attr + '">';
+
+		d3.select('#controlPanel')
+			.append('p')
+			.html(controlViewer);
+		console.log(attr);
+	}
+
+	// vue object is viewmodel
+	new Vue({
+		el: '#app',
+		data: dataObj.data,
+		methods: dataObj.methods
 	});
+
+
 </script>
 </body>
 </html>
