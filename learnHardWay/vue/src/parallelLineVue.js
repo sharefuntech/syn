@@ -32,6 +32,57 @@ var dimensions = [
     }
 ];
 
+//---------------------------------------------------
+// var arr = ['a', 'b', 'not'];
+// var arrLength = arr.length;
+// var arrPsd = arr.slice(0, arrLength-1);
+// console.log(arrPsd);
+
+//###################################################
+var dataObject = {
+    data: {
+        dimensions: dimensions,
+        checkedParas: []
+    },
+    methods: {
+        print: print,
+        copyCheckedParaArray: copyCheckedParaArray
+    }
+};
+
+new Vue({
+    el: '#app',
+    data: dataObject.data,
+    methods: dataObject.methods
+});
+
+function print(flag) {
+    console.log(flag);
+    // console.log(flag.toString);
+}
+
+function sliceCheckedParaArray(arr) {
+    var arrLength = arr.length;
+    if (arrLength > 1) {
+        var arrSliced = arr.slice(0, arrLength-1);
+        print(arr);
+        print(arrSliced);
+        return arrSliced;
+    }
+}
+
+function copyCheckedParaArray(arr) {
+    var arrLength = arr.length;
+    var arrSliced = ['国家', '年份'];
+    for ( var i = 0; i < arrLength; i++) {
+        arrSliced.push(arr[i]);
+    }
+    console.log(arrSliced);
+    return arrSliced;
+}
+
+//##################################################
+
 var x = d3.scale.ordinal()
     .domain(dimensions.map(function(d) {
         return d.name;
@@ -170,7 +221,7 @@ function draw(d) {
     var dataDimensions = dimensions.map(function(dimension) {
         return [x(dimension.name), dimension.scale(d[dimension.name])];
     });
-    console.log(dataDimensions[1]);
+    // console.log(dataDimensions[1]);
     // console.log(dimension.name + ': ' + d[dimension.name] + ' after scale is: ' + dataSingleDimension);
     return line(dimensions.map(function(dimension) {
         // //inspect geometry of each dimension after scale

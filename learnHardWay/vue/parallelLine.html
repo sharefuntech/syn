@@ -5,33 +5,26 @@
     <title>parallel line</title>
     <script src="lib/vue.js"></script>
 	<script src="lib/d3.js"></script>
-    <style>
-
-    </style>
+    <link rel="stylesheet" href="src/style.css">
 </head>
 <body>
-    <div id="demo">{{ fullName }}</div>
-    <!-- <input type="checkbox" id='checkbox' v-model='checked'>
-    <label for="checkbox">{{ checked }}</label> -->
+    <div id="app">
+        <div>
+            <input type="checkbox" id="income" value="收入" v-model='checkedParas'>
+            <label for="income">收入</label>
+            <input type="checkbox" id="income" value="人口" v-model='checkedParas'>
+            <label for="income">人口</label>
+        </div>
+        <div>
+            <span>已经选择指标：{{checkedParas}}</span>
+        </div>
+        <div>
+            <!-- <input type="button" name="click" value="Click" @click=print(this.checkedParas)> -->
+            <input type="button" name="click" value="Click" @click=copyCheckedParaArray(this.checkedParas)>
+        </div>
 
-    <script>
-    var vm = new Vue({
-        data: {
-            firstName: 'foo',
-            lastName: 'bar',
-        },
-        computed: {
-            fullName: function() {
-                return this.firstName + ' ' + this.lastName;
-            }
-        }
-    });
-    // new Vue({
-    //     el: '#checkbox',
-    //     data: {
-    //         checked: false
-    //     }
-    // });
-    </script>
+    </div>
+
+    <script src='src/parallelLineVue.js'></script>
 </body>
 </html>
