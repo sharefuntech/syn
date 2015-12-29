@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>data binding grammar</title>
+    <script src="lib/vue.js"></script>
+	<script src="lib/d3.js"></script>
+    <style>
+        .classA {
+            color: orange;
+            /*font-size: 48px;*/
+        }
+
+        .classB {
+            /*color: teal;*/
+            font-size: 64px;
+        }
+    </style>
+</head>
+<body>
+	<div id='app'>
+		<div v-bind:class="classList">{{ message | capitalize }}</div>
+        <div v-bind:style="styleObject">
+            Jack Hit the Road!
+        </div>
+        <div v-if="Math.random() > 0.5">
+            Sorry
+        </div>
+        <div v-else>
+            Not sorry
+        </div>
+
+        <input v-on:keyup.down='say'>
+        <!-- <div v-bind:class="{'classA': isA, 'classB': isB}">{{ message | capitalize }}</div> -->
+
+        <button @click=say>Click</button>
+	</div>
+	<script type="text/javascript">
+		var dataObj = {
+            data: {
+                message: 'hello',
+                isA: false,
+                isB: true,
+                classList: ['classA', 'classB'],
+                styleObject: {
+                    color: 'gray',
+                    fontSize: '80px',
+                    fontFamily: 'Microsoft Yahei'
+                }
+            },
+            methods: {
+                appendWord: appendWord,
+                say: say,
+                reverseBoolean: reverseBoolean
+            }
+		};
+
+        new Vue({
+            el: '#app',
+            data: dataObj.data,
+            methods: dataObj.methods
+        });
+
+        function appendWord(str) {
+            return str + 'world';
+        }
+
+        function say() {
+            console.log(this.message);
+            // console.log('exec scope: ' + this);
+        }
+
+        function reverseBoolean(boo) {
+            boo = !boo;
+            console.log(boo);
+            return boo;
+        }
+	</script>
+</body>
+</html>
