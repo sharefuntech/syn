@@ -101,13 +101,19 @@
                 checkBoxTrue: checkBoxTrue,
                 print: print,
                 alertMsg: alertMsg
+            },
+            computed: {
+                getChecked: function() {
+                    return this.checkedNames;
+                }
             }
 		};
 
         new Vue({
             el: '#app',
             data: dataObj.data,
-            methods: dataObj.methods
+            methods: dataObj.methods,
+            computed: dataObj.computed
         });
 
         function appendWord(str) {
@@ -126,8 +132,13 @@
         }
 
         function checkBoxTrue() {
-            var checkedBoxes = this.checkedNames;
-            print(checkedBoxes.toString());
+            this.$nextTick(function() {
+                console.log(this.getChecked);
+            });
+            // console.log(this.getChecked);
+            // return this.getChecked;
+            // var checkedBoxes = this.checkedNames;
+            // print(checkedBoxes.toString());
             // print(this.checkedA);
             // print(this.checkedB);
             // print(this.checkedC);
