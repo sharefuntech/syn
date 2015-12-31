@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>mvvm prototype</title>
+    <script src="lib/vue.js"></script>
+	<script src="lib/d3.js"></script>
+    <link rel="stylesheet" href="src/style.css">
+    <style media="screen">
+        circle.red {
+            fill: red;
+            stroke: gray;
+            stroke-width: 5;
+        }
+
+        circle.blue {
+            fill: blue;
+            stroke: gray;
+            stroke-width: 5;
+        }
+
+        circle.gray {
+            fill: gray;
+            stroke: gray;
+            stroke-width: 5;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div>
+            <div v-for='pattern in graphConfig.graphPattern'>
+                <label>{{ pattern.value }}</label>
+                <input type="checkbox" v-bind:value="pattern.category" v-model='checkedParas'>
+            </div>
+        </div>
+        <div>
+            <span>已选指标：{{checkedParas}}</span>
+        </div>
+        <div>
+            <input type="button" name="click" value="更新图表" @click=updateGraph(this.checkedParas)>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        //### model ##########################################
+        // svg graph configuration
+        var graphConfig = {
+            svgWidth: 400,
+            svgHeight: 400,
+            margin: {
+                left: 50,
+                right: 50,
+                top: 50,
+                bottom: 50
+            },
+            graphPattern: [
+                { category: 'red', value: '红色' },
+                { category: 'blue', value: '蓝色' },
+                { category: 'gray', value: '灰色' }
+            ]
+        };
+
+        // model for mvvm
+        var model = {
+            data: {
+                checkedParas: [],
+                graphConfig: graphConfig
+            },
+            methods: {
+                updateGraph: updateGraph,
+                watchOut: watchOut
+            }
+        };
+
+        //### view ##########################################
+        //view model for mvvm
+        var vm = new Vue({
+            el: '#app',
+            data: model.data,
+            methods: model.methods
+        });
+
+        //init graph after document loaded
+        iniGraph(graphConfig.graphPattern);
+
+        //update graph after click button, obj will be the checked values arrary
+        function updateGraph(obj) {
+            var data = [];
+            //make sure only the element wanted get in dataset from vue
+            for (o in obj) {
+                // console.log(obj[o]);
+                data.push(obj[o]);
+            }
+            //destroy the old graph
+            d3.select('#vizG').remove();
+
+            d3.select('svg').append('g').attr('id', 'vizG');
+
+            d3.select('#vizG')
+                .selectAll('circle')
+                .data(data)
+                .enter()
+                .append('circle')
+                .attr('class', function(d) {
+                    return d;
+                })
+                .attr('cx', function(d, i) {
+                    return (i + 1) * 100;
+                })
+                .attr('cy', 100)
+                .attr('r', 50);
+        }
+
+
+        // prepare svg and set width and height
+        function iniSvg() {
+            var svg = d3.select('body')
+                .append('svg')
+                .attr('width', graphConfig.svgWidth)
+                .attr('height', graphConfig.svgHeight);
+
+            return svg;
+        }
+
+        //init graph after document loaded
+        function iniGraph(graphData) {
+            var svg = iniSvg();
+            var vizG = svg.append('g').attr('id', 'vizG');
+
+            var data = graphData;
+
+            vizG.selectAll('circle')
+                .data(data)
+                .enter()
+                .append('circle')
+                .attr('class', function(d) {
+                    return d.category;
+                })
+                .attr('cx', function(d, i) {
+                    return (i + 1) * 100;
+                })
+                .attr('cy', 100)
+                .attr('r', 50);
+        }
+
+        // helper functions ###############################
+        function watchOut(str) {
+            console.log(str);
+        }
+    </script>
+</body>
+</html>
