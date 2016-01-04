@@ -6,7 +6,7 @@ var chartConfig = {
         top: 30,
         bottom:30,
         left: 50,
-        right: 30
+        right: 50
     },
     color: d3.scale.category10()
 };
@@ -47,8 +47,8 @@ var dimensionsAvailable = [
     }
 ];
 
-var iniDimensions = dimensionsBase.concat(dimensionsAvailable);
-console.log(iniDimensions);
+// var iniDimensions = dimensionsBase.concat(dimensionsAvailable);
+// console.log(iniDimensions);
 
 //model for mvvm
 var model = {
@@ -63,8 +63,6 @@ var model = {
     methods: {
         //turn the csv table into parallel data
         iniParallesData: iniParallesData,
-        //draw graph on load with default setting
-        iniGraph: iniGraph,
         //update graph with new setting by user, get changes from viewer
         updateGraph: updateGraph
     },
@@ -77,6 +75,7 @@ var vm = new Vue({
     el: '#app',
     data: model.data,
     methods: model.methods,
+    //draw graph on load with default setting
     ready: model.ready
 });
 
@@ -88,14 +87,6 @@ function iniSvg(svgWidth, svgHeight) {
         .attr('height', svgHeight);
 
     return svg;
-}
-
-function iniGraph() {
-    // body...
-}
-
-function updateGraph() {
-    // body...
 }
 
 function bootGraph() {
@@ -222,6 +213,10 @@ function drawChart(data) {
         	stroke:function(d,i){ return model.data.chartConfig.color(d.区域); },
             "stroke-width": "1.5px"
         })
+        .transition()
+        .delay(function(d, i) {
+            return i * 50;
+        })
         .attr("d", draw);
 
     dimension.append("g")
@@ -236,6 +231,134 @@ function drawChart(data) {
     d3.select('#vizG').select(".axis").selectAll("text:not(.title)")
         .attr("class", "label")
         .data(data, function(d) { return d.name || d; });
+
+    var projection = d3.select('#vizG').selectAll('.axis text, .background path, .foreground path')
+        .on('mouseover', mouseover)
+        .on('mouseout', mouseout);
+
+    function mouseover(d) {
+        d3.select('#vizG').classed('active', true);
+        projection.classed('inactive', function(p) {
+            return p !== d;
+        });
+
+        projection.filter(function(p) {
+            return p === d;
+        })
+            .each(moveToFront);
+    }
+
+    function mouseout() {
+        d3.select('#vizG').classed('active', false);
+        projection.classed('inactive', false);
+    }
+
+    function moveToFront() {
+        this.parentNode.appendChild(this);
+    }
+
+    function draw(d) {
+        return line(dimensions.map(function(dimension) {
+            return [x(dimension.name), dimension.scale(d[dimension.name])];
+        }));
+    }
+}
+
+function updateGraph(checkedDimensions, data) {
+    var dimensions = model.data.dimensionsBase.concat(checkedDimensions);
+
+    var x = d3.scale.ordinal()
+        .domain(dimensions.map(function(d) { return d.name; }))
+        .rangePoints([0, model.data.chartConfig.svgWidth]);
+
+    var line = d3.svg.line()
+        .defined(function(d) { return !isNaN(d[1]); });
+
+    var yAxis = d3.svg.axis()
+        .orient("left");
+
+    d3.select('#vizG').remove();
+    d3.select('svg')
+        .append('g')
+        .attr('id', 'vizG')
+        .attr("transform", "translate(" + model.data.chartConfig.margin.left + "," + model.data.chartConfig.margin.top + ")");
+
+    var dimension = d3.select('#vizG').selectAll(".dimension")
+        .data(dimensions)
+        .enter()
+        .append("g")
+        .attr("class", "dimension")
+        .attr("transform", function(d) {
+            return "translate(" + x(d.name) + ")";
+        });
+
+    dimensions.forEach(function(dimension) {
+        dimension.scale.domain(dimension.type === Number
+            ? d3.extent(data, function(d) { return +d[dimension.name]; })
+            : data.map(function(d) { return d[dimension.name]; }).sort());
+    });
+
+    d3.select('#vizG').append("g")
+        .attr("class", "background")
+        .selectAll("path")
+        .data(data)
+        .enter().append("path")
+        .attr("d", draw);
+
+    d3.select('#vizG').append("g")
+        .attr("class", "foreground")
+        .selectAll("path")
+        .data(data)
+        .enter()
+        .append("path")
+        .attr({
+            fill: "none",
+        	stroke:function(d,i){ return model.data.chartConfig.color(d.区域); },
+            "stroke-width": "1.5px"
+        })
+        .transition()
+        .delay(function(d, i) {
+            return i * 50;
+        })
+        .attr("d", draw);
+
+    dimension.append("g")
+        .attr("class", "axis")
+        .each(function(d) { d3.select(this).call(yAxis.scale(d.scale)); })
+        .append("text")
+        .attr("class", "title")
+        .attr("text-anchor", "middle")
+        .attr("y", -9)
+        .text(function(d) { return d.name; });
+
+    d3.select('#vizG').select(".axis").selectAll("text:not(.title)")
+        .attr("class", "label")
+        .data(data, function(d) { return d.name || d; });
+
+    var projection = d3.select('#vizG').selectAll('.axis text, .background path, .foreground path')
+        .on('mouseover', mouseover)
+        .on('mouseout', mouseout);
+
+    function mouseover(d) {
+        d3.select('#vizG').classed('active', true);
+        projection.classed('inactive', function(p) {
+            return p !== d;
+        });
+
+        projection.filter(function(p) {
+            return p === d;
+        })
+            .each(moveToFront);
+    }
+
+    function mouseout() {
+        d3.select('#vizG').classed('active', false);
+        projection.classed('inactive', false);
+    }
+
+    function moveToFront() {
+        this.parentNode.appendChild(this);
+    }
 
     function draw(d) {
         return line(dimensions.map(function(dimension) {
