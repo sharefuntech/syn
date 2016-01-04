@@ -94,8 +94,14 @@
             }
             //destroy the old graph
             d3.select('#vizG').remove();
-
             d3.select('svg').append('g').attr('id', 'vizG');
+
+            // //d3 data-update-exit-remove standard model, not work yet
+            // d3.select('#vizG')
+            //     .selectAll('circle')
+            //     .data(data)
+            //     .exit()
+            //     .remove();
 
             d3.select('#vizG')
                 .selectAll('circle')
