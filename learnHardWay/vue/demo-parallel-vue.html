@@ -11,7 +11,7 @@
 	<div id="app">
 		<div id='checkboxes'>
             <div v-for='dimension in dimensionsAvailable'>
-                <label>{{ dimension.name }}</label>
+                <label>{{ dimension.label }}</label>
                 <input type="checkbox" v-bind:value="dimension" v-model='checkedDimensions'>
             </div>
 			<div>

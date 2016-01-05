@@ -16,34 +16,40 @@ var dimensionsBase = [
     {
         name: "区域",
         scale: d3.scale.ordinal().rangePoints([0, chartConfig.svgHeight]),
-        type: String
+        type: String,
+        label: "区域"
     },
     {
         name: "年份",
         scale: d3.scale.linear().range([chartConfig.svgHeight, 0]),
-        type: Number
+        type: Number,
+        label: "年份"
     }];
 
 var dimensionsAvailable = [
     {
         name: "单位GDP用水总量_立方米每万元",
         scale: d3.scale.linear().range([chartConfig.svgHeight, 0]),
-        type: Number
+        type: Number,
+        label: "用水总量"
     },
     {
         name: "单位GDP能源消耗总量_公斤每万元",
         scale: d3.scale.linear().range([chartConfig.svgHeight, 0]),
-        type: Number
+        type: Number,
+        label: "能源消耗"
     },
     {
         name: "单位产值建设用地消耗_亩每亿元",
         scale: d3.scale.linear().range([chartConfig.svgHeight, 0]),
-        type: Number
+        type: Number,
+        label: "建设用地消耗"
     },
     {
         name: "单位GDP固定资产投资_元每万元",
         scale: d3.scale.linear().range([chartConfig.svgHeight, 0]),
-        type: Number
+        type: Number,
+        label: "固定资产投资"
     }
 ];
 
@@ -80,9 +86,8 @@ var vm = new Vue({
 });
 
 //parepare the svg
-function iniSvg(svgWidth, svgHeight) {
-    var svg = d3.select('body')
-        .append('svg')
+function iniSvg(svgWidth, svgHeight, vizContainer) {
+    var svg = vizContainer.append('svg')
         .attr('width', svgWidth)
         .attr('height', svgHeight);
 
@@ -94,7 +99,8 @@ function bootGraph() {
     //parepare the svg
     var svgWidth = model.data.chartConfig.svgWidth + model.data.chartConfig.margin.left + model.data.chartConfig.margin.right;
     var svgHeight = model.data.chartConfig.svgHeight + model.data.chartConfig.margin.top + model.data.chartConfig.margin.bottom;
-    var svg = iniSvg(svgWidth, svgHeight);
+    var vizContainer = d3.select('#vizContainer');
+    var svg = iniSvg(svgWidth, svgHeight, vizContainer);
     // assign the removable g with id 'vizG'
     var vizG = svg.append('g')
         .attr('id', 'vizG')
