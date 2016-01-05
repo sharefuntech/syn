@@ -1,9 +1,9 @@
 // basic chart configuration, width/ height/ margin/ color
 var chartConfig = {
     svgWidth: 800,
-    svgHeight: 600,
+    svgHeight: 550,
     margin: {
-        top: 30,
+        top: 50,
         bottom:30,
         left: 50,
         right: 50

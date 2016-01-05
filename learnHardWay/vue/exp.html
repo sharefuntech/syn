@@ -20,15 +20,20 @@
         <!-- start side panel ************************** -->
         <div id="sidePanel">
             <div id="app">
+                <div class="checkboxHint">
+                    <span>请选择可视化指标：</span>
+                </div>
 				<div id='checkboxes'>
-					<div v-for='dimension in dimensionsAvailable'>
-						<label>{{ dimension.label }}</label>
-						<input type="checkbox" v-bind:value="dimension" v-model='checkedDimensions'>
-					</div>
-					<div>
-						<input type="button" name="click" value="更新图表" @click=updateGraph(this.checkedDimensions,this.chartData)>
-					</div>
+                    <ul>
+                        <li v-for='dimension in dimensionsAvailable'>
+    						<label>{{ dimension.label }}</label>
+    						<input type="checkbox" v-bind:value="dimension" v-model='checkedDimensions'>
+    					</li>
+                    </ul>
 				</div>
+                <div>
+                    <input class='button' type="button" name="click" value="更新图表" @click=updateGraph(this.checkedDimensions,this.chartData)>
+                </div>
 			</div>
         </div>
         <!-- end side panel ************************** -->
