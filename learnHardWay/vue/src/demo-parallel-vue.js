@@ -1,7 +1,13 @@
+//tooltip on mouser over line
+var mouseTooltip = d3.select("body")
+    .append("div")
+    .attr("class", "mouseTooltip")
+    .style("opacity", 0);
+
 // basic chart configuration, width/ height/ margin/ color
 var chartConfig = {
     svgWidth: 800,
-    svgHeight: 550,
+    svgHeight: 500,
     margin: {
         top: 50,
         bottom:30,
@@ -251,12 +257,16 @@ function drawChart(data) {
         projection.filter(function(p) {
             return p === d;
         })
-            .each(moveToFront);
+        .each(moveToFront);
+
+        showMouseTooltip(d);
     }
 
     function mouseout() {
         d3.select('#vizG').classed('active', false);
         projection.classed('inactive', false);
+
+        hideMouseTooltip();
     }
 
     function moveToFront() {
@@ -354,12 +364,16 @@ function updateGraph(checkedDimensions, data) {
         projection.filter(function(p) {
             return p === d;
         })
-            .each(moveToFront);
+        .each(moveToFront);
+
+        showMouseTooltip(d);
     }
 
     function mouseout() {
         d3.select('#vizG').classed('active', false);
         projection.classed('inactive', false);
+
+        hideMouseTooltip();
     }
 
     function moveToFront() {
@@ -371,4 +385,59 @@ function updateGraph(checkedDimensions, data) {
             return [x(dimension.name), dimension.scale(d[dimension.name])];
         }));
     }
+
+
 }
+
+//出现提示框
+function showMouseTooltip(d) {
+    mouseTooltip.style("opacity", 1)
+        .style('z-index', 10);
+
+    mouseTooltip.html(generateMouseTooltipContent(d))
+        .style("left", function() {
+            var screenWidth = screen.width;
+            if (d3.event.pageX < screenWidth/2) {
+                return d3.event.pageX + "px";
+            } else{
+                return (d3.event.pageX - 160) + "px";
+            }
+            return d3.event.pageX + "px";
+        })
+        .style("top", (d3.event.pageY) + "px");
+}
+
+// 隐藏提示框
+function hideMouseTooltip() {
+    mouseTooltip.style("opacity", 0);
+}
+
+//生成提示框内容
+function generateMouseTooltipContent (d) {
+    // console.log(d);
+    var tooltipContent = [];
+    var keyArray = [];
+    var htmlContent = '';
+    for (key in d) {
+        // console.log(key + ': ' + d[key]);
+        tooltipContent.push(d[key]);
+        keyArray.push(key);
+        // to nice the raw key value
+        var keySplit = key.split('_');
+        if (keySplit.length > 1) {
+            htmlContent += "<div " + "class=" + keySplit[0] + ">" + keySplit[0] + ": " + d[key] + keySplit[1] + "</div>";
+        } else {
+            htmlContent += "<div " + "class=" + key + ">" + d[key] + "</div>";
+            // htmlContent += "<div " + "class=" + key + ">" + key + ": " + d[key] + "</div>";
+        }
+
+    }
+    // console.log(htmlContent);
+    return htmlContent;
+}
+
+//test area
+// var str = '单位GDP固定资产投资_元每万元';
+// var str2 = 'hello';
+// var strSplit = str.split('_');
+// console.log(strSplit.length);

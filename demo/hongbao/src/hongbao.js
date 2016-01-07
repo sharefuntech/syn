@@ -66,6 +66,30 @@ d3.csv('data/hongbao.csv', function(data) {
     var forceDataIndexed = addIndex(forceData);
     drawForce(forceDataIndexed, svg);
 
+    // var svgWidth = d3.select('svg').attr('width');
+    // console.log(svgWidth);
+
+    d3.select('svg').append('g')
+        .attr('id', 'container')
+        .append('rect')
+        .attr('id', 'rectObj')
+        .attr('width', 100)
+        .attr('height', 200)
+        .attr('fill', 'teal');
+
+    var svgWidth = d3.select('#rectObj').attr('width');
+
+    d3.select('#container').append('text')
+        .attr('text-anchor', 'middle')
+        .attr('transform', 'translate(' + svgWidth/2 + ',0)')
+        .text('hello');
+    //
+    // var svgWidth = d3.select('#rectObj').attr('width');
+    // console.log(svgWidth);
+
+    var str = '中文';
+    console.log(str.length);
+
     function addIndex(data) {
         var dataIndexed = {};
         var nodesArray = [];
@@ -132,8 +156,9 @@ d3.csv('data/hongbao.csv', function(data) {
             .append("text")
             .style("fill", "black")
             .style('font-size', 10)
-            .attr("dx", 20)
-            .attr("dy", 8)
+            .attr('text-anchor', 'middle')
+            .attr("dx", 0)
+            .attr("dy", -8)
             .text(function(d){
                 return d.name;
             });
