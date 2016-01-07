@@ -11,147 +11,72 @@
 </head>
 <body>
 	<div id='app'>
-        <!-- <input type="checkbox" id="jack" value="jack" v-model='checkedNames'>
-        <label for="jack">jack</label>
-
-        <input type="checkbox" id="william" value="william" v-model='checkedNames'>
-        <label for="william">william</label>
-
-        <span>{{checkedNames}}</span>
-
-        <button @click=print(this.checkedNames)>Click</button> -->
-        <!-- <span>{{ message }}</span>
-        <input type='text' v-model='message' placeholder='your msg'
-        ></input> -->
-
         <div>
-            <input type="checkbox" id="checkboxA" value='a' v-model="checkedNames" @click=checkBoxTrue>
-            <label for="checkbox">checkedA: {{ checkedA }}</label>
-
-            <input type="checkbox" id="checkboxB" value='b' v-model="checkedNames" @click=checkBoxTrue>
-            <label for="checkbox">checkedB: {{ checkedB }}</label>
-
-            <input type="checkbox" id="checkboxC" value='c' v-model="checkedNames" @click=checkBoxTrue>
-            <label for="checkbox">checkedC: {{ checkedC }}</label>
-        </div>
-
-        <div>
-            <input type="radio" id='one' value="one" v-model='radioCheckedValue'>
-            <label for="one">one</label>
-
-            <input type="radio" id='two' value="two" v-model='radioCheckedValue'>
-            <label for="two">two</label>
-
-            <span>{{ radioCheckedValue }}</span>
-        </div>
-
-        <!-- <div>
-            <select v-model="optionCheckedValue">
-                <option selected>a</option>
-                <option>b</option>
-                <option>c</option>
-            </select>
-            <span>{{ optionCheckedValue }}</span>
-        </div> -->
-
-        <div>
-            <select v-model='optionCheckedValue'>
-                <option v-for='option in optionSetting' v-bind:value='option.value'>
-                    {{option.text}}
+            <span>请选择省份：</span>
+            <select v-model="selectedProvince">
+                <option v-for="option in place" v-bind:value="option.province">
+                    {{ option.province}}
                 </option>
             </select>
-            <span>{{ optionCheckedValue }}</span>
         </div>
-
         <div>
-            <button @click=alertMsg(this.checkedNames)>Click</button>
+            <span>请选择城市：</span>
+            <select v-model="selectedCity">
+                <option v-for="city in getCityList" v-bind:value="city">
+                    {{ city }}
+                </option>
+            </select>
+        </div>
+        <div>
+            <span>已经选择： {{ selectedProvince }} {{selectedCity}}</span>
         </div>
 	</div>
 	<script type="text/javascript">
-        var optionSetting = [
-            {text: 'china', value: 1},
-            {text: 'japan', value: 2},
-            {text: 'USA', value: 3}
+        var place = [
+            { province: '浙江', city: ['嘉兴', '杭州', '宁波']},
+            { province: '江苏', city: ['南京', '徐州', '泰州']},
+            { province: '山东', city: ['青岛', '济南']}
         ];
 
-		var dataObj = {
+		var model = {
             data: {
-                countFlag: 0,
-                message: 'hello vue',
-                isA: false,
-                isB: true,
-                classList: ['classA', 'classB'],
-                styleObject: {
-                    color: 'gray',
-                    fontSize: '80px',
-                    fontFamily: 'Microsoft Yahei'
-                },
-                checkedA: '',
-                checkedB: '',
-                checkedC: '',
-                checkedNames: [],
-                radioCheckedValue: '',
-                optionCheckedValue: 2,
-                optionSetting: optionSetting
+                place: place,
+                selectedProvince: '浙江',
+                selectedCity: ''
             },
             methods: {
-                appendWord: appendWord,
-                say: say,
-                reverseBoolean: reverseBoolean,
-                checkBoxTrue: checkBoxTrue,
-                print: print,
-                alertMsg: alertMsg
+                resetCityList: function() {
+                    this.selectedCity = '';
+                    return this.selectedCity;
+                }
             },
             computed: {
-                getChecked: function() {
-                    return this.checkedNames;
+                getCityList: function() {
+                    var cityList = '';
+                    // console.log(this.selectedProvince);
+                    var targetProvence = this.selectedProvince;
+                    this.place.forEach(function(d) {
+                        // console.log(d.province);
+                        console.log(targetProvence);
+                        if (d.province == targetProvence) {
+                            cityList = d.city;
+                            // return cityList;
+                        }
+                    });
+                    return cityList;
+                },
+                test: function() {
+                    return this.selectedProvince + 'selected';
                 }
             }
 		};
 
-        new Vue({
+        var vm = new Vue({
             el: '#app',
-            data: dataObj.data,
-            methods: dataObj.methods,
-            computed: dataObj.computed
+            data: model.data,
+            methods: model.methods,
+            computed: model.computed
         });
-
-        function appendWord(str) {
-            return str + 'world';
-        }
-
-        function say() {
-            console.log(this.message);
-            // console.log('exec scope: ' + this);
-        }
-
-        function reverseBoolean(boo) {
-            boo = !boo;
-            console.log(boo);
-            return boo;
-        }
-
-        function checkBoxTrue() {
-            this.$nextTick(function() {
-                console.log(this.getChecked);
-            });
-            // console.log(this.getChecked);
-            // return this.getChecked;
-            // var checkedBoxes = this.checkedNames;
-            // print(checkedBoxes.toString());
-            // print(this.checkedA);
-            // print(this.checkedB);
-            // print(this.checkedC);
-
-            // if (this.checked === false) {
-            //     console.log(this.message);
-            //     console.log(++this.countFlag);
-            // }
-            // console.log('checkedA: ' + this.checkedA + ' ,checkedB: ' + this.checkedB + ' ,checkedC: ' + this.checkedC);
-            // if (this.checkedA && this.checkedB && this.checkedC) {
-            //     alert(this.message);
-            // }
-        }
 
         function print(obj) {
             console.log(obj);
