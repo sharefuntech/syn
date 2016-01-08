@@ -55,7 +55,7 @@
 	</g>
 </script>
 
-<!-- component template of polygraph-->
+<!-- component template of axis label-->
 <script type="text/x-template" id="axis-label-template">
 	<text :x='point.x' :y='point.y'>{{ stat.label }}</text>
 </script>
@@ -68,7 +68,7 @@
 	</svg>
 	<!-- control -->
 	<div v-for="stat in stats">
-		<label for="">{{ stat.label }}</label>
+		<label>{{ stat.label }}</label>
 		<input type="range" v-model='stat.value' min='0' max='100'>
 		<span>{{ stat.value }}</span>
 		<button @click='remove(stat)'>x</button>
@@ -101,6 +101,7 @@ Vue.component('polygraph', {
 			var total = this.stats.length;
 			return this.stats.map(function(stat, i) {
 				var point = valueToPoint(stat.value, i, total);
+				return point.x + ',' + point.y;
 			}).join(' ');
 		}
 	},

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>C10 sample tree view</title>
+	<script src="lib/vue.js"></script>
+	<script src="lib/d3.js"></script>
+	<style media="screen">
+		body {
+			font-family: 'Microsoft Yahei', sans-serif;
+			color: #333;
+			background-color: #fefefe;
+		}
+
+		#demo {
+			height: 300px;
+			width: 200px;
+			overflow: scroll;
+		}
+
+		.item {
+			cursor: pointer;
+		}
+
+		.bold {
+			font-weight: bold;
+		}
+
+		ul {
+			padding-left: 1em;
+			line-height: 1.5em;
+			list-style-type: dot;
+		}
+	</style>
+</head>
+<body>
+
+<!-- component template of item-->
+<script type="text/x-template" id="item-template">
+<li>
+	<div
+		:class='{bold: isFolder}'
+		@click='toggle'
+		@dbclick='changeType'>
+		{{model.name}}
+		<span v-if='isFolder'>[{{open ? '-' : '+'}}]</span>
+	</div>
+	<ul v-show='open' v-if='isFolder'>
+		<item
+			class='item'
+			v-for='model in model.children'
+			:model='model'>
+		</item>
+	</ul>
+</li>
+</script>
+
+<!-- root element -->
+<ul id="demo">
+	<item class='item' :model='menuData'></item>
+	<span>{{selectedCity}}</span>
+</ul>
+
+<!-- view-model and model -->
+<script type="text/javascript">
+Vue.config.debug = true;
+
+var menuData = {
+	name: '选择地区',
+	children: [
+		{
+			name: '浙江',
+		 	children: [
+				{
+					name: '嘉兴',
+					children: [
+						{name: '海宁'},
+			 			{name: '桐乡'},
+			 			{name: '海盐'}
+					]
+				},
+			   {name: '杭州'},
+			  {name: '宁波'},
+			  {name: '绍兴'}
+		 	]
+		},
+		{
+			name: '上海',
+		 	children: [
+			  {name: '松江'},
+			  {name: '金山'},
+			  {name: '奉贤'}
+		 	]
+		},
+		{
+			name: '江苏',
+		 	children: [
+			  {name: '南京'},
+			  {name: '南通'},
+			  {name: '常州'}
+		 	]
+		}
+	]
+}
+
+Vue.component('item', {
+	template: '#item-template',
+	props: {
+		model: Object,
+		selectedCity: ['selectedCity']
+	},
+	data: function() {
+		return {
+			open: false
+		}
+	},
+	computed: {
+		// toggle: function() {
+		// 	if (this.isFolder) {
+		// 		this.open = !this.open;
+		// 	} else {
+		// 		// console.log(this.model.name);
+		// 		this.selectedCity = this.model.name;
+		// 		console.log(this.selectedCity);
+		// 	}
+		// },
+		isFolder: function() {
+			return this.model.children && this.model.children.length;
+		}
+	},
+	methods: {
+		toggle: function() {
+			if (this.isFolder) {
+				this.open = !this.open;
+			} else {
+				// console.log(this.model.name);
+				this.selectedCity = this.model.name;
+				console.log(this.selectedCity);
+			}
+		},
+		changeType: function() {
+			if (!this.isFolder) {
+				Vue.set(this.model, 'children', []);
+				this.addChild();
+				this.open = true;
+			}
+		},
+		addChild: function() {
+			this.model.children.push({
+				name: 'new stuff'
+			});
+		}
+	}
+});
+
+var demo = new Vue({
+	el: '#demo',
+	data: {
+		menuData: menuData,
+		selectedCity:'not selected city'
+	}
+});
+
+</script>
+</body>
+</html>
