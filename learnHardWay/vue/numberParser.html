@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>fixed number parser</title>
+</head>
+<body>
+<script type="text/javascript">
+
+    //num 传入数字
+    //dig 要保留的有效位数
+    function numberPrecision(num, dig) {
+        if (isNaN(num)) {
+            throw 'num expect number type for numberPrecision(num, dig)';
+            // return;
+        }
+
+        if (num < Math.pow(10, (dig + 1))) {
+            if (num.toString().length <= (dig + 1)) {
+                return num
+            }
+        }
+        //toPrecision返回的是字符串，强制转化为数字类型
+        return +num.toPrecision(dig);
+    }
+
+    //测试
+    var numA = 1234567.89101234567;
+    var numB = 123.89101234567;
+    var numC = 11.89;
+
+    console.log((numberPrecision(numA, 5)));
+    console.log(numberPrecision(numB, 5));
+    console.log(numberPrecision(numC, 5));
+    console.log(numberPrecision('hello', 5));
+
+    // console.log(numB.toString().length);
+    // console.log(Math.pow(10, 3));
+</script>
+</body>
+</html>

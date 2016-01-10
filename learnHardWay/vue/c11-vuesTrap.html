@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>c11 vue strap</title>
+	<script src="lib/vue.js"></script>
+	<script src="lib/vue-strap.js"></script>
+	<link rel="stylesheet" href="lib/bootstrap.css">
+</head>
+<body>
+	<div id="app">
+		<tabs>
+			<tab header="国家">1</tab>
+			<tab header="省级">2</tab>
+			<tab header="市级">3</tab>
+		</tabs>
+	</div>
+<script type="text/javascript">
+	var tabs = VueStrap.tabs;
+	var tab = VueStrap.tab;
+	var vm = new Vue({
+		el: '#app',
+		data: {
+			msg: 'hello'
+		},
+		component: {
+			tabs: tabs,
+			tab: tab
+		}
+	});
+</script>
+</body>
+</html>
