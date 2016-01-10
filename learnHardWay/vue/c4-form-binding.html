@@ -14,16 +14,16 @@
         <div>
             <span>请选择省份：</span>
             <select v-model="selectedProvince">
-                <option v-for="option in place" v-bind:value="option.province">
-                    {{ option.province}}
+                <option v-for="province in place" v-bind:value="province.key">
+                    {{ province.key}}
                 </option>
             </select>
         </div>
         <div>
             <span>请选择城市：</span>
             <select v-model="selectedCity">
-                <option v-for="city in getCityList" v-bind:value="city">
-                    {{ city }}
+                <option v-for="city in getCityList" v-bind:value="city.city">
+                    {{ city.city }}
                 </option>
             </select>
         </div>
@@ -32,50 +32,101 @@
         </div>
 	</div>
 	<script type="text/javascript">
-        var place = [
-            { province: '浙江', city: ['嘉兴', '杭州', '宁波']},
-            { province: '江苏', city: ['南京', '徐州', '泰州']},
-            { province: '山东', city: ['青岛', '济南']}
-        ];
+        // var place = [
+        //     { province: '浙江', city: ['嘉兴', '杭州', '宁波']},
+        //     { province: '江苏', city: ['南京', '徐州', '泰州']},
+        //     { province: '山东', city: ['青岛', '济南']}
+        // ];
+        //
+		// var model = {
+        //     data: {
+        //         place: place,
+        //         selectedProvince: '浙江',
+        //         selectedCity: ''
+        //     },
+        //     methods: {
+        //         resetCityList: function() {
+        //             this.selectedCity = '';
+        //             return this.selectedCity;
+        //         }
+        //     },
+        //     computed: {
+        //         getCityList: function() {
+        //             var cityList = '';
+        //             // console.log(this.selectedProvince);
+        //             var targetProvence = this.selectedProvince;
+        //             this.place.forEach(function(d) {
+        //                 // console.log(d.province);
+        //                 // console.log(targetProvence);
+        //                 if (d.province == targetProvence) {
+        //                     cityList = d.city;
+        //                     // return cityList;
+        //                 }
+        //             });
+        //             return cityList;
+        //         },
+        //         test: function() {
+        //             return this.selectedProvince + 'selected';
+        //         }
+        //     }
+		// };
+        //
+        // var vm = new Vue({
+        //     el: '#app',
+        //     data: model.data,
+        //     methods: model.methods,
+        //     computed: model.computed
+        // });
 
-		var model = {
-            data: {
-                place: place,
-                selectedProvince: '浙江',
-                selectedCity: ''
-            },
-            methods: {
-                resetCityList: function() {
-                    this.selectedCity = '';
-                    return this.selectedCity;
-                }
-            },
-            computed: {
-                getCityList: function() {
-                    var cityList = '';
-                    // console.log(this.selectedProvince);
-                    var targetProvence = this.selectedProvince;
-                    this.place.forEach(function(d) {
-                        // console.log(d.province);
-                        console.log(targetProvence);
-                        if (d.province == targetProvence) {
-                            cityList = d.city;
-                            // return cityList;
-                        }
-                    });
-                    return cityList;
+        d3.csv('data/cityProvince.csv', function(data) {
+            // console.log(data);
+            var place = d3.nest()
+                .key(function(d) {
+                    return d.province;
+                })
+                .entries(data);
+
+            // console.log(place);
+            var model = {
+                data: {
+                    place: place,
+                    selectedProvince: '上海',
+                    selectedCity: ''
                 },
-                test: function() {
-                    return this.selectedProvince + 'selected';
+                methods: {
+                    resetCityList: function() {
+                        this.selectedCity = '';
+                        return this.selectedCity;
+                    }
+                },
+                computed: {
+                    getCityList: function() {
+                        var cityList = '';
+                        // console.log(this.selectedProvince);
+                        var targetProvence = this.selectedProvince;
+                        this.place.forEach(function(d) {
+                            // console.log(d.province);
+                            // console.log(targetProvence);
+                            if (d.key == targetProvence) {
+                                cityList = d.values;
+                                // return cityList;
+                            }
+                        });
+                        return cityList;
+                    },
+                    test: function() {
+                        return this.selectedProvince + 'selected';
+                    }
                 }
-            }
-		};
+    		};
 
-        var vm = new Vue({
-            el: '#app',
-            data: model.data,
-            methods: model.methods,
-            computed: model.computed
+            var vm = new Vue({
+                el: '#app',
+                data: model.data,
+                methods: model.methods,
+                computed: model.computed
+            });
+
         });
 
         function print(obj) {

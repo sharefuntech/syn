@@ -65,11 +65,18 @@
 			*** start side bar ***************************-->
 			<div class="col-sm-3 col-md-2 sidebar">
 				<div id="app">
-	                <div>
+	                <!-- <div>
 	                    <span>请选择可视化指标：</span>
-	                </div>
+	                </div> -->
+					<div>
+						<select class="form-control">
+							<option value="option">国家数据</option>
+							<option value="option">省级数据</option>
+							<option value="option">地市数据</option>
+						</select>
+					</div>
 					<!-- Split button -->
-					<div class="dropdown">
+					<!-- <div class="dropdown">
 					  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
 					    请选择数据源
 					    <span class="caret"></span>
@@ -80,13 +87,25 @@
 					    <li><a href="#">地市数据</a></li>
 					    <li><a href="#">县级数据</a></li>
 					  </ul>
-					</div>
-					<div >
+					</div> -->
+					<!-- <div class="panel panel-default">
+						<div class="panel-heading">
+							<h5 class="panel-title">请选择指标</h5>
+						</div>
+						<div class="panel-body">
+							<div v-for='dimension in dimensionsAvailable'>
+	    						<input type="checkbox" v-bind:value="dimension" v-model='checkedDimensions'>
+								<label>{{ dimension.label }}</label>
+	    					</div>
+						</div>
+					</div> -->
+
+					<!-- <div >
                         <div v-for='dimension in dimensionsAvailable'>
     						<input type="checkbox" v-bind:value="dimension" v-model='checkedDimensions'>
 							<label>{{ dimension.label }}</label>
     					</div>
-					</div>
+					</div> -->
 
 	                <div>
 	                    <!-- <input class="btn btn-default" type="button" name="click" value="更新图表" @click=updateGraph(this.checkedDimensions,this.chartData)> -->
@@ -152,6 +171,6 @@
 		</div>
 	</div>
 	<!-- ### end container ############################################### -->
-	<script src="src/demo-parallel-vue-reback.js"></script>
+	<!-- <script src="src/demo-parallel-vue-reback.js"></script> -->
 </body>
 </html>
