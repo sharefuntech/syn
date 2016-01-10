@@ -5,13 +5,15 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="renderer" content="webkit">
-	<title>C12 bootstrap vue</title>
+	<title>C13 bootstrap vue</title>
 	<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.css">
 	<link rel="stylesheet" href="lib/bootstrap/css/dashboard.css">
+	<link rel="stylesheet" href="src/style-bootstrap-vue.css" media="screen">
 	<script src="lib/vue.js"></script>
 	<script src="lib/d3.js"></script>
 	<script src="lib/bootstrap/js/jquery-1.12.0.js"></script>
 	<script src="lib/bootstrap/js/bootstrap.js"></script>
+
 </head>
 <body>
 	<!-- ################################################################
@@ -57,7 +59,22 @@
 			<!-- *****************************************
 			*** start side bar ***************************-->
 			<div class="col-sm-3 col-md-2 sidebar">
-				<ul class="nav nav-sidebar">
+				<div id="app">
+	                <div>
+	                    <span>请选择可视化指标：</span>
+	                </div>
+					<div >
+                        <div v-for='dimension in dimensionsAvailable'>
+    						<input type="checkbox" v-bind:value="dimension" v-model='checkedDimensions'>
+							<label>{{ dimension.label }}</label>
+    					</div>
+					</div>
+	                <div>
+	                    <!-- <input class="btn btn-default" type="button" name="click" value="更新图表" @click=updateGraph(this.checkedDimensions,this.chartData)> -->
+						<button type="button" class="btn btn-default" @click=updateGraph(this.checkedDimensions,this.chartData)><span class="glyphicon glyphicon-camera" aria-hidden="true"></span> 更新图表</button>
+	                </div>
+				</div>
+				<!-- <ul class="nav nav-sidebar">
 					<li class='active'>
 						<a href="#">
 							Overview
@@ -66,11 +83,11 @@
 					</li>
 					<li><a href="#">Reports</a></li>
 					<li><a href="#">Analytics</a></li>
-				</ul>
-				<div class="checkbox"><label for=""><input type="checkbox">国家</label></div>
+				</ul> -->
+				<!-- <div class="checkbox"><label for=""><input type="checkbox">国家</label></div>
 				<div class="checkbox"><label for=""><input type="checkbox">省份</label></div>
 				<div class="checkbox"><label for=""><input type="checkbox">县市</label></div>
-				<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-camera" aria-hidden="true"></span> 更新图表</button>
+				<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-camera" aria-hidden="true"></span> 更新图表</button> -->
 			</div>
 			<!-- *** end side bar ***************************** -->
 
@@ -79,145 +96,13 @@
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 				<!-- <h1 class="page-header">Dashboard</h1>
 				<div class="row placeholders"></div> -->
-				<h2 class="sub-header">Business Sections</h2>
-				<div class="table-responsive">
-					<table class="table table-striped">
-						<thead>
-							<tr>
-								<th>#</th>
-								<th>header</th>
-								<th>header</th>
-								<th>header</th>
-								<th>header</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-							</tr>
-							<tr>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-							</tr>
-							<tr>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-							</tr>
-							<tr>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-							</tr>
-							<tr>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-							</tr>
-							<tr>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-							</tr>
-							<tr>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-							</tr>
-							<tr>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-							</tr>
-							<tr>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-							</tr>
-							<tr>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-							</tr>
-							<tr>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-							</tr>
-							<tr>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-							</tr>
-							<tr>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-							</tr>
-							<tr>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-							</tr>
-							<tr>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-							</tr>
-							<tr>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-							</tr>
-							<tr>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-								<td>something</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
+				<!-- <h2 class="sub-header">Business Sections</h2> -->
+				<div id="vizContainer"></div>
 			</div>
 			<!-- *** end main container ***************************** -->
 		</div>
 	</div>
 	<!-- ### end container ############################################### -->
+	<script src="src/demo-parallel-vue-reback.js"></script>
 </body>
 </html>

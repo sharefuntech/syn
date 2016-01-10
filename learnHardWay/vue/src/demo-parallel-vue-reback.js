@@ -437,7 +437,7 @@ function generateMouseTooltipContent (d) {
 }
 
 //test area
-// var str = '单位GDP固定资产投资_元每万元';
-// var str2 = 'hello';
-// var strSplit = str.split('_');
+var str = '单位GDP固定资产投资_元每万元';
+var str2 = 'hello';
+var strSplit = str.split('_');
 // console.log(strSplit.length);
