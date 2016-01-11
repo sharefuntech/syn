@@ -68,7 +68,22 @@
 			<!-- *****************************************
 			*** start side bar ***************************-->
 			<div class="col-sm-3 col-md-2 sidebar">
+				<!-- === start app ======================= -->
 				<div id="app">
+					<div class="btn-group btn-group-justified" role="group" aria-label="...">
+						<div class="btn-group btn-group-sm" role="group">
+							<button type="button" class="btn btn-primary">国家</button>
+						</div>
+						<div class="btn-group btn-group-sm" role="group">
+							<button type="button" class="btn btn-default">省级</button>
+						</div>
+						<div class="btn-group btn-group-sm" role="group">
+							<button type="button" class="btn btn-default">地市</button>
+						</div>
+						<div class="btn-group btn-group-sm" role="group">
+							<button type="button" class="btn btn-default">县级</button>
+						</div>
+					</div>
 					<!-- //////////////////// -->
 					<!-- use disabled="true" to disable select and option -->
 					<div>
@@ -85,88 +100,22 @@
 					<div>
 						<span>请选择国家：</span>
 						<select v-model="selectedCountry" class="form-control" v-bind:disabled=selectionDisabledState.country>
-							<option v-for="country in getCountryList" v-bind:value="country.countryName">
-								{{ country.countryName}}
+							<option v-for="country in getCountryList" v-bind:value="country.country">
+								{{ country.label}}
 							</option>
 						</select>
 					</div>
 
-
-					<!-- <div>
-						<select class="form-control">
-							<option value="option">国家数据</option>
-							<option value="option">省级数据</option>
-							<option value="option">地市数据</option>
+					<!-- //////////////////// -->
+					<div>
+						<span>请选择省份：</span>
+						<select v-model="selectedProvince" class="form-control" v-bind:disabled=selectionDisabledState.province>
+							<option v-for="province in getProvinceList" v-bind:value="province.key">
+								{{ province.key}}
+							</option>
 						</select>
-					</div> -->
-
-					<!-- <div class="dropdown">
-						<button class="btn btn-default btn-block dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-						选择地级市列表
-							<span class="caret"></span>
-						</button>
-						<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-							<li class='multiSelectionList'>
-								<div class="">
-									<input type="checkbox">
-									<label>浙江</label>
-								</div>
-							</li>
-							<li class='multiSelectionList'>
-								<div class="">
-									<input type="checkbox">
-									<label>江苏</label>
-								</div>
-							</li>
-						</ul>
-					</div> -->
-
-					<!-- Split button -->
-					<!-- <div class="btn-group ">
-						<button type="button" class="btn btn-default ">选择地级市列表</button>
-						<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						<span class="caret"></span>
-						<span class="sr-only">Toggle Dropdown</span>
-						</button>
-						<ul class="dropdown-menu">
-							<li class='multiSelectionList'>
-								<div class="">
-									<input type="checkbox">
-									<label>浙江</label>
-								</div>
-							</li>
-							<li class='multiSelectionList'>
-								<div class="">
-									<input type="checkbox">
-									<label>江苏</label>
-								</div>
-							</li>
-						</ul>
-					</div> -->
-
-					<!-- <div>
-			            <span>请选择省份：</span>
-			            <select v-model="selectedProvince" class="form-control">
-			                <option v-for="province in place" v-bind:value="province.key">
-			                    {{ province.key}}
-			                </option>
-			            </select>
-			        </div>
-			        <div>
-			            <span>请选择城市：</span>
-			            <select v-model="selectedCity" class="form-control">
-			                <option v-for="city in getCityList" v-bind:value="city.city">
-			                    {{ city.city }}
-			                </option>
-			            </select>
-			        </div>
-			        <div>
-			            <span>已经选择： {{ selectedProvince }} {{selectedCity}}</span>
-			        </div>
-
-	                <div>
-						<button type="button" class="btn btn-default" @click=updateGraph(this.checkedDimensions,this.chartData)><span class="glyphicon glyphicon-camera" aria-hidden="true"></span> 更新图表</button>
-	                </div> -->
+					</div>
+				<!-- === end app ======================= -->
 				</div>
 			</div>
 			<!-- *** end side bar ***************************** -->
