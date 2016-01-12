@@ -91,40 +91,52 @@ d3.csv('data/cityProvince.csv', function(data) {
                 province: false,
                 city: false,
                 town: false
+            },
+            panelVisibility: {
+                country: true,
+                province: false,
+                city: false,
+                town: false
             }
         },
         methods: {
             resetCityList: function() {
                 this.selectedCity = '';
                 return this.selectedCity;
+            },
+            showPanel: function(mode) {
+                for (key in this.panelVisibility) {
+                    console.log(this.panelVisibility[key]);
+                    this.panelVisibility[key] = false;
+                }
+
+                this.panelVisibility[mode] = true;
+                // console.log(this.panelVisibility);
             }
         },
         computed: {
-            // getDataSourceMode: function() {
-            //     var dataSourceMode = this.selectedMode;
-            //     if () {
-            //         this.selectionActiveState.country
+            // getCountryList: function() {
+            //     var countryList = '';
+            //     // console.log(this.selectedProvince);
+            //     var dataSourceMode = this.selectedSourceMode;
+            //     // console.log(dataSourceMode);
+            //     if (dataSourceMode == 'country') {
+            //         //暂时设置国家列表
+            //         countryList = countryListTemp;
+            //         // this.selectedCountry = '';
+            //         this.selectionDisabledState.country = false;
+            //     } else {
+            //         // 设置国家列表位中国一个国家
+            //         countryList = [countryListTemp[0]];
+            //         // this.selectedCountry = 'China';
+            //         this.selectionDisabledState.country = true;
             //     }
-            //     return dataSourceMode;
+            //     // console.log(countryList);
+
+            //     return countryList;
             // },
             getCountryList: function() {
-                var countryList = '';
-                // console.log(this.selectedProvince);
-                var dataSourceMode = this.selectedSourceMode;
-                // console.log(dataSourceMode);
-                if (dataSourceMode == 'country') {
-                    //暂时设置国家列表
-                    countryList = countryListTemp;
-                    // this.selectedCountry = '';
-                    this.selectionDisabledState.country = false;
-                } else {
-                    // 设置国家列表位中国一个国家
-                    countryList = [countryListTemp[0]];
-                    // this.selectedCountry = 'China';
-                    this.selectionDisabledState.country = true;
-                }
-                // console.log(countryList);
-
+                var countryList = countryListTemp;
                 return countryList;
             },
             getProvinceList: function() {
@@ -161,6 +173,12 @@ d3.csv('data/cityProvince.csv', function(data) {
             },
             test: function() {
                 return this.selectedProvince + 'selected';
+            },
+            countryPanelVisibility: function() {
+                return this.panelVisibility.country;
+            },
+            provincePanelVisibility: function() {
+                return this.panelVisibility.province;
             }
         }
     };

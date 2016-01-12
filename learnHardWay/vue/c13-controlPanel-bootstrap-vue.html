@@ -26,6 +26,14 @@
 </head>
 <body>
 	<!-- ################################################################
+	### vue template
+	################################################################ -->
+	<!-- component template of polygraph-->
+	<script type="text/x-template" id="showPanel-template">
+		
+	</script>
+
+	<!-- ################################################################
 	### start nav
 	################################################################ -->
 	 <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -72,49 +80,263 @@
 				<div id="app">
 					<div class="btn-group btn-group-justified" role="group" aria-label="...">
 						<div class="btn-group btn-group-sm" role="group">
-							<button type="button" class="btn btn-primary">国家</button>
+							<button type="button" class="btn btn-default" @click='showPanel("country")'>国家</button>
 						</div>
 						<div class="btn-group btn-group-sm" role="group">
-							<button type="button" class="btn btn-default">省级</button>
+							<button type="button" class="btn btn-default"  @click='showPanel("province")'>省级</button>
 						</div>
 						<div class="btn-group btn-group-sm" role="group">
-							<button type="button" class="btn btn-default">地市</button>
+							<button type="button" class="btn btn-default" @click='showPanel("city")'>地市</button>
 						</div>
 						<div class="btn-group btn-group-sm" role="group">
-							<button type="button" class="btn btn-default">县级</button>
+							<button type="button" class="btn btn-default" @click='showPanel("town")'>县级</button>
 						</div>
+					</div>
+
+					<!-- 测试tab式按钮面板 -->
+					<div v-if="panelVisibility.country">
+						<!-- start 数据种类选择面板 -->
+						<div class="dropdown">
+							<button class="btn btn-default btn-block dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+							请选择国家列表
+								<span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+								<!-- <li class='multiSelectionList'>
+									<div class="">
+										<input type="checkbox">
+										<label>浙江</label>
+									</div>
+								</li> -->
+								<li v-model="selectedCountry" v-for="country in getCountryList" v-bind:value="country.country" class='multiSelectionList'>
+									<div>
+										<input type="checkbox">
+										<label>{{ country.label}}</label>
+									</div>
+								</li>
+							</ul>
+						</div>
+						<!-- <div>
+							<span>请选择国家：</span>
+							<select v-model="selectedCountry" class="form-control">
+								<option v-for="country in getCountryList" v-bind:value="country.country">
+									{{ country.label}}
+								</option>
+							</select>
+						</div> -->
+						<div>
+							<span>请选择省份：</span>
+							<select class="form-control" disabled="true">
+								<option>
+									省份
+								</option>
+								<option>
+									b
+								</option>
+							</select>
+						</div>
+						<div>
+							<span>请选择地市：</span>
+							<select class="form-control" disabled="true">
+								<option>
+									地市
+								</option>
+								<option>
+									b
+								</option>
+							</select>
+						</div>
+						<div>
+							<span>请选择县市：</span>
+							<select class="form-control" disabled="true">
+								<option>
+									县市
+								</option>
+								<option>
+									b
+								</option>
+							</select>
+						</div>
+						<!-- end 数据种类选择面板 -->
+					</div>
+
+					<div v-if="panelVisibility.province">
+						<!-- start 数据种类选择面板 -->
+						<div>
+							<span>请选择国家：</span>
+							<select class="form-control" disabled="true">
+								<option>
+									中国
+								</option>
+								<option>
+									asia
+								</option>
+							</select>
+						</div>
+						<div>
+							<span>请选择省份：</span>
+							<select class="form-control">
+								<option>
+									浙江
+								</option>
+								<option>
+									江苏
+								</option>
+							</select>
+						</div>
+						<div>
+							<span>请选择地市：</span>
+							<select class="form-control" disabled="true">
+								<option>
+									地市
+								</option>
+								<option>
+									b
+								</option>
+							</select>
+						</div>
+						<div>
+							<span>请选择县市：</span>
+							<select class="form-control" disabled="true">
+								<option>
+									县市
+								</option>
+								<option>
+									b
+								</option>
+							</select>
+						</div>
+						<!-- end 数据种类选择面板 -->
+					</div>
+
+					<div v-if="panelVisibility.city">
+						<!-- start 数据种类选择面板 -->
+						<div>
+							<span>请选择国家：</span>
+							<select class="form-control" disabled="true">
+								<option>
+									中国
+								</option>
+								<option>
+									asia
+								</option>
+							</select>
+						</div>
+						<div>
+							<span>请选择省份：</span>
+							<select class="form-control">
+								<option>
+									浙江
+								</option>
+								<option>
+									江苏
+								</option>
+							</select>
+						</div>
+						<div>
+							<span>请选择地市：</span>
+							<select class="form-control">
+								<option>
+									嘉兴
+								</option>
+								<option>
+									杭州
+								</option>
+							</select>
+						</div>
+						<div>
+							<span>请选择县市：</span>
+							<select class="form-control" disabled="true">
+								<option>
+									县市
+								</option>
+								<option>
+									b
+								</option>
+							</select>
+						</div>
+						<!-- end 数据种类选择面板 -->
+					</div>
+
+					<div v-if="panelVisibility.town">
+						<!-- start 数据种类选择面板 -->
+						<div>
+							<span>请选择国家：</span>
+							<select class="form-control" disabled="true">
+								<option>
+									中国
+								</option>
+								<option>
+									asia
+								</option>
+							</select>
+						</div>
+						<div>
+							<span>请选择省份：</span>
+							<select class="form-control">
+								<option>
+									浙江
+								</option>
+								<option>
+									江苏
+								</option>
+							</select>
+						</div>
+						<div>
+							<span>请选择地市：</span>
+							<select class="form-control">
+								<option>
+									南京
+								</option>
+								<option>
+									常熟
+								</option>
+							</select>
+						</div>
+						<div>
+							<span>请选择县市：</span>
+							<select class="form-control">
+								<option>
+									海宁
+								</option>
+								<option>
+									桐乡
+								</option>
+							</select>
+						</div>
+						<!-- end 数据种类选择面板 -->
 					</div>
 					<!-- //////////////////// -->
 					<!-- use disabled="true" to disable select and option -->
-					<div>
+					<!-- <div>
 						<span>请选择数据源：</span>
 						<select v-model="selectedSourceMode" class="form-control" >
 							<option v-for="mode in dataSourceMode" v-bind:value="mode.mode">
 								{{ mode.label}}
 							</option>
 						</select>
-					</div>
+					</div> -->
 
 					<!-- //////////////////// -->
 					<!-- use disabled="true" to disable select and option -->
-					<div>
+					<!-- <div>
 						<span>请选择国家：</span>
 						<select v-model="selectedCountry" class="form-control" v-bind:disabled=selectionDisabledState.country>
 							<option v-for="country in getCountryList" v-bind:value="country.country">
 								{{ country.label}}
 							</option>
 						</select>
-					</div>
+					</div> -->
 
 					<!-- //////////////////// -->
-					<div>
+					<!-- <div>
 						<span>请选择省份：</span>
 						<select v-model="selectedProvince" class="form-control" v-bind:disabled=selectionDisabledState.province>
 							<option v-for="province in getProvinceList" v-bind:value="province.key">
 								{{ province.key}}
 							</option>
 						</select>
-					</div>
+					</div> -->
 				<!-- === end app ======================= -->
 				</div>
 			</div>
