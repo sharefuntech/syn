@@ -36,24 +36,27 @@ body, .onepage-wrapper, html {
   list-style: none;
   margin: 0;
   padding: 0;
+  /*color: white;*/
 }
 .onepage-pagination li {
   padding: 0;
   text-align: center;
+  /*color: white;*/
 }
 .onepage-pagination li a{
   padding: 10px;
   width: 4px;
   height: 4px;
   display: block;
-  
+
 }
 .onepage-pagination li a:before{
   content: '';
   position: absolute;
   width: 4px;
   height: 4px;
-  background: rgba(0,0,0,0.85);
+  /*background: rgba(0,0,0,0.85);*/
+  background: rgba(200,200,200,0.5);
   border-radius: 10px;
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
@@ -62,8 +65,10 @@ body, .onepage-wrapper, html {
 .onepage-pagination li a.active:before{
   width: 10px;
   height: 10px;
-  background: none;
-  border: 1px solid black;
+  /*background: none;*/
+  background: rgba(100,100,100,0.5);
+  /*border: 1px solid black;*/
+  border: 1px solid #999;
   margin-top: -4px;
   left: 8px;
 }
