@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>bundle sample</title>
+    <script src="lib/d3.js"></script>
+    <script src="lib/saveSvgAsPng.js"></script>
+    <style media="screen">
+        body {
+            background-color: #000;
+            margin: 0;
+            padding: 0;
+        }
+
+        .node circle {
+          stroke: black;
+          stroke-width: 1px;
+        }
+
+        .node text{
+          fill: #fff;
+          font-size: 10px;
+          font-family: 'Microsoft Yahei';
+        }
+
+        .link {
+          fill: none;
+          /*stroke: white;*/
+          stroke: orange;
+          stroke-opacity: .1;
+          stroke-width: 1px;
+        }
+    </style>
+</head>
+<body>
+    <script type="text/javascript">
+        d3.csv('data/hongbao.csv', function(data) {
+            data.forEach(function(d) {
+                d.money_received = +d.money_received;
+                // d.hb_id = +d.hb_id;
+            });
+
+            drawBundle(data, 'body');
+
+            function drawBundle(data, container) {
+                var bundleLinks = [];
+
+                data.forEach(function(d) {
+                    var link = {
+                        source: d.hb_id,
+                        target: d.people_name
+                    };
+                    bundleLinks.push(link);
+                });
+
+                var dataNestedById = d3.nest()
+                    .key(function(d) {
+                        return d.hb_id;
+                    })
+                    .entries(data);
+                // console.log(dataNestedById);
+
+                var nodesId = dataNestedById.map(function(d) {
+                    return {name: d.key};
+                });
+                // console.log(children);
+
+                var dataNestedByPeople = d3.nest()
+                    .key(function(d) {
+                        return d.people_name;
+                    })
+                    .entries(data);
+
+                var nodesPeople = dataNestedByPeople.map(function(d) {
+                    return {name: d.key};
+                });
+
+                var nodesAll = nodesId.concat(nodesPeople);
+
+                var bundleNodes = {
+                    name: '',
+                    children: nodesAll
+                };
+
+        		var width  = 300;	//SVG绘制区域的宽度
+        		var height = 300;	//SVG绘制区域的高度
+
+        		var svg = d3.select(container)			//选择<body>
+        					.append("svg")
+                            .attr('id', 'diagram')			//在<body>中添加<svg>
+        					.attr("width", width)	//设定<svg>的宽度属性
+        					.attr("height", height);//设定<svg>的高度属性
+
+                // //just for png background-color
+                // svg.append('rect')
+                //     .attr("width", width)
+                //     .attr("height", height)
+                //     .style('fill', 'black');
+
+        		var cluster = d3.layout.cluster()
+        						.size([width *1.2, height/2])
+        						.separation(function(a, b) { return (a.parent == b.parent ? 1 : 2) / a.depth; });
+
+        		var bundle = d3.layout.bundle();
+
+        		var nodes = cluster.nodes(bundleNodes);
+        		// console.log(nodes);
+
+        		var oLinks = map(nodes, bundleLinks);
+        		// console.log(oLinks);
+
+        		var links = bundle(oLinks);
+        		// console.log(links);
+
+        		//将links中的source和target由名称替换成节点
+        		function map( nodes, links ){
+        			var hash = [];
+        			for(var i = 0; i < nodes.length; i++){
+        				hash[nodes[i].name] = nodes[i];
+        			}
+        			var resultLinks = [];
+        			for(var i = 0; i < links.length; i++){
+        				resultLinks.push({  source: hash[ links[i].source ],
+        									target: hash[ links[i].target ]
+        								});
+        			}
+        			return resultLinks;
+        		}
+        		//3. 绘图
+        		var line = d3.svg.line.radial()
+        					.interpolate("bundle")
+        					.tension(.85)
+        					.radius(function(d) { return d.y; })
+        					.angle(function(d) { return d.x / 180 * Math.PI; });
+
+        		gBundle = svg.append("g")
+        					.attr("transform", "translate(" + (width/2) + "," + (height/2) + ")");
+
+        		var color = d3.scale.category20c();
+
+        		var link = gBundle.selectAll(".link")
+        			  .data(links)
+        			  .enter()
+        			  .append("path")
+        			  .attr("class", "link")
+        			  .attr("d", line);	//使用线段生成器
+
+        		var node = gBundle.selectAll(".node")
+        			  .data( nodes.filter(function(d) { return !d.children; }) )
+        			  .enter()
+        			  .append("g")
+        			  .attr("class", "node")
+        			  .attr("transform", function(d) {
+        					return "rotate(" + (d.x- 90) + ")translate(" + d.y + ")" + "rotate("+ (90 - d.x) +")";
+        			  });
+
+        		node.append("circle")
+        			  .attr("r", function(d, i) {
+        			    //  return 20 + i;
+                        return 2;
+        			  })
+                      .style('fill', 'brown');
+        			//   .style("fill",function(d,i){ return color(i); });
+
+        		// node.append("text")
+        		// 	.attr("dy",".2em")
+        		// 	.style("text-anchor", "middle")
+        		// 	.text(function(d) { return d.name; });
+            }
+
+            // 保存svg为png
+            // saveSvgAsPng(document.getElementById("diagram"), "diagram.png");
+        });
+
+
+    </script>
+</body>
+</html>

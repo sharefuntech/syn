@@ -1,5 +1,5 @@
 /* ===========================================================
- * jquery-onepage-scroll.js v1.3
+ * jquery-onepage-scroll.js v1.3.1
  * ===========================================================
  * Copyright 2013 Pete Rojwongsuriya.
  * http://www.thepetedesign.com
@@ -28,14 +28,13 @@
     loop: true,
     responsiveFallback: false,
     direction : 'vertical'
-    };
+	};
 
 	/*------------------------------------------------*/
 	/*  Credit: Eike Send for the awesome swipe event */
 	/*------------------------------------------------*/
 
 	$.fn.swipeEvents = function() {
-          console.log("Running swipEvents ");
       return this.each(function() {
 
         var startX,
@@ -45,18 +44,12 @@
         $this.bind('touchstart', touchstart);
 
         function touchstart(event) {
-          console.log("Running touchstart");
           var touches = event.originalEvent.touches;
           if (touches && touches.length) {
             startX = touches[0].pageX;
             startY = touches[0].pageY;
             $this.bind('touchmove', touchmove);
           }
-
-          if (!$("body").hasClass("disabled-onepage-scroll")){
-            event.preventDefault();
-          }
-
         }
 
         function touchmove(event) {
@@ -81,7 +74,6 @@
               $this.unbind('touchmove', touchmove);
             }
           }
-          // event.preventDefault();
         }
 
       });
@@ -102,16 +94,29 @@
 
     $.fn.transformPage = function(settings, pos, index) {
       if (typeof settings.beforeMove == 'function') settings.beforeMove(index);
-      $(this).css({
-        "-webkit-transform": ( settings.direction == 'horizontal' ) ? "translate3d(" + pos + "%, 0, 0)" : "translate3d(0, " + pos + "%, 0)",
-        "-webkit-transition": "all " + settings.animationTime + "ms " + settings.easing,
-        "-moz-transform": ( settings.direction == 'horizontal' ) ? "translate3d(" + pos + "%, 0, 0)" : "translate3d(0, " + pos + "%, 0)",
-        "-moz-transition": "all " + settings.animationTime + "ms " + settings.easing,
-        "-ms-transform": ( settings.direction == 'horizontal' ) ? "translate3d(" + pos + "%, 0, 0)" : "translate3d(0, " + pos + "%, 0)",
-        "-ms-transition": "all " + settings.animationTime + "ms " + settings.easing,
-        "transform": ( settings.direction == 'horizontal' ) ? "translate3d(" + pos + "%, 0, 0)" : "translate3d(0, " + pos + "%, 0)",
-        "transition": "all " + settings.animationTime + "ms " + settings.easing
-      });
+
+      // Just a simple edit that makes use of modernizr to detect an IE8 browser and changes the transform method into
+    	// an top animate so IE8 users can also use this script.
+    	if($('html').hasClass('ie8')){
+        if (settings.direction == 'horizontal') {
+          var toppos = (el.width()/100)*pos;
+          $(this).animate({left: toppos+'px'},settings.animationTime);
+        } else {
+          var toppos = (el.height()/100)*pos;
+          $(this).animate({top: toppos+'px'},settings.animationTime);
+        }
+    	} else{
+    	  $(this).css({
+    	    "-webkit-transform": ( settings.direction == 'horizontal' ) ? "translate3d(" + pos + "%, 0, 0)" : "translate3d(0, " + pos + "%, 0)",
+         "-webkit-transition": "all " + settings.animationTime + "ms " + settings.easing,
+         "-moz-transform": ( settings.direction == 'horizontal' ) ? "translate3d(" + pos + "%, 0, 0)" : "translate3d(0, " + pos + "%, 0)",
+         "-moz-transition": "all " + settings.animationTime + "ms " + settings.easing,
+         "-ms-transform": ( settings.direction == 'horizontal' ) ? "translate3d(" + pos + "%, 0, 0)" : "translate3d(0, " + pos + "%, 0)",
+         "-ms-transition": "all " + settings.animationTime + "ms " + settings.easing,
+         "transform": ( settings.direction == 'horizontal' ) ? "translate3d(" + pos + "%, 0, 0)" : "translate3d(0, " + pos + "%, 0)",
+         "transition": "all " + settings.animationTime + "ms " + settings.easing
+    	  });
+    	}
       $(this).one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function(e) {
         if (typeof settings.afterMove == 'function') settings.afterMove(index);
       });
@@ -239,13 +244,13 @@
         }
 
 
-        // el.swipeEvents().bind("swipeDown",  function(event){
-        //   if (!$("body").hasClass("disabled-onepage-scroll")) event.preventDefault();
-        //   el.moveUp();
-        // }).bind("swipeUp", function(event){
-        //   if (!$("body").hasClass("disabled-onepage-scroll")) event.preventDefault();
-        //   el.moveDown();
-        // });
+        el.swipeEvents().bind("swipeDown",  function(event){
+          if (!$("body").hasClass("disabled-onepage-scroll")) event.preventDefault();
+          el.moveUp();
+        }).bind("swipeUp", function(event){
+          if (!$("body").hasClass("disabled-onepage-scroll")) event.preventDefault();
+          el.moveDown();
+        });
 
         $(document).bind('mousewheel DOMMouseScroll MozMousePixelScroll', function(event) {
           event.preventDefault();
@@ -391,6 +396,9 @@
               if (tag != 'input' && tag != 'textarea') el.moveUp()
             break;
             case 40:
+              if (tag != 'input' && tag != 'textarea') el.moveDown()
+            break;
+            case 32: //spacebar
               if (tag != 'input' && tag != 'textarea') el.moveDown()
             break;
             case 33: //pageg up
