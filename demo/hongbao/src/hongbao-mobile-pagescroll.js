@@ -14,25 +14,22 @@ var viewportHeight = document.documentElement.clientHeight;
 // console.log(viewportHeight);
 
 d3.csv('data/hongbao.csv', function(data) {
-    //红包id与金额
     var hongbao = {};
-    //红包id与发送人
-    var sender = {};
-    //发最多红包的人，人名和次数
-    var mostSender = {};
-    // 抢最多红包个数的人
-    var mostGetter = {};
-    // 盈亏排名，人名与余额
-    var balance = {};
-    // 最热门的红包，红包id，抢的人数
-    var hongbaoHottest = {};
-    // 最活跃的人，人名-红包次数
-    var peopleHottest = {};
+    var people = {};
+
+    hongbao.money = {}; //红包id与金额
+    hongbao.sender = {};//红包id与发送人
+    hongbao.hongbaoHottest = {}; // 最热门的红包，红包id，抢的人数
+
+    people.peopleHottest = {}; //最活跃多人（发、抢红包累积）人名和次数，
+    people.mostSender = {}; //发最多红包的人，人名和次数
+    people.mostGetter = {}; // 抢最多红包个数的人，人名和次数
+    people.balance = {}; // 盈亏排名，人名与余额
 
     var dataNestedById;
     var dataNestedByPeople;
 
-    //set for people and hongbao id, for reference later
+    //红包编号和人名的堆
     var idSet;
     var peopleSet;
 
@@ -40,76 +37,82 @@ d3.csv('data/hongbao.csv', function(data) {
         d.money_received = +d.money_received;
         // d.hb_id = +d.hb_id;
         if (d.money_received < 0) {
-            // hongbao.push({
-            //     id: d.hbid,
-            //     sender: d.people_name,
-            //     money: d.money_received
-            // });
-            // console.log(d.money_received);
-            hongbao[d.hb_id] = -d.money_received;
-            sender[d.hb_id] = d.people_name;
+            hongbao.money[d.hb_id] = -d.money_received; //红包大小，id和金额
+            hongbao.sender[d.hb_id] = d.people_name; //红包id和发送者
+            // 统计发红包达人
+            if (!people.mostSender[d.people_name]) {
+                people.mostSender[d.people_name] = 1;
+            } else {
+                people.mostSender[d.people_name] += 1;
+            }
         }
     });
-
-    // console.log(typeof(hongbao));
-    // console.log();
-    // console.log(sender);
-    var hongbaoMoneySizeExtent = d3.extent(d3.values(hongbao));
-    // console.log(hongbaoExtent);
-
-    var hongbaoMoneySizeScale = d3.scale.linear()
-            .domain(hongbaoMoneySizeExtent)
-            .range([2, 15]);
+    // console.log(people.mostSender);
 
     dataNestedById = d3.nest()
         .key(function(d) {
             return d.hb_id;
         })
         .entries(data);
-    // console.log(dataNestedById);
-    // 计算红包热度，参与抢的人数
-    dataNestedById.forEach(function(d) {
-        // console.log(d.values.length);
-        hongbaoHottest[d.key] = d.values.length;
-    });
-    // console.log(hongbaoHottest);
-    var hongbaoHotExtent = d3.extent(d3.values(hongbaoHottest));
-    // console.log(hongbaoHotExtent);
-    // 红包热度比例尺
-    var hongbaoHotScale = d3.scale.linear()
-            .domain(hongbaoHotExtent)
-            .range([2, 15]);
 
     dataNestedByPeople = d3.nest()
         .key(function(d) {
             return d.people_name;
         })
         .entries(data);
-
-    // 计算人的活跃度，参与抢红包次数
-    dataNestedByPeople.forEach(function(d) {
-        // console.log(d.values.length);
-        peopleHottest[d.key] = d.values.length;
-    });
-    // console.log(peopleHottest);
-    var peopleHotExtent = d3.extent(d3.values(peopleHottest));
-    // console.log(peopleHotExtent);
-    // 红包热度比例尺
-    var peopleHotScale = d3.scale.linear()
-            .domain(peopleHotExtent)
-            .range([1, 10]);
+    // console.log(dataNestedByPeople);
 
     idSet = d3.set(dataNestedById.map(function(d) {
         return d.key;
     }));
-    // console.log(idSet.size()); //65
-    // console.log(idSet.has('7'));
-    // console.log(idSet.has('77'));
-
     peopleSet = d3.set(dataNestedByPeople.map(function(d) {
         return d.key;
     }));
     // console.log(peopleSet.size()); //70
+
+    // 红包金额比例尺
+    var hongbaoMoneySizeExtent = d3.extent(d3.values(hongbao.money));
+    var hongbaoMoneySizeScale = d3.scale.linear()
+            .domain(hongbaoMoneySizeExtent)
+            .range([2, 15]);
+
+    // 红包热度比例尺
+    dataNestedById.forEach(function(d) {
+        hongbao.hongbaoHottest[d.key] = d.values.length;
+    });
+    var hongbaoHotExtent = d3.extent(d3.values(hongbao.hongbaoHottest));
+    var hongbaoHotScale = d3.scale.linear()
+            .domain(hongbaoHotExtent)
+            .range([2, 15]);
+
+    // 人的活跃度比例尺
+    dataNestedByPeople.forEach(function(d) {
+        // console.log(d.values.length);
+        people.peopleHottest[d.key] = d.values.length;
+        people.mostGetter[d.key] = d.values.length;
+    });
+
+    var peopleHotExtent = d3.extent(d3.values(people.peopleHottest));
+    var peopleHotScale = d3.scale.linear()
+            .domain(peopleHotExtent)
+            .range([1, 10]);
+
+    //计算抢红包达人，去除发送红包次数的统计
+    for (key in people.mostGetter) {
+        if (people.mostSender[key]) {
+            people.mostGetter[key] -= people.mostSender[key];
+        }
+    }
+
+    people.balance = d3.nest()
+        .key(function(d) { return d.people_name;})
+        .rollup(function(d) {
+            return d3.sum(d, function(k) {
+                return k.money_received;
+            });
+        })
+        .entries(data);
+    console.log(people.balance);
 
     // 在这里可以做不同设备的视口设置，代替css方案
     var svgMinCanvas = d3.min([viewportWidth, viewportHeight]);
@@ -131,30 +134,17 @@ d3.csv('data/hongbao.csv', function(data) {
             links.push(link);
         });
 
-        // var dataNestedById = d3.nest()
-        //     .key(function(d) {
-        //         return d.hb_id;
-        //     })
-        //     .entries(data);
-
         dataNestedById.forEach(function(d) {
             // console.log(d.key);
             var node = {name: d.key};
             nodes.push(node);
         });
 
-        // var dataNestedByPeople = d3.nest()
-        //     .key(function(d) {
-        //         return d.people_name;
-        //     })
-        //     .entries(data);
-        // console.log(dataNestedByPeople);
         dataNestedByPeople.forEach(function(d) {
             // console.log(d.key);
             var node = {name: d.key};
             nodes.push(node);
         });
-        // console.log(nodes);
 
         var forceData = {
             nodes: nodes,
@@ -232,14 +222,12 @@ d3.csv('data/hongbao.csv', function(data) {
                 .attr("r",function(d) {
                     if (idSet.has(d.name)) {
                         // 红包大小
-                        // return hongbaoMoneySizeScale(hongbao[d.name]);
+                        // return hongbaoMoneySizeScale(hongbao.money[d.name]);
                         // 红包热度
-                        // console.log(hongbaoHottest[d.name]);
-                        // console.log(hongbaoHotScale(hongbao[d.name]));
-                        return hongbaoHotScale(hongbaoHottest[d.name]);
+                        return hongbaoHotScale(hongbao.hongbaoHottest[d.name]);
                     } else if (peopleSet.has(d.name)) {
                         // return 5;
-                        return peopleHotScale(peopleHottest[d.name]);
+                        return peopleHotScale(people.peopleHottest[d.name]);
                     }
                 })
                 .style('fill', function(d) {
@@ -303,23 +291,10 @@ d3.csv('data/hongbao.csv', function(data) {
             bundleLinks.push(link);
         });
 
-        // var dataNestedById = d3.nest()
-        //     .key(function(d) {
-        //         return d.hb_id;
-        //     })
-        //     .entries(data);
-        // console.log(dataNestedById);
-
         var nodesId = dataNestedById.map(function(d) {
             return {name: d.key};
         });
         // console.log(children);
-
-        // var dataNestedByPeople = d3.nest()
-        //     .key(function(d) {
-        //         return d.people_name;
-        //     })
-        //     .entries(data);
 
         var nodesPeople = dataNestedByPeople.map(function(d) {
             return {name: d.key};
