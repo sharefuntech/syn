@@ -54,6 +54,7 @@ d3.csv('data/hongbao.csv', function(data) {
             return d.hb_id;
         })
         .entries(data);
+    console.log(dataNestedById);
 
     dataNestedByPeople = d3.nest()
         .key(function(d) {
@@ -112,7 +113,7 @@ d3.csv('data/hongbao.csv', function(data) {
             });
         })
         .entries(data);
-    console.log(people.balance);
+    // console.log(people.balance);
 
     // 在这里可以做不同设备的视口设置，代替css方案
     var svgMinCanvas = d3.min([viewportWidth, viewportHeight]);
