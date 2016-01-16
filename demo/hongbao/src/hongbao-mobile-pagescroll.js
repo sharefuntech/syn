@@ -25,6 +25,7 @@ d3.csv('data/hongbao.csv', function(data) {
     people.mostSender = {}; //发最多红包的人，人名和次数
     people.mostGetter = {}; // 抢最多红包个数的人，人名和次数
     people.balance = {}; // 盈亏排名，人名与余额
+    people.senderSet = d3.set(); // 红包发送者人名，去重
 
     var dataNestedById;
     var dataNestedByPeople;
@@ -44,6 +45,10 @@ d3.csv('data/hongbao.csv', function(data) {
                 people.mostSender[d.people_name] = 1;
             } else {
                 people.mostSender[d.people_name] += 1;
+            }
+            // 红包发送者人名，去重
+            if (!people.senderSet.has(d.people_name)) {
+                people.senderSet.add(d.people_name);
             }
         }
     });
@@ -120,6 +125,153 @@ d3.csv('data/hongbao.csv', function(data) {
     // console.log(svgMaxCanvas);
     drawForce(data, '#vizContainer-2', svgMinCanvas, svgMinCanvas)
     drawBundle(data, '#vizContainer-1', svgMinCanvas, svgMinCanvas);
+    drawMatrix('#vizContainer-3', people.senderSet, dataNestedById, svgMinCanvas, svgMinCanvas);
+
+    //###################################################################
+    //### force start #################################################
+
+
+    function drawMatrix(container, senderSet, dataNestedById, svgWidth, svgHeight) {
+        hongbao.senderCollection = calculateSenderCollection(senderSet);
+
+        var uniqEdges = calculateUniqEdges(dataNestedById);
+
+        var matrix = calculateMatrix(hongbao.senderCollection, uniqEdges);
+
+        setMatrix(container, matrix, hongbao.senderCollection, svgWidth, svgHeight);
+
+        function calculateSenderCollection(senderSet) {
+            var senderSetArray = senderSet.values();
+            var senderCollection = senderSetArray.map(function(d) {
+                return {people: d};
+            });
+            return senderCollection;
+        }
+
+        function calculateUniqEdges(dataNestedById) {
+            var edgesDuplicate = dataNestedById.map(function(d) {
+                var singleIdEdgeCollection = [];
+
+                d.values.forEach(function(obj) {
+                    var edge = {};
+                    // console.log(obj.money_received);
+                    if (obj.money_received > 0) {
+                        // console.log(obj);
+                        singleIdEdgeCollection.push({
+                            source: d.values[0].people_name,
+                            target: obj.people_name,
+                            money: obj.money_received
+                        });
+                    }
+                })
+                return singleIdEdgeCollection;
+            });
+
+            // 连线：发送人-抢的人，以id为统计，64个统计结果数组
+            var edgesConnectionDuplicate = edgesDuplicate.map(function(d) {
+                var edgeHash = {};
+                for (x in d) {
+                    var id = d[x].source + "-" + d[x].target;
+                    edgeHash[id] = d[x];
+                    // console.log(id);
+                }
+                return edgeHash;
+            });
+
+            var mergedEdgesConnectionDuplicate = d3.merge([edgesConnectionDuplicate]);
+
+            var uniqEdges = {};
+            mergedEdgesConnectionDuplicate.forEach(function(d) {
+                for(key in d) {
+                    // console.log(key);
+                    if (!uniqEdges[key]) {
+                        uniqEdges[key] = d[key];
+                    } else {
+                        uniqEdges[key].money += d[key].money;
+                    }
+                }
+            });
+
+            return uniqEdges;
+        }
+
+        function calculateMatrix(hongbaoSenderCollection, uniqEdges) {
+            var matrix = [];
+            for (a in hongbaoSenderCollection) {
+                for (b in hongbaoSenderCollection) {
+                    var grid = {
+                        id: hongbaoSenderCollection[a].people + "-" + hongbaoSenderCollection[b].people,
+                        x: b,
+                        y: a,
+                        money: 0
+                    }
+                    // console.log(grid);
+
+                    if (uniqEdges[grid.id]) {
+                        grid.money = uniqEdges[grid.id].money;
+                    }
+
+                    matrix.push(grid);
+                    // console.log(matrix);
+                }
+            }
+            return matrix;
+        }
+
+        function setMatrix(container, matrix, hongbaoSenderCollection, svgWidth, svgHeight) {
+            var rect_width = (svgWidth - 70) / hongbaoSenderCollection.length;
+            d3.select(container)
+                .append("svg")
+                .attr('width', svgWidth)
+                .attr('height', svgHeight)
+                .append("g")
+                .attr("transform", "translate(20,20)")
+                .attr("id", "adjacencyG")
+                .selectAll("rect")
+                .data(matrix)
+                .enter()
+                .append("rect")
+                .attr("width", rect_width)
+                .attr("height", rect_width)
+                .attr("x", function (d) {return d.x * rect_width})
+                .attr("y", function (d) {return d.y * rect_width})
+                .style("stroke", "#111")
+                .style("stroke-width", "1px")
+                .style("fill", "red")
+                .style("fill-opacity", function (d) {return d.money * .2})
+                .on("mouseover", gridOver)
+
+            var scaleSize = hongbaoSenderCollection.length * rect_width;
+            var nameScale = d3.scale.ordinal()
+                .domain(hongbaoSenderCollection.map(function (el) {return el.people}))
+                .rangePoints([0,scaleSize],1);
+
+            xAxis = d3.svg.axis().scale(nameScale).orient("top").tickSize(4);
+            yAxis = d3.svg.axis().scale(nameScale).orient("left").tickSize(4);
+
+            d3.select("#adjacencyG")
+                .append("g")
+                .call(xAxis)
+                // .selectAll("text")
+                // .style("text-anchor", "end")
+                // .attr("transform", "translate(-10,-10) rotate(90)");
+
+            d3.select("#adjacencyG")
+                .append("g")
+                .call(yAxis);
+
+            function gridOver(d,i) {
+                d3.selectAll("rect")
+                    .style("stroke-width", function (p) {
+                        return p.x == d.x || p.y == d.y ? "3px" : "1px"
+                    });
+                // var selectedTick = 'tick:nth-child(' + i + ')';
+                // console.log(d3.select(selectedTick));
+                // d3.select(selectedTick).style('fill-opacity', 1);
+            }
+        }
+    }
+    //### force end #################################################
 
     //###################################################################
     //### force start #################################################
@@ -369,6 +521,10 @@ d3.csv('data/hongbao.csv', function(data) {
               .enter()
               .append("path")
               .attr("class", "link")
+              .transition()
+              .delay(function(d, i) {
+                  return i * 50;
+              })
               .attr("d", line);	//使用线段生成器
 
         var node = gBundle.selectAll(".node")
