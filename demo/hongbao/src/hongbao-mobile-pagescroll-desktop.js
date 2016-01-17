@@ -10,8 +10,8 @@ $(".main").onepage_scroll({loop: false});
 // var viewportHeight = window.innerHeight;
 var viewportWidth = document.documentElement.clientWidth;
 var viewportHeight = document.documentElement.clientHeight;
-// console.log(viewportWidth);
-// console.log(viewportHeight);
+// console.log(window.innerHeight);
+// console.log(document.documentElement.clientHeight);
 
 d3.csv('data/hongbao.csv', function(data) {
     var hongbao = {};
@@ -101,7 +101,7 @@ d3.csv('data/hongbao.csv', function(data) {
     var peopleHotExtent = d3.extent(d3.values(people.peopleHottest));
     var peopleHotScale = d3.scale.linear()
             .domain(peopleHotExtent)
-            .range([1, 10]);
+            .range([2, 10]);
 
     //计算抢红包达人，去除发送红包次数的统计
     for (key in people.mostGetter) {
@@ -121,11 +121,12 @@ d3.csv('data/hongbao.csv', function(data) {
     // console.log(people.balance);
 
     // 在这里可以做不同设备的视口设置，代替css方案
-    var svgMinCanvas = d3.min([viewportWidth, viewportHeight]);
+    var svgMinCanvas = d3.min([viewportWidth, viewportHeight]) - 60;
     // console.log(svgMaxCanvas);
-    drawForce(data, '#vizContainer-2', svgMinCanvas, svgMinCanvas)
+
     drawBundle(data, '#vizContainer-1', svgMinCanvas, svgMinCanvas);
-    drawMatrix('#vizContainer-3', people.senderSet, dataNestedById, svgMinCanvas, svgMinCanvas);
+    drawMatrix('#vizContainer-2', people.senderSet, dataNestedById, svgMinCanvas, svgMinCanvas);
+    drawForce(data, '#vizContainer-3', svgMinCanvas, svgMinCanvas);
 
     //###################################################################
     //### force start #################################################
@@ -220,51 +221,96 @@ d3.csv('data/hongbao.csv', function(data) {
 
         function setMatrix(container, matrix, hongbaoSenderCollection, svgWidth, svgHeight) {
             var rect_width = (svgWidth - 70) / hongbaoSenderCollection.length;
-            d3.select(container)
+
+            var svg = d3.select(container)
                 .append("svg")
                 .attr('width', svgWidth)
                 .attr('height', svgHeight)
-                .append("g")
-                .attr("transform", "translate(20,20)")
-                .attr("id", "adjacencyG")
+                .attr("id", "adjacencyG");
+
+            svg.append("g")
+                .attr("transform", "translate(50,40)")
+                .append('rect')
+                .attr('width', svgWidth - 70)
+                .attr('height', svgHeight - 70)
+                .attr('fill', '#222');
+
+                var scaleSize = hongbaoSenderCollection.length * rect_width;
+                var nameScale = d3.scale.ordinal()
+                    .domain(hongbaoSenderCollection.map(function (el) {return el.people}))
+                    .rangePoints([0,scaleSize],1);
+
+                xAxis = d3.svg.axis().scale(nameScale).orient("top").tickSize(4);
+                yAxis = d3.svg.axis().scale(nameScale).orient("left").tickSize(4);
+
+                d3.select("#adjacencyG")
+                    .append("g")
+                    .attr("transform", "translate(50,40)")
+                    .call(xAxis)
+                    .selectAll("text")
+                    .style("text-anchor", "end")
+                    .attr("transform", "translate(-10,-10) rotate(90)");
+
+                d3.select("#adjacencyG")
+                    .append("g")
+                    .attr("transform", "translate(50,40)")
+                    .call(yAxis);
+
+            svg.append("g")
+                .attr("transform", "translate(50,40)")
+                // .attr("id", "adjacencyG")
                 .selectAll("rect")
                 .data(matrix)
                 .enter()
                 .append("rect")
+                .attr('class', 'hongbao')
                 .attr("width", rect_width)
                 .attr("height", rect_width)
                 .attr("x", function (d) {return d.x * rect_width})
                 .attr("y", function (d) {return d.y * rect_width})
-                .style("stroke", "#111")
+                .style("stroke", "#000")
                 .style("stroke-width", "1px")
-                .style("fill", "red")
+                .style("fill", "orange")
                 .style("fill-opacity", function (d) {return d.money * .2})
                 .on("mouseover", gridOver)
 
-            var scaleSize = hongbaoSenderCollection.length * rect_width;
-            var nameScale = d3.scale.ordinal()
-                .domain(hongbaoSenderCollection.map(function (el) {return el.people}))
-                .rangePoints([0,scaleSize],1);
 
-            xAxis = d3.svg.axis().scale(nameScale).orient("top").tickSize(4);
-            yAxis = d3.svg.axis().scale(nameScale).orient("left").tickSize(4);
 
-            d3.select("#adjacencyG")
-                .append("g")
-                .call(xAxis)
-                // .selectAll("text")
-                // .style("text-anchor", "end")
-                // .attr("transform", "translate(-10,-10) rotate(90)");
-
-            d3.select("#adjacencyG")
-                .append("g")
-                .call(yAxis);
+            // console.log(hongbaoSenderCollection.length);
+            // d3.select("#adjacencyG")
+            //     .append("g")
+            //     .attr("transform", "translate(50,10)")
+            //     .selectAll('text.matrixHorizontal')
+            //     .data(hongbaoSenderCollection)
+            //     .enter()
+            //     .append('text')
+            //     .attr('class', 'matrixHorizontal')
+            //     .attr("transform",function(d, i) {
+            //         return "translate(" + rect_width * i + ",0)";
+            //     })
+            //     .text(function(d) {
+            //         return d.people;
+            //     });
 
             function gridOver(d,i) {
-                d3.selectAll("rect")
-                    .style("stroke-width", function (p) {
-                        return p.x == d.x || p.y == d.y ? "3px" : "1px"
-                    });
+                d3.selectAll("rect.hongbao")
+                    .style('stroke', function(p) {
+                        if (p.x == d.x || p.y == d.y) {
+                            // console.log(d.y);
+                            // console.log(p.x);
+                            if (p.x == d.x && p.y == d.y) {
+                                // console.log(d.y);
+                                // console.log(d.x);
+                            }
+                            return '#fdd431';
+                        } else {
+                            return 'black';
+                            // return {'stroke': 'black', 'stroke-width': '1px'};
+                        }
+                    })
+                    // .style("stroke-width", function (p) {
+                    //     return p.x == d.x || p.y == d.y ? "3px" : "1px"
+                    // });
                 // var selectedTick = 'tick:nth-child(' + i + ')';
                 // console.log(d3.select(selectedTick));
                 // d3.select(selectedTick).style('fill-opacity', 1);
@@ -351,7 +397,7 @@ d3.csv('data/hongbao.csv', function(data) {
                 .nodes(nodes)   //指定节点数组
                 .links(edges)   //指定连线数组
                 .size([width-30,height-30]) //指定范围
-                .linkDistance(100)  //指定连线长度
+                .linkDistance(250)  //指定连线长度
                 .charge([-300]);  //相互之间的作用力
 
             force.start();  //开始作用
@@ -386,15 +432,18 @@ d3.csv('data/hongbao.csv', function(data) {
                 .style('fill', function(d) {
                     // console.log(d);
                     if (idSet.has(d.name)) {
-                        return 'red';
+                        return 'orange';
                     } else if (peopleSet.has(d.name)) {
-                        return 'blue';
+                        return 'gray';
                     }
                 })
                 .style('fill-opacity', .7)
-                .style("stroke","#eee")
-                .style("stroke-opacity", .3)
-                .style("stroke-width",1)
+                .on('mouseover', function(d) {
+                    // console.log(d);
+                })
+                // .style("stroke","#eee")
+                // .style("stroke-opacity", .3)
+                // .style("stroke-width",1)
                 .call(force.drag);  //使得节点能够拖动
 
             //添加描述节点的文字
@@ -523,7 +572,7 @@ d3.csv('data/hongbao.csv', function(data) {
               .attr("class", "link")
               .transition()
               .delay(function(d, i) {
-                  return i * 20;
+                  return i * 10;
               })
               .attr("d", line);	//使用线段生成器
 
@@ -544,9 +593,9 @@ d3.csv('data/hongbao.csv', function(data) {
               })
               .style('fill', function(d) {
                   if (idSet.has(d.name)) {
-                      return 'red';
+                      return 'brown';
                   } else if (peopleSet.has(d.name)) {
-                      return 'blue';
+                      return 'gray';
                   }
               });
             //   .style("fill",function(d,i){ return color(i); });

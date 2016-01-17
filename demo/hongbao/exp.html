@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>exp</title>
+    <script src="lib/d3.js"></script>
+</head>
+<body>
+    <script type="text/javascript">
+        var svg = d3.select('body')
+            .append('svg')
+            .attr('width', 400)
+            .attr('height', 400);
+
+        svg.append('rect')
+            .attr('width', 100)
+            .attr('height', 100)
+            // .style('fill', 'red')
+            // .style('stroke', 'gray')
+            .attr('style',function(d) {
+                return 'fill:red;' + 'stroke:gray;';
+            });
+    </script>
+</body>
+</html>
