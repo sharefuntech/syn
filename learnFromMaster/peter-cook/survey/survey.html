@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Freelance Rates survey 2014</title>
+    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="chart.css">
+     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <script type="text/javascript" src='d3.v3.min.js'></script>
+    <script type="text/javascript" src='lodash.min.js'></script>
+</head>
+<body>
+    <div id="wrapper">
+      <div class="sidebar">
+        <div class="heading"><a href="http://ournameismud.co.uk/"><img src="img/mud.png" width="38"></a><span>Freelance Rates survey 2014</span></div>
+        <div class="about">
+          <div class="copy">This is an interactive visualisation of results from Cole Henley's Freelance Rates survey of 2014. There was a total of 566 respondents, each of whom is represented by a single cell. Hover over a cell to find out more about each of the freelancers.</div>
+        </div>
+        <div class="buttons">
+          <div class="prev button"><i class="fa fa-arrow-left"></i> Previous</div>
+          <div class="next button">Next <i class="fa fa-arrow-right"></i></div>
+        </div>
+        <div class="menu"></div>
+        <div class="legend">
+          <h3>Key</h3>
+        </div>
+      </div>
+
+      <div id="chart">
+        <svg width="500" height="700">
+          <g class="cells" transform="translate(1, 0)"></g>
+        </svg>
+        <div class="tooltip"></div>
+      </div>
+      <!-- <div class="social">
+        <span><a href="https://twitter.com/share" class="twitter-share-button" data-text="Freelance Rates Survey 2014 by @ournameismud visualised by @animateddata">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script></span>
+      </div> -->
+      <!-- <div class="build">Design and build <a href="http://animateddata.co.uk">Peter Cook</a><a href="http://www.informationisbeautifulawards.com/showcase/851-freelance-rates-survey-2014"><img src="img/IIBA2015_Badge_Shortlist.png"></a></div> -->
+    </div>
+    <script type="text/javascript" src='main.min.js'></script>
+</body>
+</html>

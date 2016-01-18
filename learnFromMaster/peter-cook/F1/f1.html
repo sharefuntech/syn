@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="style.css">
+     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <script type="text/javascript" src='d3.v3.min.js'></script>
+    <script type="text/javascript" src='modernizr.js'></script>
+</head>
+<body>
+    <div class="wrapper">
+    <div class="story">
+      <table>
+        <tr>
+          <td class="button back">&#9664;</td>
+          <td class="text"><td>
+          <td class="button next">&#9654;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="close button"><i class="fa fa-times-circle"></i><td>
+          <td></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="header">
+      <div class="title">F1<span>Timeline</span></div>
+
+      <div class="menu">
+        <div class="races item">
+          <select></select>
+        </div>
+        <div class="wide item">
+          WIDESCREEN
+          <input type="checkbox" name="wide"></input>
+        </div>
+      </div>
+
+      <div class="legend">
+        <div class="win item">WINNER</div>
+        <div class="podium item">PODIUM</div>
+        <div class="top-ten item">TOP 10</div>
+        <div class="finish item">OTHER</div>
+      </div>
+
+      <div class="social">
+        <span><a href="https://twitter.com/intent/tweet?original_referer=http%3A%2F%2Flocalhost%3A8000%2Ff1activedrivers%2F&amp;text=F1%20Timeline%20pic.twitter.com%2FgiGpk1VTDi&amp;tw_p=tweetbutton&amp;url=http%3A%2F%2Fcharts.animateddata.co.uk%2Ff1&amp;via=animateddata"><i class="fa fa-twitter"></i></a></span>
+        <span><a href="http://animateddata.co.uk"><i class="fa fa-info"></i></a></span>
+      </div>
+    </div>
+
+
+    <div class="x axis"></div>
+
+    <svg width="1330px" height="16800px">
+    <!-- <svg width="9000" height="16600"> -->
+      <g class="chart-container" transform="translate(30, 2)">
+        <g class="x axis" transform="translate(100, 0)"></g>
+        <g class="drivers"></g>
+      </g>
+    </svg>
+
+    <div class="tooltip">
+      <div class="race item"></div>
+      <div class="date item"></div>
+      <div class="driver item"></div>
+      <div class="position item"></div>
+      <!-- <div class="age item"></div> -->
+    </div>
+
+    <div class="footer">
+      <div>Designed and developed by <a href="http://animateddata.co.uk">Animated Data</a>. Data from <a href="http://ergast.com/mrd/">Ergast Developer API</a>.</div>
+      <div>This website is unofficial and is not associated in any way with the Formula One group of companies. F1, FORMULA ONE, FORMULA 1, FIA FORMULA ONE WORLD CHAMPIONSHIP, GRAND PRIX and related marks are trade marks of Formula One Licensing B.V.</div>
+    </div>
+    <div class="log"></div>
+  </div>
+  <script type="text/javascript" src='f1.min.js'></script>
+</body>
+</html>

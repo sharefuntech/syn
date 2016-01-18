@@ -1,0 +1,237 @@
+body {
+  background-color: #222;
+  font-family: "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 10px;
+  color: #ddd;
+}
+a {
+  color: white;
+}
+
+/*svg {border: 1px solid #ddd;}*/
+
+div.wrapper {
+  width: 1330px;
+  position: relative;
+  margin: 0 auto;
+}
+
+div.log {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  padding: 10px;
+  background-color: #111;
+  color: white;
+}
+/* HEADER */
+div.header {
+  height: 80px;
+  width: 1330px;
+  /*width: 9000px;*/
+  color: white;
+  position: fixed;
+  /*border: 1px solid #666;*/
+  margin: 0;
+  background-color: #222;
+}
+div.x.axis {
+  position: absolute;
+  margin-top: 66px;
+  left: 130px;
+  position: absolute;
+}
+div.x.axis .tick {
+  position: absolute;
+  text-align: center;
+  width: 100px;
+  color: #ddd;
+}
+
+div.header .title {
+  position: absolute;
+  top: 10px;
+  left: 5px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #ddd;
+}
+div.header .title span {
+  font-weight: 100;
+}
+div.header .menu {
+  position: absolute;
+  left: 145px;
+  top: 8px;
+}
+div.header .menu .item {
+  display: inline-block;
+  margin-right: 20px;
+}
+div.header .menu .item select {
+  background-color: #444;
+  border: none;
+  font-size: 12px;
+  border-radius: 0;
+  /*padding: 5px 20px;*/
+  margin-top: 4px;
+  color: #ddd;
+  /*-webkit-appearance: none;*/
+}
+div.header .legend {
+  position: absolute;
+  left: 450px;
+  top: 13px;
+  color: #ddd;
+  font-size: 10px;
+  line-height: 12px;
+}
+div.header .legend .item {
+  display: inline-block;
+  margin-right: 14px;
+  border-left: 6px solid;
+  padding-left: 5px;
+}
+div.header .legend .win.item { border-color: #f03b20; }
+div.header .legend .podium.item { border-color: #ffeda0; }
+div.header .legend .top-ten.item { border-color: #aaa; }
+div.header .legend .finish.item { border-color: #444; }
+
+div.header .social {
+  position: absolute;
+  left: 730px;
+  font-size: 16px;
+  top: 10px;
+}
+div.header .social span {
+  padding-right: 8px;
+}
+div.header .social span i:hover {
+  color: #aaa;
+}
+div.header .social .jules {
+  font-size: 12px;
+  color: #aaa;
+  text-decoration: none;
+}
+
+/* footer */
+div.footer {
+  position: absolute;
+  bottom: 80px;
+  font-size: 13px;
+  color: #aaa;
+}
+div.footer div {
+  padding-bottom: 10px;
+}
+
+
+svg {
+  margin-top: 80px;
+}
+g.driver.fade {
+  opacity: 0.1;
+}
+g.driver.highlight text {
+  fill: white;
+}
+g.driver.highlight line {
+  stroke: none;
+}
+g.driver text {
+  fill: #aaa;
+  text-anchor: end;
+}
+g.driver line {
+  stroke: #2a2a2a;
+  stroke-width: 0.5px;
+}
+
+g.x.axis path {
+  stroke: none;
+  fill: none;  
+}
+g.x.axis.fade {
+  opacity: 0.6;
+}
+g.x.axis line {
+  stroke: #555;
+  stroke-dasharray: 1,1;
+}
+g.x.axis text {
+  fill: none;
+}
+
+/* story */
+div.story {
+  opacity: 0;
+  position: absolute;
+  top: 300px;
+  left: 700px;
+  font-size: 15px;
+  color: white;
+  background-color: #222;
+  border: 1px solid #555;
+}
+div.story td.button {
+  padding: 0 10px;
+  vertical-align: middle;
+  cursor: pointer;
+  font-size: 12px;
+}
+div.story .text {
+  line-height: 22px;
+  font-weight: 200;  
+  padding: 10px;
+  text-align: center;
+  width: 380px;
+}
+div.story .close.button {
+  text-align: center;
+  font-size: 14px;
+  padding-bottom: 8px;
+  color: #ddd;
+}
+
+/* tooltip */
+div.tooltip {
+  opacity: 0;
+  display: none;
+  position: absolute;
+  background-color: #111;
+  width: 200px;
+  border: 1px solid #555;
+  color: white;
+  padding: 10px;
+}
+div.tooltip .item {
+  text-align: center;
+  padding-bottom: 8px;
+}
+div.tooltip .date.item {
+  font-size: 12px;
+}
+div.tooltip .race.item {
+  font-size: 16px;
+}
+div.tooltip .position.item {
+  font-size: 16px;
+  padding-bottom: 0;
+}
+
+/* fallback */
+.fallback {
+  background-color: black !important;
+  position: absolute;
+  top: 200px;
+  left: 530px;
+  width: 300px;
+  background-color: white;
+  padding: 20px;
+  font-size: 16px;
+  line-height: 22px;
+  border: 1px solid #ddd;
+  text-align: center;
+}

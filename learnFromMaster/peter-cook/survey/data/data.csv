@@ -1,0 +1,567 @@
+location,skillset,age,dayRate,yearsFreelance,charge,requestDeposit,workRelationships,gender,dayRateCat
+London,mixed,25-29,40,2-5,By the project,25-50%,mixed,Male,0-100
+East Midlands,DES,25-29,42,0-1,By the project,10-25%,direct,Male,0-100
+Scotland,DEV,25-29,50,6-9,By the hour,10-25%,mixed,Male,0-100
+South West,mixed,35-39,50,14-17,By the project,notUsually,direct,Male,0-100
+Yorkshire & The Humber,mixed,25-29,$50,2-5,By the project,25-50%,mixed,Male,0-100
+South East,DES,20-24,75,0-1,By the hour,notUsually,direct,Male,0-100
+East Midlands,mixed,15-19,75,0-1,By the hour,25-50%,direct,Male,0-100
+Northern Ireland,DES,20-24,75,0-1,By the hour,notUsually,direct,Male,0-100
+London,DEV,25-29,75,2-5,By the month,notUsually,direct,Female,0-100
+London,DES,25-29,80,2-5,By the project,10-25%,mixed,Male,0-100
+North East,DES,25-29,£80,2-5,By the hour,notUsually,direct,Male,0-100
+West Midlands,DES,20-24,80,0-1,By the hour,10-25%,direct,Male,0-100
+London,DES,25-29,85,0-1,By the project,notUsually,mixed,Male,0-100
+Yorkshire & The Humber,mixed,30-34,£90,6-9,By the project,notUsually,direct,Male,0-100
+South West,mixed,15-19,100,0-1,By the day,10-25%,direct,Male,100-199
+North East,DES,20-24,100,0-1,By the project,notUsually,direct,Male,100-199
+London,DEV,20-24,£100,2-5,By the day,notUsually,mixed,Male,100-199
+South East,mixed,35-39,100,6-9,By the project,25-50%,mixed,Male,100-199
+London,mixed,30-34,100,2-5,By the project,25-50%,mixed,Male,100-199
+North West,DES,30-34,100,2-5,By the project,25-50%,direct,Male,100-199
+North West,DEV,30-34,100,0-1,By the hour,notUsually,direct,Male,100-199
+Northern Ireland,DES,35-39,100,2-5,By the project,notUsually,direct,Male,100-199
+North East,DES,20-24,100,0-1,By the project,0-10%,mixed,Male,100-199
+London,DES,30-34,100,2-5,By the day,25-50%,mixed,Male,100-199
+South West,DEV,40-44,£110,0-1,By the hour,notUsually,direct,Male,100-199
+London,mixed,25-29,£110,0-1,By the day,?,direct,Female,100-199
+London,DES,25-29,120,2-5,By the day,10-25%,mixed,Male,100-199
+London,DEV,20-24,120,6-9,Varies per project,10-25%,direct,Male,100-199
+Scotland,DEV,15-19,120,0-1,By the project,10-25%,mixed,Male,100-199
+West Midlands,DEV,25-29,£120,0-1,By the project,25-50%,direct,Male,100-199
+South West,DEV,40-44,120,2-5,By the hour,notUsually,mixed,Male,100-199
+Northern Ireland,mixed,30-34,120,6-9,By the project,10-25%,mixed,Male,100-199
+South West,DES,35-39,120,2-5,By the hour,notUsually,mixed,Male,100-199
+West Midlands,DES,40-44,120,10-13,Varies per project,25-50%,mixed,Male,100-199
+South West,DES,25-29,£120,2-5,By the month,notUsually,direct,Male,100-199
+North West,DES,20-24,120,2-5,By the hour,notUsually,direct,Male,100-199
+South West,DES,40-44,125,2-5,By the day,notUsually,agencies,Male,100-199
+South West,DES,35-39,£130,0-1,By the day,notUsually,direct,Female,100-199
+North East,DES,20-24,140,2-5,By the hour,notUsually,mixed,Male,100-199
+South East,mixed,25-29,£140,2-5,By the project,25-50%,mixed,Male,100-199
+South East,mixed,15-19,150,2-5,Varies per project,25-50%,direct,Male,100-199
+South East,mixed,40-44,150,10-13,By the month,25-50%,direct,Male,100-199
+Yorkshire & The Humber,DEV,45+,£150,2-5,By the project,10-25%,direct,Male,100-199
+South East,mixed,15-19,150,2-5,Varies per project,fixed,mixed,Male,100-199
+Scotland,DES,30-34,150,10-13,By the hour,fixed,direct,Male,100-199
+London,mixed,20-24,150,2-5,Varies per project,?,direct,Male,100-199
+London,mixed,30-34,150,2-5,By the project,notUsually,direct,Male,100-199
+North East,DEV,25-29,150,2-5,By the day,25-50%,agencies,Male,100-199
+Yorkshire & The Humber,mixed,30-34,150,2-5,By the day,25-50%,direct,Male,100-199
+London,DES,45+,150,2-5,By the hour,notUsually,mixed,Female,100-199
+West Midlands,mixed,40-44,150,0-1,By the project,notUsually,direct,Male,100-199
+Yorkshire & The Humber,mixed,25-29,160,2-5,By the project,25-50%,mixed,Male,100-199
+South West,mixed,25-29,160,2-5,By the hour,notUsually,direct,Male,100-199
+Northern Ireland,DES,30-34,160,2-5,By the hour,10-25%,mixed,Male,100-199
+South West,mixed,40-44,161,0-1,By the project,25-50%,mixed,Male,100-199
+London,DES,25-29,£165,0-1,By the day,25-50%,direct,Male,100-199
+South East,mixed,20-24,£175,0-1,By the project,25-50%,agencies,Male,100-199
+South West,DEV,25-29,175,0-1,Varies per project,notUsually,direct,Male,100-199
+East of England,DEV,25-29,175,2-5,By the day,25-50%,direct,Male,100-199
+North West,mixed,20-24,180,2-5,By the project,50+%,mixed,Male,100-199
+London,DES,25-29,180,0-1,By the project,25-50%,direct,Female,100-199
+London,DES,25-29,180,2-5,By the project,50+%,direct,Male,100-199
+South West,mixed,40-44,£180,2-5,By the hour,10-25%,direct,Male,100-199
+South West,DEV,30-34,200,2-5,By the project,25-50%,mixed,Male,200-299
+South West,DEV,25-29,200,0-1,By the hour,notUsually,direct,Male,200-299
+South West,DEV,20-24,£200,0-1,By the hour,25-50%,agencies,Male,200-299
+Scotland,DEV,35-39,200,14-17,By the hour,10-25%,mixed,Male,200-299
+Wales,mixed,20-24,200,2-5,Varies per project,notUsually,agencies,Male,200-299
+South East,DES,35-39,£200,2-5,By the project,25-50%,direct,Female,200-299
+Scotland,mixed,35-39,200,10-13,Varies per project,notUsually,mixed,Male,200-299
+London,mixed,25-29,200,6-9,Varies per project,notUsually,mixed,?,200-299
+South West,DES,20-24,£200,0-1,By the hour,25-50%,direct,Male,200-299
+North West,mixed,25-29,200,0-1,By the hour,50+%,mixed,Male,200-299
+East of England,DEV,20-24,£200,0-1,Varies per project,25-50%,mixed,Male,200-299
+East of England,DEV,25-29,£200,0-1,By the project,notUsually,agencies,Male,200-299
+London,mixed,20-24,£200,0-1,By the day,10-25%,agencies,Female,200-299
+South East,DEV,40-44,£200,6-9,By the project,10-25%,direct,Male,200-299
+South West,DES,25-29,£200,0-1,Varies per project,notUsually,direct,Female,200-299
+South West,mixed,30-34,200,2-5,By the project,25-50%,direct,Male,200-299
+North West,DEV,25-29,200,6-9,Varies per project,notUsually,mixed,Male,200-299
+North East,mixed,40-44,£200,2-5,Varies per project,10-25%,mixed,Male,200-299
+Yorkshire & The Humber,DEV,30-34,£200,6-9,By the hour,notUsually,mixed,Male,200-299
+London,DEV,40-44,200,6-9,By the month,fixed,direct,Male,200-299
+South East,mixed,25-29,200,2-5,By the day,notUsually,agencies,Male,200-299
+London,DEV,20-24,200,0-1,By the day,25-50%,mixed,Male,200-299
+London,DES,25-29,200,2-5,By the day,notUsually,direct,Male,200-299
+West Midlands,DEV,35-39,200,2-5,Varies per project,notUsually,direct,Male,200-299
+East of England,DEV,45+,200,10-13,By the project,notUsually,direct,Male,200-299
+Wales,DEV,40-44,£200,2-5,By the project,25-50%,direct,Male,200-299
+South East,DEV,25-29,200,2-5,By the hour,25-50%,direct,Male,200-299
+London,DEV,30-34,200,2-5,By the project,fixed,direct,Male,200-299
+East of England,DES,30-34,200,0-1,By the hour,10-25%,direct,Male,200-299
+East Midlands,DEV,35-39,200,10-13,By the project,25-50%,direct,Male,200-299
+Scotland,DEV,35-39,£200,2-5,By the day,notUsually,mixed,Male,200-299
+North East,DES,25-29,200,0-1,By the hour,notUsually,direct,Male,200-299
+East of England,DEV,35-39,200,6-9,By the hour,25-50%,direct,Male,200-299
+West Midlands,mixed,25-29,£200,0-1,By the hour,10-25%,direct,Male,200-299
+South East,DES,15-19,£200,0-1,By the project,50+%,mixed,Male,200-299
+?,DES,35-39,200,?,?,?,?,?,200-299
+Yorkshire & The Humber,mixed,35-39,£200,2-5,By the hour,25-50%,mixed,Male,200-299
+South West,DEV,25-29,200,2-5,Varies per project,25-50%,mixed,Male,200-299
+London,mixed,25-29,200,2-5,By the project,50+%,direct,Male,200-299
+Northern Ireland,mixed,25-29,200,2-5,By the hour,25-50%,mixed,Female,200-299
+South West,DES,25-29,£200,0-1,By the hour,notUsually,direct,Female,200-299
+South East,mixed,20-24,200,2-5,By the hour,notUsually,direct,Male,200-299
+South East,mixed,35-39,200,6-9,By the day,notUsually,direct,Male,200-299
+North West,mixed,35-39,£210,0-1,By the project,notUsually,agencies,Male,200-299
+West Midlands,DEV,35-39,210,2-5,Varies per project,25-50%,mixed,Male,200-299
+West Midlands,mixed,25-29,210,0-1,By the day,notUsually,agencies,Male,200-299
+South West,mixed,25-29,216,10-13,By the hour,notUsually,mixed,Male,200-299
+South East,DEV,30-34,220,2-5,Varies per project,notUsually,mixed,Female,200-299
+Scotland,mixed,25-29,220,0-1,By the hour,25-50%,mixed,Male,200-299
+Yorkshire & The Humber,DEV,30-34,220,0-1,By the day,notUsually,direct,Male,200-299
+North West,mixed,30-34,220,2-5,By the project,25-50%,mixed,Male,200-299
+Wales,DEV,35-39,225,2-5,By the project,10-25%,agencies,Female,200-299
+North West,DEV,35-39,225,2-5,By the project,50+%,freelancers,Male,200-299
+Scotland,mixed,30-34,227,0-1,By the week,25-50%,mixed,Male,200-299
+South West,DEV,40-44,230,0-1,By the hour,25-50%,direct,Male,200-299
+South West,DES,45+,230,10-13,By the day,notUsually,direct,Male,200-299
+Wales,mixed,40-44,234,2-5,By the project,25-50%,direct,Male,200-299
+Northern Ireland,mixed,30-34,240,2-5,By the day,25-50%,direct,Male,200-299
+London,DEV,25-29,240,2-5,By the month,notUsually,direct,Male,200-299
+London,mixed,20-24,240,2-5,By the day,25-50%,direct,Male,200-299
+Yorkshire & The Humber,DEV,20-24,240,0-1,By the week,25-50%,mixed,Male,200-299
+South West,DEV,30-34,240,10-13,By the hour,10-25%,mixed,Male,200-299
+South West,mixed,20-24,£240,2-5,Varies per project,25-50%,direct,Male,200-299
+Wales,DEV,20-24,240,10-13,Varies per project,25-50%,mixed,Male,200-299
+South East,DES,20-24,£240,0-1,By the hour,50+%,direct,Female,200-299
+West Midlands,mixed,25-29,240,2-5,By the project,50+%,mixed,Female,200-299
+South East,DEV,45+,240,6-9,Varies per project,notUsually,direct,Male,200-299
+South East,mixed,45+,240,18+,By the project,25-50%,direct,Male,200-299
+London,DES,25-29,$240,6-9,By the hour,0-10%,direct,Male,100-199
+London,mixed,25-29,240,2-5,By the hour,25-50%,mixed,Male,200-299
+South West,mixed,20-24,240,2-5,By the hour,50+%,freelancers,Male,200-299
+London,mixed,25-29,240,0-1,By the day,10-25%,direct,Male,200-299
+Scotland,mixed,25-29,240,6-9,By the project,25-50%,direct,Male,200-299
+South West,DEV,25-29,250,2-5,By the hour,25-50%,mixed,Male,200-299
+London,DEV,30-34,£250,2-5,By the project,0-10%,direct,Male,200-299
+South West,mixed,20-24,250,2-5,By the day,25-50%,?,Male,200-299
+London,mixed,25-29,250,2-5,By the day,notUsually,mixed,Male,200-299
+Scotland,mixed,30-34,250,2-5,Varies per project,25-50%,direct,Male,200-299
+London,DEV,20-24,250,0-1,By the day,25-50%,mixed,Male,200-299
+South West,DEV,25-29,£250,0-1,By the day,25-50%,agencies,Male,200-299
+South East,DEV,20-24,250,0-1,By the hour,notUsually,agencies,Male,200-299
+South East,mixed,25-29,£250,0-1,By the hour,25-50%,mixed,Male,200-299
+South West,DEV,15-19,250,0-1,Varies per project,25-50%,direct,Male,200-299
+North West,mixed,25-29,250,2-5,By the hour,25-50%,mixed,Male,200-299
+South West,DES,35-39,250,14-17,By the day,notUsually,agencies,Male,200-299
+Scotland,DEV,25-29,£250,2-5,By the hour,notUsually,mixed,Male,200-299
+London,DES,30-34,250,0-1,By the day,notUsually,direct,Female,200-299
+North West,DEV,30-34,250,0-1,By the day,0-10%,direct,Male,200-299
+South West,mixed,30-34,£250,10-13,By the project,25-50%,direct,Male,200-299
+Yorkshire & The Humber,DEV,25-29,250,2-5,By the day,25-50%,agencies,Male,200-299
+South East,DEV,25-29,£250,2-5,By the day,25-50%,direct,Male,200-299
+South West,DEV,20-24,250,0-1,By the day,?,mixed,Male,200-299
+West Midlands,DEV,30-34,250,2-5,By the project,25-50%,mixed,Male,200-299
+London,DES,45+,250,6-9,Varies per project,notUsually,mixed,Male,200-299
+North East,mixed,45+,250,6-9,By the project,10-25%,direct,Male,200-299
+Scotland,mixed,30-34,£250,2-5,By the day,notUsually,mixed,Male,200-299
+South East,DEV,25-29,250,2-5,By the project,notUsually,mixed,Male,200-299
+North West,DEV,25-29,250,0-1,By the day,25-50%,direct,Male,200-299
+South East,DEV,35-39,250,2-5,By the project,25-50%,mixed,Male,200-299
+Wales,DEV,30-34,250,6-9,Varies per project,notUsually,direct,Male,200-299
+North West,DEV,30-34,253.2,0-1,By the project,notUsually,agencies,Male,200-299
+Yorkshire & The Humber,mixed,30-34,260,0-1,By the week,notUsually,mixed,Male,200-299
+South West,DEV,20-24,262.5,2-5,By the hour,0-10%,direct,Male,200-299
+West Midlands,mixed,35-39,£265,2-5,By the hour,notUsually,mixed,Male,200-299
+East of England,mixed,30-34,£265,0-1,By the day,25-50%,mixed,Male,200-299
+London,DEV,25-29,270,0-1,By the day,10-25%,direct,Male,200-299
+London,DES,25-29,270,0-1,By the month,notUsually,direct,Male,200-299
+London,DES,30-34,£270,2-5,By the project,25-50%,direct,Male,200-299
+South West,DEV,25-29,275,2-5,By the project,10-25%,mixed,Male,200-299
+South East,DEV,30-34,275,2-5,By the week,notUsually,mixed,Male,200-299
+West Midlands,DEV,25-29,280,2-5,Varies per project,0-10%,mixed,Female,200-299
+North East,DEV,30-34,280,0-1,By the project,25-50%,direct,Male,200-299
+South West,DEV,25-29,280,2-5,By the project,10-25%,direct,Male,200-299
+North West,DEV,25-29,280,2-5,By the day,notUsually,mixed,Male,200-299
+South East,DEV,30-34,280,0-1,By the hour,notUsually,direct,Male,200-299
+East Midlands,CON,20-24,£280,0-1,By the hour,notUsually,mixed,Female,200-299
+Wales,DES,30-34,280,2-5,By the project,25-50%,mixed,Male,200-299
+Wales,mixed,20-24,280,2-5,By the hour,10-25%,mixed,Male,200-299
+South East,mixed,25-29,280,2-5,Varies per project,25-50%,mixed,Female,200-299
+Northern Ireland,DEV,40-44,280,2-5,By the project,25-50%,direct,Female,200-299
+London,mixed,25-29,280,0-1,By the project,25-50%,?,Female,200-299
+Scotland,DEV,45+,280,10-13,By the hour,notUsually,freelancers,Female,200-299
+West Midlands,DES,30-34,£280,0-1,By the hour,notUsually,agencies,Male,200-299
+Scotland,DEV,35-39,280,6-9,By the hour,notUsually,mixed,Male,200-299
+South West,DEV,35-39,280,2-5,By the hour,25-50%,mixed,Male,200-299
+South West,mixed,35-39,280,0-1,By the hour,notUsually,mixed,Male,200-299
+Scotland,DEV,35-39,280,2-5,By the project,notUsually,mixed,Male,200-299
+Yorkshire & The Humber,mixed,40-44,280,10-13,By the project,25-50%,mixed,Male,200-299
+South East,DEV,45+,280,14-17,By the day,notUsually,direct,Male,200-299
+South West,mixed,25-29,280,6-9,By the day,0-10%,mixed,Male,200-299
+London,DEV,30-34,280,10-13,By the hour,0-10%,direct,Male,200-299
+North West,DEV,30-34,280,0-1,By the day,25-50%,mixed,Male,200-299
+West Midlands,DEV,35-39,281.25,2-5,By the day,notUsually,direct,Male,200-299
+South East,DEV,45+,£288,10-13,By the hour,25-50%,direct,Male,200-299
+South West,DEV,30-34,300,2-5,Varies per project,25-50%,mixed,Male,300-399
+South West,mixed,25-29,300,2-5,By the hour,notUsually,direct,Male,300-399
+North West,DEV,30-34,300,2-5,By the day,notUsually,agencies,Male,300-399
+South East,DEV,30-34,300,10-13,Varies per project,25-50%,agencies,Male,300-399
+South East,DEV,30-34,300,6-9,?,25-50%,mixed,Male,300-399
+North West,DEV,25-29,£300,2-5,Varies per project,notUsually,freelancers,Male,300-399
+Scotland,mixed,25-29,300,2-5,By the day,25-50%,mixed,Male,300-399
+London,DEV,25-29,300,0-1,By the day,0-10%,mixed,Male,300-399
+London,DEV,30-34,300,0-1,By the day,50+%,mixed,Male,300-399
+Scotland,mixed,25-29,300,0-1,By the day,notUsually,mixed,Male,300-399
+South East,DEV,35-39,300,2-5,By the hour,notUsually,mixed,Female,300-399
+London,mixed,30-34,300,0-1,By the month,25-50%,direct,Male,300-399
+West Midlands,DEV,25-29,300,2-5,By the project,10-25%,mixed,Female,300-399
+South West,mixed,35-39,300,6-9,By the project,25-50%,mixed,Male,300-399
+South East,DEV,25-29,300,6-9,By the project,25-50%,mixed,Male,300-399
+London,mixed,30-34,300,2-5,By the day,notUsually,mixed,Male,300-399
+North West,DEV,30-34,300,2-5,By the hour,notUsually,mixed,Male,300-399
+London,mixed,20-24,300,2-5,By the project,25-50%,mixed,Male,300-399
+East Midlands,DEV,25-29,£300,0-1,By the hour,10-25%,mixed,Male,300-399
+North West,DEV,35-39,300,2-5,?,?,?,?,300-399
+London,DEV,25-29,300,2-5,By the hour,50+%,mixed,Male,300-399
+Scotland,mixed,35-39,300,6-9,Varies per project,50+%,direct,Female,300-399
+Scotland,mixed,25-29,300,2-5,By the project,25-50%,mixed,Male,300-399
+South East,mixed,30-34,300,2-5,By the project,50+%,direct,Male,300-399
+South East,mixed,30-34,300,2-5,By the day,25-50%,mixed,Male,300-399
+East Midlands,DEV,40-44,300,6-9,By the project,25-50%,mixed,Female,300-399
+South West,DEV,30-34,300,2-5,By the project,notUsually,mixed,Male,300-399
+West Midlands,DES,30-34,300,0-1,By the project,25-50%,direct,Male,300-399
+Yorkshire & The Humber,DES,15-19,£300,2-5,By the week,10-25%,direct,Male,300-399
+Wales,DEV,40-44,£300,2-5,By the day,notUsually,mixed,Male,300-399
+South West,DEV,25-29,£300,2-5,By the hour,10-25%,mixed,Male,300-399
+Yorkshire & The Humber,mixed,35-39,300,2-5,By the project,notUsually,direct,Male,300-399
+South West,DEV,30-34,300,2-5,By the day,25-50%,direct,Male,300-399
+South East,DES,35-39,£300,2-5,By the day,notUsually,agencies,Female,300-399
+South East,DEV,25-29,300,2-5,By the day,notUsually,direct,Male,300-399
+London,DES,35-39,300,2-5,Varies per project,notUsually,mixed,Male,300-399
+London,DES,25-29,£300,2-5,By the project,notUsually,direct,Male,300-399
+Yorkshire & The Humber,DES,35-39,300,2-5,By the hour,notUsually,mixed,Male,300-399
+London,DEV,25-29,300,0-1,By the day,notUsually,agencies,Male,300-399
+South East,DEV,25-29,300,2-5,Varies per project,notUsually,mixed,Male,300-399
+London,DEV,25-29,300,2-5,Varies per project,notUsually,direct,Male,300-399
+Scotland,DEV,25-29,300,2-5,By the project,notUsually,mixed,Male,300-399
+London,DEV,30-34,300,2-5,By the week,notUsually,direct,Male,300-399
+West Midlands,DEV,30-34,300,10-13,By the project,25-50%,mixed,Male,300-399
+East of England,mixed,40-44,300,2-5,By the project,25-50%,direct,Male,300-399
+North East,DEV,35-39,300,2-5,By the hour,25-50%,mixed,Male,300-399
+South West,DEV,30-34,300,2-5,By the day,notUsually,mixed,Male,300-399
+South East,DEV,25-29,300,6-9,Varies per project,notUsually,mixed,Male,300-399
+South East,mixed,30-34,300,2-5,By the hour,25-50%,direct,Male,300-399
+East Midlands,mixed,30-34,315,2-5,By the day,50+%,agencies,Male,300-399
+Northern Ireland,DEV,30-34,315,0-1,By the day,notUsually,agencies,Male,300-399
+London,mixed,20-24,320,0-1,By the day,?,direct,Male,300-399
+Wales,mixed,25-29,320,2-5,Varies per project,25-50%,mixed,Male,300-399
+East of England,DEV,20-24,320,2-5,By the project,25-50%,direct,Male,300-399
+North East,DEV,35-39,320,2-5,By the project,25-50%,direct,Male,300-399
+West Midlands,DEV,30-34,320,2-5,Varies per project,notUsually,agencies,Male,300-399
+South East,DEV,20-24,320,2-5,Varies per project,25-50%,freelancers,Male,300-399
+London,DES,30-34,320,2-5,By the week,notUsually,mixed,Male,300-399
+East Midlands,DEV,30-34,£320,2-5,By the day,25-50%,mixed,Male,300-399
+East of England,DEV,25-29,320,2-5,By the hour,10-25%,mixed,Male,300-399
+South West,mixed,35-39,320,2-5,By the project,notUsually,mixed,Male,300-399
+Yorkshire & The Humber,mixed,40-44,320,2-5,By the week,notUsually,mixed,Male,300-399
+South East,DEV,30-34,320,2-5,By the project,25-50%,mixed,Male,300-399
+South East,DES,35-39,£320,2-5,Varies per project,25-50%,mixed,Male,300-399
+London,DES,25-29,$320,6-9,By the hour,notUsually,direct,Male,200-299
+South East,DEV,40-44,320,6-9,By the hour,10-25%,direct,Male,300-399
+South West,DES,25-29,320,0-1,By the day,25-50%,mixed,Male,300-399
+North West,DES,35-39,320,2-5,Varies per project,notUsually,direct,Male,300-399
+Scotland,mixed,30-34,320,2-5,By the day,notUsually,mixed,Male,300-399
+South West,DEV,35-39,320,10-13,Varies per project,25-50%,mixed,Male,300-399
+South West,DES,40-44,£325,2-5,By the day,notUsually,agencies,Male,300-399
+Wales,DES,20-24,£325,2-5,By the week,25-50%,direct,Male,300-399
+West Midlands,DEV,35-39,325,2-5,By the day,notUsually,mixed,Male,300-399
+South East,DEV,45+,325,10-13,By the day,notUsually,direct,Male,300-399
+North West,mixed,25-29,330,2-5,By the day,25-50%,mixed,Male,300-399
+South West,mixed,40-44,330,6-9,By the day,10-25%,mixed,Male,300-399
+London,DEV,30-34,335,2-5,By the month,notUsually,agencies,Male,300-399
+London,DEV,25-29,350,0-1,By the month,25-50%,mixed,Male,300-399
+East of England,DEV,30-34,350,6-9,By the project,25-50%,direct,Male,300-399
+London,DEV,25-29,350,0-1,By the day,notUsually,mixed,Male,300-399
+Scotland,DEV,30-34,350,0-1,By the day,25-50%,mixed,Male,300-399
+East Midlands,mixed,20-24,350,2-5,By the day,25-50%,mixed,Male,300-399
+South East,DEV,25-29,350,0-1,By the project,notUsually,mixed,Male,300-399
+North West,mixed,25-29,350,0-1,By the day,25-50%,mixed,Male,300-399
+South East,mixed,25-29,350,0-1,By the project,50+%,mixed,Female,300-399
+North West,DEV,30-34,£350,0-1,By the day,notUsually,direct,Male,300-399
+Scotland,DEV,35-39,350,6-9,By the project,notUsually,mixed,Male,300-399
+South West,DES,40-44,£350,14-17,Varies per project,notUsually,direct,Male,300-399
+London,DES,35-39,350,6-9,By the project,notUsually,direct,Female,300-399
+East Midlands,mixed,30-34,350,2-5,By the project,notUsually,mixed,Male,300-399
+London,CON,30-34,350,2-5,By the project,notUsually,direct,Male,300-399
+London,mixed,25-29,350,0-1,Varies per project,10-25%,mixed,Female,300-399
+London,DEV,25-29,350,2-5,By the week,25-50%,mixed,Male,300-399
+South West,DEV,30-34,350,0-1,By the day,notUsually,direct,Male,300-399
+Scotland,mixed,25-29,350,6-9,By the day,notUsually,mixed,Male,300-399
+London,DEV,30-34,350,0-1,?,25-50%,direct,Male,300-399
+London,mixed,35-39,350,0-1,By the project,notUsually,mixed,Male,300-399
+North West,mixed,20-24,350,0-1,By the hour,0-10%,mixed,Male,300-399
+South West,mixed,30-34,350,2-5,By the day,notUsually,mixed,Male,300-399
+Yorkshire & The Humber,DEV,35-39,350,2-5,By the day,0-10%,direct,Male,300-399
+Scotland,DEV,35-39,350,6-9,Varies per project,10-25%,agencies,Male,300-399
+South East,DEV,45+,350,18+,By the day,notUsually,direct,Male,300-399
+London,mixed,25-29,350,6-9,By the day,25-50%,mixed,Male,300-399
+South East,DEV,40-44,350,6-9,By the day,25-50%,agencies,Male,300-399
+South East,DEV,40-44,350,10-13,By the week,notUsually,direct,Male,300-399
+South West,DEV,45+,350,6-9,By the month,notUsually,mixed,Male,300-399
+South East,DEV,45+,350,10-13,Varies per project,25-50%,mixed,Male,300-399
+East of England,DEV,25-29,350,2-5,Varies per project,25-50%,mixed,Male,300-399
+East of England,DEV,25-29,360,0-1,By the day,10-25%,mixed,Male,300-399
+South West,mixed,35-39,360,0-1,By the hour,notUsually,mixed,Male,300-399
+Yorkshire & The Humber,mixed,40-44,360,14-17,By the day,25-50%,mixed,Male,300-399
+Scotland,DEV,40-44,360,10-13,Varies per project,notUsually,mixed,Male,300-399
+London,DEV,35-39,370,2-5,By the day,notUsually,direct,Female,300-399
+London,mixed,25-29,375,2-5,Varies per project,25-50%,mixed,Male,300-399
+South East,mixed,25-29,375,2-5,By the project,notUsually,mixed,Male,300-399
+London,DEV,30-34,375,2-5,?,?,?,?,300-399
+South West,DEV,30-34,375,2-5,Varies per project,25-50%,mixed,Male,300-399
+South East,MAN,40-44,375,2-5,By the day,notUsually,agencies,Male,300-399
+South East,DEV,35-39,375,6-9,By the day,0-10%,mixed,Male,300-399
+London,DEV,45+,375,18+,By the month,0-10%,direct,Male,300-399
+South West,DES,30-34,375,2-5,By the hour,25-50%,mixed,Female,300-399
+Yorkshire & The Humber,DEV,35-39,375,6-9,By the day,notUsually,agencies,Male,300-399
+London,DES,25-29,375,2-5,By the hour,fixed,direct,Male,300-399
+West Midlands,DEV,30-34,375,2-5,By the day,notUsually,direct,Male,300-399
+London,DEV,30-34,380,2-5,By the day,notUsually,direct,Male,300-399
+South East,DEV,40-44,400,6-9,By the day,25-50%,freelancers,Male,400-499
+North West,DES,20-24,400,0-1,By the project,50+%,mixed,Male,400-499
+South West,DEV,25-29,£400,2-5,By the day,25-50%,direct,Male,400-499
+South East,DES,25-29,400,2-5,By the project,notUsually,direct,Male,400-499
+North West,DEV,25-29,400,6-9,By the day,10-25%,mixed,Male,400-499
+London,DEV,35-39,400,6-9,?,notUsually,mixed,Male,400-499
+London,DEV,25-29,400,2-5,By the day,notUsually,mixed,Male,400-499
+South West,mixed,40-44,400,2-5,By the day,notUsually,mixed,Male,400-499
+London,mixed,30-34,400,2-5,By the hour,notUsually,mixed,Male,400-499
+London,DEV,30-34,400,2-5,By the day,notUsually,direct,Male,400-499
+South East,DES,25-29,400,2-5,By the project,50+%,direct,Male,400-499
+South West,DEV,35-39,400,18+,By the day,10-25%,direct,Male,400-499
+South West,mixed,40-44,400,10-13,By the day,25-50%,direct,Male,400-499
+London,DES,25-29,£400,2-5,By the day,notUsually,direct,Male,400-499
+London,MAR,30-34,400,2-5,By the month,25-50%,mixed,Male,400-499
+London,DEV,45+,400,18+,By the month,notUsually,mixed,Male,400-499
+South East,DES,20-24,£400,2-5,By the hour,notUsually,direct,Male,400-499
+London,DES,35-39,400,0-1,By the day,25-50%,mixed,Female,400-499
+East of England,DES,20-24,£400,2-5,By the day,10-25%,mixed,Male,400-499
+Scotland,mixed,25-29,400,2-5,Varies per project,25-50%,mixed,Male,400-499
+London,mixed,25-29,400,0-1,By the hour,10-25%,direct,Male,400-499
+Scotland,DEV,35-39,400,6-9,By the project,25-50%,direct,Male,400-499
+Scotland,DEV,30-34,400,0-1,By the day,notUsually,direct,Male,400-499
+South East,DEV,35-39,400,6-9,By the day,notUsually,mixed,Male,400-499
+South West,DEV,35-39,400,2-5,By the project,25-50%,mixed,Male,400-499
+Wales,DEV,20-24,400,0-1,By the day,notUsually,mixed,Male,400-499
+East of England,mixed,30-34,400,2-5,Varies per project,25-50%,direct,Male,400-499
+West Midlands,DEV,35-39,400,14-17,By the hour,25-50%,direct,Male,400-499
+London,DEV,25-29,400,2-5,By the hour,25-50%,agencies,Male,400-499
+North West,mixed,20-24,400,2-5,By the day,25-50%,mixed,Male,400-499
+South West,DEV,35-39,400,6-9,By the day,notUsually,agencies,Male,400-499
+Scotland,MAR,25-29,400,2-5,By the hour,notUsually,mixed,Male,400-499
+London,DES,40-44,400,2-5,Varies per project,notUsually,mixed,Male,400-499
+South East,DEV,40-44,400,10-13,By the project,notUsually,mixed,Male,400-499
+South East,DES,35-39,400,2-5,By the day,notUsually,agencies,Male,400-499
+London,UI/UX,35-39,400,2-5,By the day,notUsually,mixed,Female,400-499
+London,DES,20-24,$400,2-5,By the hour,10-25%,direct,Male,200-299
+London,DES,30-34,400,2-5,By the hour,25-50%,direct,Male,400-499
+South East,DEV,25-29,400,2-5,By the project,25-50%,mixed,Male,400-499
+Scotland,mixed,40-44,£400,0-1,By the week,fixed,mixed,Male,400-499
+London,DEV,25-29,400,2-5,By the day,notUsually,mixed,Male,400-499
+South East,mixed,25-29,400,2-5,Varies per project,25-50%,direct,Male,400-499
+London,DEV,35-39,400,2-5,By the day,notUsually,mixed,Male,400-499
+South East,SYS,35-39,400,2-5,By the hour,notUsually,direct,Male,400-499
+South East,mixed,45+,400,18+,By the project,notUsually,direct,Male,400-499
+London,mixed,30-34,400,0-1,By the day,notUsually,mixed,Male,400-499
+South East,DEV,40-44,400,18+,By the hour,notUsually,mixed,Male,400-499
+London,mixed,30-34,420,2-5,By the project,50+%,mixed,Male,400-499
+North East,DES,30-34,420,6-9,By the day,50+%,direct,Male,400-499
+South West,DEV,35-39,425,10-13,Varies per project,25-50%,mixed,Male,400-499
+Scotland,DEV,35-39,440,2-5,Varies per project,25-50%,direct,Male,400-499
+London,mixed,30-34,450,0-1,By the day,25-50%,mixed,Male,400-499
+London,DES,30-34,450,0-1,By the month,notUsually,mixed,Male,400-499
+South East,DEV,35-39,450,2-5,By the day,notUsually,direct,Male,400-499
+North West,MAR,25-29,450,2-5,By the month,25-50%,mixed,Male,400-499
+Scotland,DEV,35-39,450,2-5,By the day,notUsually,mixed,Male,400-499
+East of England,mixed,25-29,£450,2-5,By the day,10-25%,agencies,Female,400-499
+Scotland,SYS,30-34,£450,2-5,By the day,notUsually,direct,Male,400-499
+South East,DEV,30-34,450,2-5,By the day,50+%,mixed,Male,400-499
+London,mixed,35-39,450,2-5,By the week,fixed,direct,Male,400-499
+London,DES,25-29,450,0-1,By the day,notUsually,agencies,Male,400-499
+London,DEV,35-39,450,0-1,By the day,notUsually,direct,Male,400-499
+East Midlands,DEV,25-29,450,2-5,By the day,notUsually,mixed,Male,400-499
+South East,mixed,35-39,450,6-9,By the project,notUsually,mixed,Male,400-499
+Scotland,DEV,40-44,450,10-13,By the project,notUsually,direct,Male,400-499
+London,DEV,35-39,470,10-13,By the day,notUsually,agencies,Male,400-499
+South East,DEV,45+,475,6-9,By the day,notUsually,agencies,Male,400-499
+Scotland,DEV,25-29,480,2-5,By the hour,25-50%,mixed,Male,400-499
+Northern Ireland,mixed,30-34,480,0-1,By the hour,notUsually,mixed,Male,400-499
+East Midlands,mixed,20-24,480,2-5,By the project,25-50%,direct,Male,400-499
+East of England,mixed,45+,£480,18+,By the hour,notUsually,mixed,Male,400-499
+Wales,DEV,30-34,500,0-1,By the hour,fixed,mixed,Male,500-749
+North West,DEV,40-44,500,10-13,By the day,25-50%,direct,Male,500-749
+London,mixed,25-29,500,0-1,By the month,notUsually,direct,Male,500-749
+London,DEV,15-19,500,2-5,By the hour,25-50%,direct,Male,500-749
+London,mixed,30-34,500,2-5,By the month,notUsually,direct,Male,500-749
+London,DEV,35-39,500,2-5,By the hour,notUsually,direct,Male,500-749
+London,DES,35-39,500,6-9,By the week,10-25%,mixed,Male,500-749
+South East,DEV,20-24,£500,6-9,By the day,10-25%,mixed,Female,500-749
+London,DEV,?,£500,6-9,By the day,10-25%,direct,Male,500-749
+North West,DEV,40-44,500,6-9,By the hour,notUsually,mixed,Male,500-749
+West Midlands,mixed,35-39,£500,2-5,By the day,notUsually,agencies,Male,500-749
+South West,mixed,20-24,500,2-5,By the day,notUsually,mixed,Male,500-749
+East of England,mixed,40-44,500,2-5,By the project,25-50%,direct,Male,500-749
+West Midlands,DEV,40-44,500,2-5,By the month,notUsually,mixed,Male,500-749
+North East,DES,25-29,£500,2-5,By the week,50+%,direct,Male,500-749
+East Midlands,DEV,20-24,£500,0-1,By the project,10-25%,mixed,Male,500-749
+South West,DEV,25-29,500,0-1,By the hour,notUsually,freelancers,Male,500-749
+London,DES,25-29,550,0-1,By the day,notUsually,mixed,Male,500-749
+South East,DEV,35-39,550,6-9,Varies per project,25-50%,mixed,Male,500-749
+East of England,DEV,35-39,550,2-5,By the month,notUsually,mixed,Male,500-749
+Scotland,mixed,25-29,600,6-9,Varies per project,25-50%,mixed,Male,500-749
+South West,DES,35-39,£600,10-13,By the hour,25-50%,direct,Male,500-749
+London,DEV,25-29,600,2-5,By the day,notUsually,direct,Male,500-749
+South East,DES,45+,600,14-17,By the project,notUsually,direct,Male,500-749
+South West,mixed,40-44,640,6-9,Varies per project,10-25%,direct,Male,500-749
+London,DEV,35-39,650,2-5,By the day,notUsually,mixed,Male,500-749
+London,DEV,30-34,696,6-9,By the hour,50+%,mixed,Male,500-749
+London,mixed,40-44,700,2-5,Varies per project,10-25%,mixed,Male,500-749
+London,DEV,25-29,700,6-9,By the month,notUsually,mixed,Male,500-749
+London,mixed,30-34,750,6-9,Varies per project,notUsually,mixed,Male,750-999
+South West,DES,40-44,750,10-13,Varies per project,10-25%,direct,Male,750-999
+South East,DEV,30-34,750,6-9,By the month,25-50%,direct,Male,750-999
+East Midlands,mixed,40-44,£800,10-13,By the hour,10-25%,direct,Male,750-999
+Yorkshire & The Humber,DEV,20-24,800,0-1,By the project,notUsually,direct,Male,750-999
+London,DES,25-29,£960,2-5,By the hour,50+%,direct,Male,750-999
+London,MAN,40-44,1000,0-1,By the day,notUsually,direct,Male,1000+
+West Midlands,OTH,30-34,"£1,000",10-13,By the project,25-50%,agencies,Male,0-100
+London,mixed,30-34,1000,2-5,By the project,25-50%,mixed,Male,1000+
+West Midlands,DEV,25-29,1200,2-5,By the project,25-50%,mixed,Male,1000+
+London,DEV,40-44,1200,10-13,By the hour,50+%,direct,Male,1000+
+North West,DEV,45+,£ 480,10-13,By the project,notUsually,direct,Male,400-499
+South East,DEV,15-19,£100 - 150,2-5,Varies per project,25-50%,mixed,Male,100-199
+South East,mixed,15-19,£100-115,0-1,By the hour,25-50%,mixed,Male,100-199
+Wales,DEV,30-34,£100-150,0-1,Varies per project,50+%,direct,Female,100-199
+North East,mixed,30-34,£105-140,0-1,By the hour,notUsually,mixed,Male,100-199
+West Midlands,DEV,25-29,£120 - £320,2-5,Varies per project,10-25%,mixed,Male,200-299
+East of England,mixed,30-34,£120-£200,2-5,Varies per project,notUsually,agencies,Female,100-199
+South East,mixed,35-39,£125-£150 per day,2-5,By the day,notUsually,direct,Male,100-199
+North East,mixed,30-34,£140 - £240,2-5,By the project,25-50%,mixed,Male,100-199
+East of England,mixed,25-29,£150 - £200,2-5,By the project,25-50%,direct,Male,100-199
+Scotland,DES,30-34,£180-£200,6-9,By the day,notUsually,mixed,Female,100-199
+London,DES,20-24,£180-220,0-1,By the day,25-50%,agencies,Male,200-299
+North West,mixed,20-24,£20 - £50,2-5,By the project,notUsually,direct,Male,0-100
+Wales,DES,20-24,£20-£80,0-1,By the project,notUsually,direct,Female,0-100
+North East,DEV,30-34,£200 - £300,2-5,By the project,25-50%,freelancers,Male,200-299
+North West,mixed,25-29,£200 Although this is not something I have done before,2-5,By the hour,25-50%,direct,Male,200-299
+South East,DES,30-34,£250 - £300,2-5,Varies per project,10-25%,direct,Male,200-299
+North West,mixed,25-29,£250 - £350,2-5,Varies per project,25-50%,mixed,Male,300-399
+London,DES,30-34,£250-£300,0-1,By the day,25-50%,direct,Male,200-299
+Yorkshire & The Humber,DEV,25-29,£250-£300,0-1,By the hour,25-50%,mixed,Male,200-299
+London,DES,?,£250-£300,6-9,Varies per project,notUsually,direct,Female,200-299
+South East,CON,25-29,£250-£300,2-5,By the project,notUsually,mixed,Female,200-299
+East of England,DEV,40-44,£250-£350,2-5,By the project,50+%,direct,Female,300-399
+London,mixed,35-39,£250-300,2-5,By the day,notUsually,agencies,Male,200-299
+Yorkshire & The Humber,mixed,30-34,£250-500,6-9,By the project,fixed,mixed,Male,300-399
+Yorkshire & The Humber,DEV,30-34,£300 - £400,0-1,By the day,notUsually,direct,Female,300-399
+South East,DES,35-39,£300-£400,10-13,By the day,25-50%,direct,Male,300-399
+London,DEV,35-39,£320 - 375,0-1,By the month,notUsually,agencies,Female,300-399
+South West,mixed,30-34,£350 - £450,0-1,By the day,notUsually,mixed,Female,400-499
+Scotland,DEV,45+,£350 (can vary slightly between jobs),10-13,By the hour,25-50%,direct,Male,300-399
+South West,DEV,30-34,£350-£400,0-1,By the day,notUsually,mixed,Male,300-399
+South East,DEV,45+,£350-600,10-13,By the day,10-25%,direct,Male,400-499
+London,DEV,25-29,£350+VAT,2-5,By the day,10-25%,direct,Male,300-399
+South East,mixed,35-39,£400-480,10-13,Varies per project,10-25%,mixed,Male,400-499
+South East,DEV,15-19,£50-75,0-1,By the project,notUsually,direct,Male,0-100
+London,mixed,25-29,"£600+ regularly, can go down to 450 for eight week plus, 'full time' gigs ",0-1,By the day,notUsually,mixed,Male,500-749
+London,mixed,20-24,£80-£200,2-5,By the day,50+%,mixed,Male,100-199
+West Midlands,DEV,30-34,100 - 400,6-9,By the hour,25-50%,mixed,Male,200-299
+West Midlands,DES,25-29,100-150,2-5,By the day,25-50%,direct,Male,100-199
+South West,mixed,25-29,100-160,0-1,By the project,25-50%,direct,Male,100-199
+North West,DEV,25-29,100-200,2-5,By the project,fixed,direct,Female,100-199
+North West,mixed,20-24,120 - 225,0-1,Varies per project,notUsually,mixed,Male,100-199
+Wales,DES,20-24,125-250,2-5,By the hour,25-50%,mixed,Male,100-199
+London,mixed,15-19,150 - 200,2-5,By the project,25-50%,direct,Male,100-199
+London,DES,30-34,150-200,6-9,By the hour,0-10%,mixed,Male,100-199
+Yorkshire & The Humber,mixed,20-24,150-200,2-5,Varies per project,50+%,direct,Male,100-199
+South East,DES,35-39,150-200,2-5,By the project,10-25%,direct,Male,100-199
+Yorkshire & The Humber,mixed,25-29,150-280,6-9,By the project,50+%,mixed,Male,200-299
+South West,mixed,30-34,175 - 150,6-9,By the hour,notUsually,mixed,Male,100-199
+South West,mixed,25-29,175 - 220,2-5,By the month,notUsually,agencies,Male,100-199
+Wales,mixed,35-39,175-200,0-1,By the project,25-50%,mixed,Male,100-199
+London,DEV,20-24,190-650,2-5,By the day,notUsually,direct,Male,400-499
+Yorkshire & The Humber,mixed,25-29,200 - 300,0-1,Varies per project,50+%,mixed,Male,200-299
+East of England,DEV,30-34,200-250,10-13,By the project,10-25%,mixed,Male,200-299
+North East,DEV,30-34,200-260,0-1,By the month,notUsually,agencies,Female,200-299
+South West,DEV,25-29,200-300,2-5,Varies per project,10-25%,mixed,Male,200-299
+South East,mixed,35-39,200-300,6-9,By the day,notUsually,mixed,Male,200-299
+London,DEV,45+,200-300,2-5,By the project,notUsually,direct,Male,200-299
+South East,mixed,40-44,200-400,6-9,By the project,50+%,mixed,Male,300-399
+East Midlands,DEV,30-34,230-280,2-5,Varies per project,25-50%,agencies,Male,200-299
+West Midlands,mixed,45+,240-280,2-5,Varies per project,25-50%,mixed,Male,200-299
+South West,DEV,35-39,240-300,2-5,By the hour,notUsually,mixed,Female,200-299
+North West,DEV,25-29,250 - 280,0-1,Varies per project,notUsually,mixed,Male,200-299
+East of England,mixed,40-44,250 - 350,6-9,By the hour,10-25%,mixed,Male,300-399
+South West,DEV,35-39,250-300,2-5,By the hour,notUsually,agencies,Male,200-299
+London,DES,35-39,250-300,6-9,By the day,10-25%,mixed,Female,200-299
+South West,DEV,25-29,250-300,2-5,By the day,notUsually,agencies,Male,200-299
+North East,mixed,30-34,250-300,2-5,By the day,10-25%,mixed,Male,200-299
+North West,DEV,20-24,250-350,0-1,By the day,25-50%,mixed,Male,300-399
+East Midlands,mixed,25-29,250-350,2-5,By the project,0-10%,direct,Male,300-399
+South East,DEV,35-39,250-500,6-9,Varies per project,25-50%,mixed,Male,300-399
+Wales,DEV,30-34,250–300,2-5,By the day,notUsually,mixed,Male,200-299
+Scotland,DES,25-29,250+VAT,2-5,Varies per project,25-50%,direct,Male,200-299
+Scotland,DEV,30-34,262-338,10-13,By the hour,25-50%,mixed,Male,300-399
+Wales,DES,35-39,270- 350,0-1,By the hour,10-25%,direct,Female,300-399
+South East,mixed,25-29,"280, 240",2-5,By the day,25-50%,mixed,Male,200-299
+?,mixed,25-29,280EUR,?,?,?,?,?,200-299
+South East,DEV,30-34,300 - 400,6-9,By the week,25-50%,agencies,Male,300-399
+Scotland,DES,25-29,300 - 500,2-5,By the project,25-50%,direct,Male,400-499
+South East,DEV,40-44,300 to 400,10-13,By the day,notUsually,mixed,Male,300-399
+London,DES,30-34,300-320,0-1,By the day,25-50%,mixed,Male,300-399
+North West,mixed,20-24,300-350,2-5,Varies per project,50+%,mixed,Female,300-399
+South East,DEV,30-34,300-350,2-5,By the hour,notUsually,mixed,Male,300-399
+Scotland,DEV,35-39,300-350,0-1,By the week,notUsually,direct,Male,300-399
+South West,DEV,35-39,300-360,6-9,Varies per project,10-25%,mixed,Male,300-399
+West Midlands,DEV,20-24,300-400,2-5,By the project,25-50%,mixed,Male,300-399
+London,mixed,30-34,300-400,2-5,Varies per project,25-50%,mixed,Male,300-399
+South East,mixed,35-39,300-450,0-1,By the week,notUsually,mixed,Male,300-399
+South East,DEV,35-39,300-450,0-1,Varies per project,notUsually,mixed,Male,300-399
+Scotland,DEV,35-39,300-450,0-1,Varies per project,notUsually,direct,Male,300-399
+London,mixed,35-39,300-450,2-5,Varies per project,notUsually,direct,Male,300-399
+South West,mixed,25-29,300-500,2-5,By the day,25-50%,mixed,Male,400-499
+London,MAN,40-44,300-500,2-5,By the day,notUsually,mixed,Female,400-499
+South East,DEV,40-44,300-500,10-13,By the hour,10-25%,direct,Male,400-499
+South East,DEV,35-39,300-600,10-13,Varies per project,notUsually,direct,Male,400-499
+North West,DEV,30-34,320-400,6-9,By the hour,25-50%,mixed,Male,300-399
+Scotland,DEV,20-24,320-400,0-1,By the hour,10-25%,mixed,Male,300-399
+South East,DEV,35-39,320-400,10-13,By the day,notUsually,direct,Male,300-399
+Scotland,DEV,30-34,325-400,10-13,By the project,notUsually,mixed,Male,300-399
+South West,DES,40-44,325-400,2-5,By the day,notUsually,mixed,Female,300-399
+London,mixed,25-29,350-450,0-1,By the day,25-50%,direct,Male,400-499
+South East,DEV,35-39,350-475,2-5,By the day,notUsually,direct,Male,400-499
+South West,DEV,30-34,350-500,6-9,By the project,25-50%,mixed,Male,400-499
+London,DES,40-44,375-450,0-1,By the day,notUsually,agencies,Male,400-499
+London,MAN,40-44,400 - 450,2-5,By the project,notUsually,mixed,Female,400-499
+South East,mixed,25-29,400-450,2-5,By the day,notUsually,mixed,Male,400-499
+London,DEV,20-24,400-500,0-1,By the day,notUsually,mixed,Male,400-499
+South East,SYS,40-44,400-500,2-5,By the hour,notUsually,mixed,Male,400-499
+South West,DEV,30-34,400-500,6-9,By the day,10-25%,mixed,Male,400-499
+London,DES,40-44,400-500,2-5,By the day,notUsually,mixed,Male,400-499
+South East,DEV,30-34,400-500,2-5,By the day,50+%,mixed,Female,400-499
+London,DES,40-44,400-550,2-5,By the hour,25-50%,mixed,Male,400-499
+London,DEV,30-34,410-430,0-1,By the project,25-50%,mixed,Female,400-499
+East of England,UI/UX,40-44,450 - 500,2-5,By the day,notUsually,mixed,Female,400-499
+London,DEV,30-34,450 + VAT,2-5,By the day,notUsually,mixed,Male,400-499
+London,DEV,40-44,450-500,2-5,By the day,notUsually,direct,Male,400-499
+London,DES,25-29,450-550,0-1,By the project,50+%,direct,Female,500-749
+South West,MAN,40-44,450-600,14-17,By the day,0-10%,mixed,Female,500-749
+South West,DES,35-39,450-600,2-5,By the month,notUsually,agencies,Male,500-749
+North West,DEV,25-29,460-680,6-9,By the project,10-25%,direct,Female,500-749
+London,OTH,35-39,465-600,0-1,By the day,notUsually,mixed,Female,500-749
+?,DEV,25-29,480 euro,2-5,By the hour,25-50%,mixed,Male,300-399
+South West,MAN,40-44,500-600,14-17,By the day,notUsually,mixed,Female,500-749
+South East,DES,30-34,525/375/262.50,0-1,By the hour,50+%,mixed,Male,300-399
+West Midlands,DEV,40-44,535-700,0-1,By the day,notUsually,direct,Male,500-749
+East of England,DES,20-24,"60, 100",2-5,By the hour,10-25%,direct,Male,0-100
+West Midlands,SYS,45+,600-1500,18+,Varies per project,10-25%,direct,Male,1000+
+Wales,DES,45+,600-800,14-17,By the week,fixed,direct,Male,500-749
+South West,DEV,30-34,GBP 275,10-13,By the hour,50+%,mixed,Male,200-299
+Wales,DEV,15-19,NA,2-5,By the hour,10-25%,direct,Male,0-100
+South East,mixed,45+,Varies,18+,By the project,50+%,direct,Male,0-100
+South West,DEV,20-24,Varies,0-1,By the hour,25-50%,direct,Male,0-100
+South East,?,25-29,?,?,By the hour,notUsually,direct,Male,0-100

@@ -1,0 +1,182 @@
+body {
+	font-family: "Lato", "Helvetica Neue", Helvetica, sans-serif;
+	font-size: 12px;
+}
+
+#wrapper {
+  width: 1100px;
+  margin: 0 auto;
+  margin-bottom: 100px;
+  position: relative;
+}
+#wrapper.portrait {
+  margin-bottom: 50px;
+}
+
+
+h3 {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+a {
+  color: #4EB3D3;
+}
+
+/* CONTAINERS */
+#chart, #wrapper .sidebar {
+  padding: 20px;
+}
+
+#chart svg {
+  display: block;
+  margin: 0 auto;
+}
+
+/* CHART */
+#chart {
+  position: relative;
+  padding-bottom: 50px;
+}
+
+#chart rect {
+  fill: #ddd;
+}
+#chart rect:hover {
+  stroke: #666;
+  stroke-width: 2px;
+}
+
+#chart svg g.cells text {
+  font-size: 12px;
+  font-weight: 100;
+}
+
+#chart .tooltip {
+  display: none;
+  opacity: 0;
+  width: 220px;
+  background-color: white;
+  border: 1px solid #eee;
+  position: absolute;
+  left: -100px;
+  pointer-events: none;
+  padding: 5px;
+  opacity: 0.9;
+}
+#chart .tooltip td {
+  padding: 6px;
+}
+#chart .tooltip td:first-child {
+  font-weight: bold;
+}
+
+
+
+/* SIDEBAR */
+#wrapper .sidebar {
+  position: absolute;
+  right: 0;
+  padding-bottom: 0;
+  margin-top: 17px;
+}
+#wrapper.portrait .sidebar {
+  margin-top: 0;
+}
+#wrapper .sidebar .heading {
+  margin-bottom: 20px;
+}
+#wrapper .sidebar .heading img {
+  position: relative;
+  top: 4px;
+}
+#wrapper .sidebar .heading span {
+  font-family: 'Montserrat';
+  font-size: 34px;
+  letter-spacing: -1px;
+  margin-left: 3px;
+  /*font-weight: 300;*/
+}
+#wrapper .sidebar .about {
+  line-height: 21px;
+  font-size: 16px;
+  font-weight: 300;
+  margin-bottom: 10px;
+}
+#wrapper .sidebar .about .copy div {
+  margin-bottom: 10px;
+}
+#wrapper .sidebar .buttons {
+  margin-top: 20px;
+  margin-bottom: 30px;
+  position: relative;
+} 
+#wrapper .sidebar .buttons .button {
+  color: #666;
+  cursor: pointer;
+  font-size: 18px;
+}
+#wrapper .sidebar .buttons .button:hover {
+  color: #4EB3D3;
+}
+#wrapper .sidebar .buttons .next.button {
+  position: absolute;
+  right: 5px;
+  top: 0;
+}
+#wrapper .sidebar .buttons .prev.button {
+  display: none;
+}
+#wrapper .sidebar .buttons .prev.button.active {
+  display: block;
+}
+#wrapper .sidebar .menu {
+  display: none;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+#wrapper .sidebar .menu.active {
+  display: block;
+}
+#wrapper .sidebar .menu .select {
+  margin-bottom: 10px;
+}
+#wrapper .sidebar .menu .label {
+  font-weight: bold;
+  margin-right: 6px;
+}
+#wrapper .sidebar .legend h3 {
+  display: none;
+}
+#wrapper .sidebar .legend h3.active {
+  display: block;
+}
+#wrapper .sidebar .legend div.item {
+  display: block;  
+  border-left: 16px solid;
+  padding-left: 4px;
+  margin-right: 8px;
+  line-height: 16px;
+  margin-bottom: 5px;
+}
+#wrapper.portrait .sidebar .legend div {
+  display: inline-block;
+}
+#wrapper .social {
+  position: absolute;
+  bottom: 0px;
+  left: 40px;
+  color: #999;
+}
+#wrapper .build {
+  position: absolute;
+  bottom: 0px;
+  right: 40px;
+  color: #999;
+  line-height: 22px; /* to line up with Twitter */
+}
+#wrapper .build img {
+  width: 80px;
+  position: relative;
+  top: 8px;
+}
