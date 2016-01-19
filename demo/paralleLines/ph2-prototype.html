@@ -5,24 +5,25 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 	<meta name="renderer" content="webkit">
-	<title>控制面板 vue + bootstrap</title>
+	<title>平行坐标项目开发</title>
 	<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.css">
 	<!-- dashboard布局的必须样式 -->
 	<link rel="stylesheet" href="lib/bootstrap/css/dashboard.css">
 	<link rel="stylesheet" href="src/style-bootstrap-vue.css" media="screen">
 	<script src="lib/vue.js"></script>
 	<script src="lib/d3.js"></script>
+	<script src="lib/queue.js"></script>
 	<script src="lib/bootstrap/js/jquery-1.12.0.js"></script>
 	<script src="lib/bootstrap/js/bootstrap.js"></script>
 	<style media="screen">
-		#testTooltip {
+		/*#testTooltip {
 			width: 300px;
 			height: auto;
 		}
 
 		.multiSelectionList {
 			margin-left: 10px;
-		}
+		}*/
 	</style>
 </head>
 <body>
@@ -176,7 +177,7 @@
 								<li class='multiSelectionList'>
 									<div v-for="province in geo.provinceList">
 										<input type="checkbox"  v-bind:value="province" v-model="selectedProvince">
-										<label>{{ province}}</label>
+										<label class='checkboxeLabel'>{{ province}}</label>
 									</div>
 								</li>
 							</ul>
@@ -371,6 +372,7 @@
 		</div>
 	</div>
 	<!-- ### end container ############################################### -->
-	<script src="src/c13-exp-bootstrap-vue.js"></script>
+	<!-- <script src="src/c13-exp-bootstrap-vue.js"></script> -->
+	<script src="src/ph2-prototype.js"></script>
 </body>
 </html>

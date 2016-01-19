@@ -7,6 +7,9 @@
 </head>
 <body>
     <script type="text/javascript">
+        var str = ['3', '12', '5', '21', '中文'];
+        console.log(str.sort());
+        
         var svg = d3.select('body')
             .append('svg')
             .attr('width', 400)
@@ -20,38 +23,38 @@
         //     .attr('cy', 200)
         //     .attr('r', 200);
 
-        var defs = svg.append('defs');
-
-        defs.append('linearGradient')
-            .attr('id', 'Gradient')
-            .append('stop')
-            .attr('offset', '0')
-            .attr('stop-color', 'white')
-            .attr('stop-opacity', '0')
-            .append('stop')
-            .attr('offset', '1')
-            .attr('stop-color', 'white')
-            .attr('stop-opacity', '1');
-
-        defs.append('mask')
-            .attr('id', 'Mask')
-            .append('rect')
-            .attr('width', 200)
-            .attr('height', 100)
-            .attr('fill', 'url(#Gradient)');
-
-            svg.append('rect')
-                .attr('width', 400)
-                .attr('height', 400)
-                .style('fill', 'green')
-                .style('stroke', 'gray');
-
-        svg.append('rect')
-            .attr('width', 400)
-            .attr('height', 400)
-            .style('fill', 'red')
-            .style('stroke', 'gray')
-            .attr('mask', 'url(#Mask)');
+        // var defs = svg.append('defs');
+        //
+        // defs.append('linearGradient')
+        //     .attr('id', 'Gradient')
+        //     .append('stop')
+        //     .attr('offset', '0')
+        //     .attr('stop-color', 'white')
+        //     .attr('stop-opacity', '0')
+        //     .append('stop')
+        //     .attr('offset', '1')
+        //     .attr('stop-color', 'white')
+        //     .attr('stop-opacity', '1');
+        //
+        // defs.append('mask')
+        //     .attr('id', 'Mask')
+        //     .append('rect')
+        //     .attr('width', 200)
+        //     .attr('height', 100)
+        //     .attr('fill', 'url(#Gradient)');
+        //
+        //     svg.append('rect')
+        //         .attr('width', 400)
+        //         .attr('height', 400)
+        //         .style('fill', 'green')
+        //         .style('stroke', 'gray');
+        //
+        // svg.append('rect')
+        //     .attr('width', 400)
+        //     .attr('height', 400)
+        //     .style('fill', 'red')
+        //     .style('stroke', 'gray')
+        //     .attr('mask', 'url(#Mask)');
 
     </script>
 </body>
