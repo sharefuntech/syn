@@ -15,24 +15,12 @@
 	<script src="lib/queue.js"></script>
 	<script src="lib/bootstrap/js/jquery-1.12.0.js"></script>
 	<script src="lib/bootstrap/js/bootstrap.js"></script>
-	<style media="screen">
-		/*#testTooltip {
-			width: 300px;
-			height: auto;
-		}
-
-		.multiSelectionList {
-			margin-left: 10px;
-		}*/
-	</style>
 </head>
 <body>
 	<!-- ################################################################
 	### vue template
 	################################################################ -->
-	<!-- component template of polygraph-->
-	<script type="text/x-template" id="showPanel-template">
-
+	<script type="text/x-template" id="">
 	</script>
 
 	<!-- ################################################################
@@ -82,22 +70,22 @@
 				<div id="app">
 					<div class="btn-group btn-group-justified" role="group" aria-label="...">
 						<div class="btn-group btn-group-sm" role="group">
-							<button type="button" class="btn btn-default" @click='showPanel("country")'>国家</button>
+							<button type="button" class="btn btn-default" @click='enterMode("country")'>国家</button>
 						</div>
 						<div class="btn-group btn-group-sm" role="group">
-							<button type="button" class="btn btn-default"  @click='showPanel("province")'>省级</button>
+							<button type="button" class="btn btn-default"  @click='enterMode("province")'>省级</button>
 						</div>
 						<div class="btn-group btn-group-sm" role="group">
-							<button type="button" class="btn btn-default" @click='showPanel("city")'>地市</button>
+							<button type="button" class="btn btn-default" @click='enterMode("city")'>地市</button>
 						</div>
 						<div class="btn-group btn-group-sm" role="group">
-							<button type="button" class="btn btn-default" @click='showPanel("town")'>县级</button>
+							<button type="button" class="btn btn-default" @click='enterMode("town")'>县级</button>
 						</div>
 					</div>
 
 					<!-- /////////////////////////////// -->
 					<!-- start 国家模式 -->
-					<div v-if="panelVisibility.country">
+					<div v-if="controlPanelVisibility.country">
 						<div class="dropdown">
 							<button class="btn btn-default btn-block dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
 							请选择国家列表
@@ -106,7 +94,7 @@
 							<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
 								<li  v-for="country in getCountryList"  class='multiSelectionList'>
 									<div>
-										<input type="checkbox" v-model="selectedCountry" v-bind:value="country.country">
+										<input type="checkbox" v-model="selectedStatus.selectedCountryList" v-bind:value="country.country">
 										<label>{{ country.label}}</label>
 									</div>
 								</li>
@@ -150,7 +138,7 @@
 
 					<!-- /////////////////////////////// -->
 					<!-- start 省份模式 -->
-					<div v-if="panelVisibility.province">
+					<div v-if="controlPanelVisibility.province">
 						<div>
 							<span>请选择国家：</span>
 							<select class="form-control" disabled="true">
@@ -175,8 +163,8 @@
 									</div>
 								</li> -->
 								<li class='multiSelectionList'>
-									<div v-for="province in geo.provinceList">
-										<input type="checkbox"  v-bind:value="province" v-model="selectedProvince">
+									<div v-for="province in getProvinceList">
+										<input type="checkbox"  v-bind:value="province" v-model="selectedStatus.selectedProvinceList">
 										<label class='checkboxeLabel'>{{ province}}</label>
 									</div>
 								</li>
@@ -209,7 +197,7 @@
 
 					<!-- /////////////////////////////// -->
 					<!-- start 地市模式 -->
-					<div v-if="panelVisibility.city">
+					<div v-if="controlPanelVisibility.city">
 						<div>
 							<span>请选择国家：</span>
 							<select class="form-control" disabled="true">
@@ -259,7 +247,7 @@
 
 					<!-- /////////////////////////////// -->
 					<!-- start 县级模式 -->
-					<div v-if="panelVisibility.town">
+					<div v-if="controlPanelVisibility.town">
 						<div>
 							<span>请选择国家：</span>
 							<select class="form-control" disabled="true">
