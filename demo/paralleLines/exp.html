@@ -2,19 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<meta name="renderer" content="webkit">
     <title>exp</title>
-    <script src="lib/d3.js"></script>
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.css">
+	<!-- dashboard布局的必须样式 -->
+	<link rel="stylesheet" href="lib/bootstrap/css/dashboard.css">
+	<!-- <link rel="stylesheet" href="src/style-bootstrap-vue.css" media="screen"> -->
+	<script src="lib/vue.js"></script>
+	<script src="lib/d3.js"></script>
 	<script src="lib/queue.js"></script>
+	<script src="lib/bootstrap/js/jquery-1.12.0.js"></script>
+	<script src="lib/bootstrap/js/bootstrap.js"></script>
 </head>
 <body>
+    <div class="container-fluid">
+        <div class="row">
+            <button type="button" class="btn btn-default btn-primary">Click</button>
+        </div>
+    </div>
     <script type="text/javascript">
-    queue()
-        .defer(d3.csv, 'data/list-province-city.csv')
-        .defer(d3.csv, 'data/data-province.csv')
-        .await(function(error, listProvinceCity, dataProvince) {
-            console.log(listProvinceCity);
-            console.log(dataProvince);
-        });
+    // queue()
+    //     .defer(d3.csv, 'data/list-province-city.csv')
+    //     .defer(d3.csv, 'data/data-province.csv')
+    //     .await(function(error, listProvinceCity, dataProvince) {
+    //         console.log(listProvinceCity);
+    //         console.log(dataProvince);
+    //     });
     </script>
 </body>
 </html>

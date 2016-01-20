@@ -70,16 +70,16 @@
 				<div id="app">
 					<div class="btn-group btn-group-justified" role="group" aria-label="...">
 						<div class="btn-group btn-group-sm" role="group">
-							<button type="button" class="btn btn-default" @click='enterMode("country")'>国家</button>
+							<button type="button" class="btn btn-default" v-bind:class="{'btn-primary': controlPanelVisibility.country}" @click='enterMode("country")'>国家</button>
 						</div>
 						<div class="btn-group btn-group-sm" role="group">
-							<button type="button" class="btn btn-default"  @click='enterMode("province")'>省级</button>
+							<button type="button" class="btn btn-default" v-bind:class="{'btn-primary': controlPanelVisibility.province}"  @click='enterMode("province")'>省级</button>
 						</div>
 						<div class="btn-group btn-group-sm" role="group">
-							<button type="button" class="btn btn-default" @click='enterMode("city")'>地市</button>
+							<button type="button" class="btn btn-default" v-bind:class="{'btn-primary': controlPanelVisibility.city}" @click='enterMode("city")'>地市</button>
 						</div>
 						<div class="btn-group btn-group-sm" role="group">
-							<button type="button" class="btn btn-default" @click='enterMode("town")'>县级</button>
+							<button type="button" class="btn btn-default" v-bind:class="{'btn-primary': controlPanelVisibility.town}" @click='enterMode("town")'>县级</button>
 						</div>
 					</div>
 
@@ -299,7 +299,7 @@
 					<!-- //////////////////// -->
 					<!-- start 更新图表按钮 -->
 					<div class="updateButtonContainer">
-						<button type="button" class="btn btn-primary" @click='drawGraph(this.selectedSourceMode, "a", "b")'><span class="glyphicon glyphicon-camera" aria-hidden="true"></span> 更新图表</button>
+						<button type="button" class="btn btn-success" @click='drawGraph(this.selectedSourceMode, "a", "b")'><span class="glyphicon glyphicon-camera" aria-hidden="true"></span> 更新图表</button>
 	                </div>
 					<!-- end 更新图表按钮 -->
 
