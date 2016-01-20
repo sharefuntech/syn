@@ -135,6 +135,17 @@ queue()
                 province: false,
                 city: false,
                 town: false
+            },
+            graphConfig: {
+                svgWidth: 800,
+                svgHeight: 500,
+                margin: {
+                    top: 50,
+                    bottom:30,
+                    left: 50,
+                    right: 50
+                },
+                color: d3.scale.category10()
             }
         }
 
@@ -163,18 +174,12 @@ queue()
                 resetSelectedStatus();
 
             },
+            // 按钮点击进入不同模式，同时初始化变量
             enterMode: function(mode) {
                 this.selectedStatus.selectedDataSourceMode = mode;
                 this.showControlPanel(mode);
                 // iniSelectedStatus(mode);
             },
-            // //进入country模式，调用getCountryList等
-            // enterCountryMode: function(mode) {
-            //     showControlPanel(mode);
-            // },
-            // enterProvinceMode, //进入province模式，调用getCountryList等
-            // enterCityMode, //进入province模式，调用getCountryList等
-            // enterTownMode, //进入province模式，调用getCountryList等
             //进入province模式根据国家抽取省份列表
             filterProvinceByCountry: function(selectedCountry) {
                 var country = selectedCountry; //暂时不检验选中国家，默认返回中国数据
@@ -197,7 +202,9 @@ queue()
             },
             filterTownByCity: function(selectedCity) {
 
-            }
+            },
+            // 绘制图表
+            drawGraph: drawGraph
         }
 
         model.computed = {
@@ -247,6 +254,30 @@ queue()
             computed: model.computed
         });
         /// modelView end /////////////////////////////////////
+
+        ////////////////////////////////////////////////////////
+        /// function definition start //////////////////////////
+        function drawGraph() {
+            // console.log(selectedStatus);
+            iniSvg(graphConfig);
+            parseData(mode);
+            iniDimensions();
+            generateParellel();
+
+            //初始化svg画布################
+            function iniSvg(svgWidth, svgHeight, vizContainer) {
+                var svg = vizContainer.append('svg')
+                    .attr('width', svgWidth)
+                    .attr('height', svgHeight);
+
+                return svg;
+            }
+
+            // 将数据转换为平行坐标格式######
+            function parseData() {
+                
+            }
+        }
     });
 
 ///////////////////////////////////////////////////////////////////
