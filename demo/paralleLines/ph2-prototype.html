@@ -151,17 +151,12 @@
 							</select>
 						</div>
 						<div class="dropdown">
+							<span>请选择省份列表：</span>
 							<button class="btn btn-default btn-block dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-							请选择省份列表
+							省份列表
 								<span class="caret"></span>
 							</button>
 							<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-								<!-- <li  v-for="province in geo.provinceList"  class='multiSelectionList'>
-									<div>
-										<input type="checkbox"  v-bind:value="province" v-model="selectedProvince">
-										<label>{{ province}}</label>
-									</div>
-								</li> -->
 								<li class='multiSelectionList'>
 									<div v-for="province in getProvinceList">
 										<input type="checkbox"  v-bind:value="province" v-model="selectedStatus.selectedProvinceList">
@@ -191,6 +186,35 @@
 									b
 								</option>
 							</select>
+						</div>
+						<div class="dropdown">
+							<span>请选择指标列表：</span>
+							<button class="btn btn-default btn-block dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+							指标列表
+								<span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+								<li class='multiSelectionList'>
+									<div v-for="key in getParallelDimensionKeys">
+										<input type="checkbox"  v-bind:value="key" v-model="selectedStatus.selectedDimensionKeys">
+										<label class='checkboxeLabel'>{{ key.name }}</label>
+									</div>
+								</li>
+							</ul>
+						</div>
+						<div class="">
+							<!-- <ul class="list-group">
+								<li v-for='key in selectedStatus.selectedDimensionKeys' class="list-group-item list-group-item-info">{{key | displayShortDimensionKeyName}}</li>
+							</ul> -->
+							<span>已选择的省份：</span>
+							<ul class="list-group selectedInfoBox">
+								<li class="list-group-item list-group-item-success">{{selectedStatus.selectedProvinceList}}</li>
+								<!-- <li class="list-group-item list-group-item-info">{{selectedStatus.selectedDimensionKeys}}</li> -->
+							</ul>
+							<span>已选择的指标：</span>
+							<ul class="list-group selectedInfoBox">
+								<li class="list-group-item list-group-item-success">{{selectedStatus.selectedDimensionKeys | displayShortDimensionKeyName}}</li>
+							</ul>
 						</div>
 					</div>
 					<!-- end 省份模式 -->
@@ -299,7 +323,7 @@
 					<!-- //////////////////// -->
 					<!-- start 更新图表按钮 -->
 					<div class="updateButtonContainer">
-						<button type="button" class="btn btn-success" @click='drawGraph(this.selectedStatus)'><span class="glyphicon glyphicon-camera" aria-hidden="true"></span> 更新图表</button>
+						<button type="button" class="btn btn-success" @click='drawGraph'><span class="glyphicon glyphicon-camera" aria-hidden="true"></span> 更新图表</button>
 	                </div>
 					<!-- end 更新图表按钮 -->
 
@@ -342,8 +366,7 @@
 			<!-- *****************************************
 			*** start main container ***************************-->
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-				<h2>this is test</h2>
-				<div id='testTooltip'>
+				<!-- <div id='testTooltip'>
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							<h5 class="panel-title">2016</h3>
@@ -353,8 +376,8 @@
 							Panel content
 						</div>
 					</div>
-				</div>
-				<!-- <div id="vizContainer"></div> -->
+				</div> -->
+				<div id="vizContainer"></div>
 			</div>
 			<!-- *** end main container ***************************** -->
 		</div>

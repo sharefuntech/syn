@@ -104,8 +104,24 @@ queue()
             {country: 'netherland', label: '荷兰'}
         ];
 
-        ////////////////////////////////////////////////////////
-        /// model start ////////////////////////////////////////
+        //******************************************************
+        /// vue global config start
+        //******************************************************
+        //### filter start #####################################
+        //将对象数组处理后转化为数组
+        Vue.filter('displayShortDimensionKeyName', function (keyObjArr) {
+            var keyNameArr = [];
+            keyObjArr.forEach(function(d) {
+                keyNameArr.push(d.name);
+            })
+            return keyNameArr;
+        });
+        //### filter end #######################################
+        /// vue global config end ******************************
+
+        //******************************************************
+        /// model start
+        //******************************************************
         var model = {};
         //data for vue model
         model.data = {
@@ -128,7 +144,8 @@ queue()
                 selectedCountryList: ['china'],
                 selectedProvinceList: [],
                 selectedCityList: [],
-                selectedTownList: []
+                selectedTownList: [],
+                selectedDimensionKeys:[] //选中的数据指标
             },
             controlPanelVisibility: { //控制面板四大类的显示控制
                 country: true,
@@ -137,8 +154,8 @@ queue()
                 town: false
             },
             graphConfig: {
-                svgWidth: 800,
-                svgHeight: 500,
+                svgWidth: 800, //初始化设置为800,实例化图表时进行覆盖
+                svgHeight: 500, //初始化设置为500,实例化图表时进行覆盖
                 margin: {
                     top: 50,
                     bottom:30,
@@ -146,6 +163,11 @@ queue()
                     right: 50
                 },
                 color: d3.scale.category10()
+            },
+            parallelConfig: { //平行数据指标，指标索引、转换后的平行数据
+                dimensionKeys: [],
+                displayDimensionKeys: [], //显示出来用于选择的指标，去除年份和区域
+                paralleledData: ''
             }
         }
 
@@ -168,6 +190,7 @@ queue()
                 this.selectedStatus.selectedProvinceList = [];
                 this.selectedStatus.selectedCityList = [];
                 this.selectedStatus.selectedTownList = [];
+                this.selectedStatus.selectedDimensionKeys = [];
             },
             // 初始化每个模式面板的菜单渲染数据
             iniSelectedStatus: function(mode) {
@@ -203,6 +226,8 @@ queue()
             filterTownByCity: function(selectedCity) {
 
             },
+            // 抽取平行数据指标
+            generateParallelDimensionKeys: generateParallelDimensionKeys,
             // 绘制图表
             drawGraph: drawGraph
         }
@@ -227,57 +252,266 @@ queue()
                 }
             },
             // 用于选择国别地市菜单展开
-            getCityList: function(mode, selectedProvince) {
-                if (mode == 'city' || mode == 'town') {
-                    return this.filterCityByProvince(selectedProvince);
-                } else {
-                    return [];
-                }
+            getCityList: function() {
+
             },
             // 用于选择县级菜单展开
-            getTownList: function(mode, selectedCity) {
-                if (mode == 'town') {
-                    return this.filterTownByCity(selectedCity);
+            getTownList: function() {
+
+            },
+            // 用于选择指标菜单展开
+            getParallelDimensionKeys: function() {
+                if (this.selectedStatus.selectedDataSourceMode == 'province') { //暂时注册province模式
+                    return this.generateParallelDimensionKeys();
                 } else {
                     return [];
                 }
             }
         }
-        /// model end ////////////////////////////////////////
+        /// model end *****************************************
 
-        ////////////////////////////////////////////////////////
-        /// modelView start ////////////////////////////////////
+        //******************************************************
+        /// modelView start
+        //******************************************************
         var vm = new Vue({
             el: '#app',
             data: model.data,
             methods: model.methods,
             computed: model.computed
         });
-        /// modelView end /////////////////////////////////////
+        /// modelView end **************************************
 
-        ////////////////////////////////////////////////////////
-        /// function definition start //////////////////////////
+        //******************************************************
+        /// function definition start
+        //******************************************************
+
+
+        //### generateParallelDimensionKeys start ##############
+        function generateParallelDimensionKeys() {
+            // 获取数据来源模式
+            var mode = this.selectedStatus.selectedDataSourceMode;
+            // 根据模式获取对应数据源
+            var data = this.geoData[mode];
+            // // csv文件原始索引
+            // var csvIndex = [];
+            // // 转换成平行数据
+            // var paralleledData;
+            // // 指标索引
+            // var dimensionKeys = [];
+
+            this.parallelConfig.paralleledData = parseData(data);// 平行化数据
+            this.parallelConfig.dimensionKeys = getDimensionKeys(this.parallelConfig.paralleledData); // 抽取平行数据索引
+
+            //不能在匿名函数里使用this.parallelConfig.displayDimensionKeys，闭包的作用域会出错
+            var arrayBridgeForDisplayDimensionKeys = [];
+
+            this.parallelConfig.dimensionKeys.forEach(function(d) {
+                if (d != '区域' && d != '年份') {
+                    var keySplit = d.split('_');
+                    var fullKey = d;
+                    var shortKey = keySplit[0];
+
+                    arrayBridgeForDisplayDimensionKeys.push(
+                        { name: shortKey, value: fullKey}
+                    );
+                    // console.log(d);
+                }
+            });
+
+            // console.log(arrayBridgeForDisplayDimensionKeys);
+            this.parallelConfig.displayDimensionKeys = arrayBridgeForDisplayDimensionKeys;
+
+            return this.parallelConfig.displayDimensionKeys;
+
+            // 指标索引
+            function getDimensionKeys(paralleledData) {
+                var dimensionKeys = [];
+                for (key in paralleledData[0]) {
+                    dimensionKeys.push(key);
+                }
+                return dimensionKeys;
+            }
+
+            // 将数据转换为平行坐标格式######
+            function parseData(data) {
+                // console.log(data);
+                var dataProcessed = [];
+                data.forEach(function(d) {
+                    d.年份 = +d.年份;
+                    d.指标值 = +d.指标值;
+                    d[d.指标名称] = d.指标值;
+                    var obj = {};
+                    obj['区域'] = d.区域;
+                    obj['年份'] = d.年份;
+                    obj[d.指标名称] = d.指标值;
+                    dataProcessed.push(obj);
+                });
+                // console.log(dataProcessed);
+
+                var dataNested = d3.nest()
+                    .key(function(d) {
+                        return d.区域;
+                    })
+                    .key(function(d) {
+                        return d.年份;
+                    })
+                    .entries(dataProcessed);
+                    // console.log(dataNested);
+
+                var dataParallel = [];
+                var keyYear = '年份';
+                var keyPlace = '区域';
+
+                dataNested.forEach(function(d) {
+                    var place = d.key;
+                    d.values.forEach(function(e) {
+                        // console.log(e);
+                        var year = +e.key;
+                        var obj = {};
+                        obj[keyYear] = year;
+                        obj[keyPlace] = place;
+                        e.values.forEach(function(f) {
+                            for(key in f) {
+                                if (key != keyPlace && key != keyYear) {
+                                    // console.log(key + ': ' + f[key]);
+                                    obj[key] = f[key];
+                                }
+                            }
+                        });
+                        dataParallel.push(obj);
+                    });
+                });
+
+                return dataParallel;
+            }
+        }
+        //### generateParallelDimensionKeys end ##############
+
+        //绘制图表
+        //### 绘制图表drawGraph start #########################
         function drawGraph() {
-            // console.log(selectedStatus);
-            iniSvg(graphConfig);
-            parseData(mode);
-            iniDimensions();
-            generateParellel();
+            // console.log(this.selectedStatus);
+            // 获取数据来源模式
+            // var mode = this.selectedStatus.selectedDataSourceMode;
+            // // 根据模式获取对应数据源
+            // var data = this.geoData[mode];
+            // // csv文件原始索引
+            // var csvIndex = [];
+            // // 转换成平行数据
+            // var paralleledData;
+            // // 指标索引
+            // var dimensionKeys = [];
+            // 实例化图表设置
+            var graphConfig = this.graphConfig;
+            // 设置图表实例边距
+            var pageNavbarHeight = 50;
+            var containerMargin = 10;
+            var svg; // 图表svg
+
+            // paralleledData = parseData(data);// 平行化数据
+            // dimensionKeys = getDimensionKeys(paralleledData); // 抽取平行数据索引
+            setSvgConfig(); // 设置svg画布参数
+            // 初始化svg画布
+            svg = iniSvg(graphConfig.svgWidth, graphConfig.svgHeight, '#vizContainer');
+            testDraw();
 
             //初始化svg画布################
             function iniSvg(svgWidth, svgHeight, vizContainer) {
-                var svg = vizContainer.append('svg')
+                if (d3.select('svg')) {
+                    d3.select('svg').remove();
+                }
+                var svg = d3.select(vizContainer).append('svg')
                     .attr('width', svgWidth)
                     .attr('height', svgHeight);
 
                 return svg;
             }
 
+            // 设置svg画布参数
+            function setSvgConfig() {
+                graphConfig.svgWidth = document.getElementById('vizContainer').offsetWidth - containerMargin;
+                graphConfig.svgHeight = document.documentElement.clientHeight - pageNavbarHeight - containerMargin;
+            }
+
+            function testDraw() {
+                svg.append('rect')
+                    .attr('width', graphConfig.svgWidth)
+                    .attr('height', graphConfig.svgHeight)
+                    .style('fill', 'teal');
+            }
+
+            // csv文件原始索引
+            function getCsvIndex(data) {
+                var csvIndex = [];
+                for (key in data[0]) {
+                    csvIndex.push(key);
+                }
+                return csvIndex;
+            }
+
+            // 指标索引
+            function getDimensionKeys(paralleledData) {
+                var dimensionKeys = [];
+                for (key in paralleledData[0]) {
+                    dimensionKeys.push(key);
+                }
+                return dimensionKeys;
+            }
+
             // 将数据转换为平行坐标格式######
-            function parseData() {
-                
+            function parseData(data) {
+                // console.log(data);
+                var dataProcessed = [];
+                data.forEach(function(d) {
+                    d.年份 = +d.年份;
+                    d.指标值 = +d.指标值;
+                    d[d.指标名称] = d.指标值;
+                    var obj = {};
+                    obj['区域'] = d.区域;
+                    obj['年份'] = d.年份;
+                    obj[d.指标名称] = d.指标值;
+                    dataProcessed.push(obj);
+                });
+                // console.log(dataProcessed);
+
+                var dataNested = d3.nest()
+                    .key(function(d) {
+                        return d.区域;
+                    })
+                    .key(function(d) {
+                        return d.年份;
+                    })
+                    .entries(dataProcessed);
+                    // console.log(dataNested);
+
+                var dataParallel = [];
+                var keyYear = '年份';
+                var keyPlace = '区域';
+
+                dataNested.forEach(function(d) {
+                    var place = d.key;
+                    d.values.forEach(function(e) {
+                        // console.log(e);
+                        var year = +e.key;
+                        var obj = {};
+                        obj[keyYear] = year;
+                        obj[keyPlace] = place;
+                        e.values.forEach(function(f) {
+                            for(key in f) {
+                                if (key != keyPlace && key != keyYear) {
+                                    // console.log(key + ': ' + f[key]);
+                                    obj[key] = f[key];
+                                }
+                            }
+                        });
+                        dataParallel.push(obj);
+                    });
+                });
+
+                return dataParallel;
             }
         }
+        //### 绘制图表drawGraph end #########################
     });
 
 ///////////////////////////////////////////////////////////////////

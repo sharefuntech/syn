@@ -17,12 +17,15 @@
 	<script src="lib/bootstrap/js/bootstrap.js"></script>
 </head>
 <body>
-    <div class="container-fluid">
+    <!-- <div class="container-fluid">
         <div class="row">
             <button type="button" class="btn btn-default btn-primary">Click</button>
         </div>
-    </div>
+    </div> -->
+    <div id='imgBox'><img src="image/dog.jpg" alt=""></div>
     <script type="text/javascript">
+        console.log(document.getElementById('imgBox').offsetWidth);
+        console.log(document.getElementById('imgBox').offsetHeight);
     // queue()
     //     .defer(d3.csv, 'data/list-province-city.csv')
     //     .defer(d3.csv, 'data/data-province.csv')
