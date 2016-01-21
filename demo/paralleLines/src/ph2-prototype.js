@@ -401,6 +401,8 @@ queue()
             // var paralleledData;
             // // 指标索引
             // var dimensionKeys = [];
+            var selectedStatus = this.selectedStatus; //控制面板选择状态参数
+            var parallelConfig = this.parallelConfig; //平行数据参数
             // 实例化图表设置
             var graphConfig = this.graphConfig;
             // 设置图表实例边距
@@ -413,7 +415,9 @@ queue()
             setSvgConfig(); // 设置svg画布参数
             // 初始化svg画布
             svg = iniSvg(graphConfig.svgWidth, graphConfig.svgHeight, '#vizContainer');
+
             testDraw();
+            bootParallelGraph(svg, graphConfig, selectedStatus, parallelConfig);
 
             //初始化svg画布################
             function iniSvg(svgWidth, svgHeight, vizContainer) {
@@ -440,233 +444,200 @@ queue()
                     .style('fill', 'teal');
             }
 
-            // csv文件原始索引
-            function getCsvIndex(data) {
-                var csvIndex = [];
-                for (key in data[0]) {
-                    csvIndex.push(key);
-                }
-                return csvIndex;
-            }
-
-            // 指标索引
-            function getDimensionKeys(paralleledData) {
-                var dimensionKeys = [];
-                for (key in paralleledData[0]) {
-                    dimensionKeys.push(key);
-                }
-                return dimensionKeys;
-            }
-
-            // 将数据转换为平行坐标格式######
-            function parseData(data) {
-                // console.log(data);
-                var dataProcessed = [];
-                data.forEach(function(d) {
-                    d.年份 = +d.年份;
-                    d.指标值 = +d.指标值;
-                    d[d.指标名称] = d.指标值;
-                    var obj = {};
-                    obj['区域'] = d.区域;
-                    obj['年份'] = d.年份;
-                    obj[d.指标名称] = d.指标值;
-                    dataProcessed.push(obj);
+            //start 生成parallel图#########
+            function bootParallelGraph(svg, graphConfig, selectedStatus, parallelConfig) {
+                var baseDimensionKey = ['年份', '区域'];
+                var availableDimensionKey = selectedStatus.selectedDimensionKeys.map(function(d) {
+                    return {
+                        name: d.value,
+                        scale: d3.scale.linear().range([graphConfig.svgHeight, 0]),
+                        type: Number,
+                        label: d.name
+                    }
                 });
-                // console.log(dataProcessed);
+                console.log(availableDimensionKey);
+            }
+            //end 生成parallel图###########
 
-                var dataNested = d3.nest()
-                    .key(function(d) {
-                        return d.区域;
-                    })
-                    .key(function(d) {
-                        return d.年份;
-                    })
-                    .entries(dataProcessed);
-                    // console.log(dataNested);
+            // // csv文件原始索引
+            // function getCsvIndex(data) {
+            //     var csvIndex = [];
+            //     for (key in data[0]) {
+            //         csvIndex.push(key);
+            //     }
+            //     return csvIndex;
+            // }
 
-                var dataParallel = [];
-                var keyYear = '年份';
-                var keyPlace = '区域';
+            // // 指标索引
+            // function getDimensionKeys(paralleledData) {
+            //     var dimensionKeys = [];
+            //     for (key in paralleledData[0]) {
+            //         dimensionKeys.push(key);
+            //     }
+            //     return dimensionKeys;
+            // }
 
-                dataNested.forEach(function(d) {
-                    var place = d.key;
-                    d.values.forEach(function(e) {
-                        // console.log(e);
-                        var year = +e.key;
-                        var obj = {};
-                        obj[keyYear] = year;
-                        obj[keyPlace] = place;
-                        e.values.forEach(function(f) {
-                            for(key in f) {
-                                if (key != keyPlace && key != keyYear) {
-                                    // console.log(key + ': ' + f[key]);
-                                    obj[key] = f[key];
-                                }
-                            }
-                        });
-                        dataParallel.push(obj);
+            // // 将数据转换为平行坐标格式######
+            // function parseData(data) {
+            //     // console.log(data);
+            //     var dataProcessed = [];
+            //     data.forEach(function(d) {
+            //         d.年份 = +d.年份;
+            //         d.指标值 = +d.指标值;
+            //         d[d.指标名称] = d.指标值;
+            //         var obj = {};
+            //         obj['区域'] = d.区域;
+            //         obj['年份'] = d.年份;
+            //         obj[d.指标名称] = d.指标值;
+            //         dataProcessed.push(obj);
+            //     });
+            //     // console.log(dataProcessed);
+            //
+            //     var dataNested = d3.nest()
+            //         .key(function(d) {
+            //             return d.区域;
+            //         })
+            //         .key(function(d) {
+            //             return d.年份;
+            //         })
+            //         .entries(dataProcessed);
+            //         // console.log(dataNested);
+            //
+            //     var dataParallel = [];
+            //     var keyYear = '年份';
+            //     var keyPlace = '区域';
+            //
+            //     dataNested.forEach(function(d) {
+            //         var place = d.key;
+            //         d.values.forEach(function(e) {
+            //             // console.log(e);
+            //             var year = +e.key;
+            //             var obj = {};
+            //             obj[keyYear] = year;
+            //             obj[keyPlace] = place;
+            //             e.values.forEach(function(f) {
+            //                 for(key in f) {
+            //                     if (key != keyPlace && key != keyYear) {
+            //                         // console.log(key + ': ' + f[key]);
+            //                         obj[key] = f[key];
+            //                     }
+            //                 }
+            //             });
+            //             dataParallel.push(obj);
+            //         });
+            //     });
+            //
+            //     return dataParallel;
+            // }
+            // end 将数据转换为平行坐标格式######
+
+            // start 绘制平行坐标##############
+            function drawChart(svg, graphConfig, selectedStatus, parallelConfig) {
+                var baseDimensionKey = ['年份', '区域'];
+                var availableDimensionKey = selectedStatus.selectedDimensionKeys.map(function(d) {
+                    return d.value;
+                });
+
+                var dimensions = model.data.dimensionsBase.concat(model.data.dimensionsAvailable);
+
+                var x = d3.scale.ordinal()
+                    .domain(dimensions.map(function(d) { return d.name; }))
+                    .rangePoints([0, model.data.chartConfig.svgWidth]);
+
+                var line = d3.svg.line()
+                    .defined(function(d) { return !isNaN(d[1]); });
+
+                var yAxis = d3.svg.axis()
+                    .orient("left");
+
+                var dimension = d3.select('#vizG').selectAll(".dimension")
+                    .data(dimensions)
+                    .enter()
+                    .append("g")
+                    .attr("class", "dimension")
+                    .attr("transform", function(d) {
+                        return "translate(" + x(d.name) + ")";
                     });
+
+                dimensions.forEach(function(dimension) {
+                    dimension.scale.domain(dimension.type === Number
+                        ? d3.extent(data, function(d) { return +d[dimension.name]; })
+                        : data.map(function(d) { return d[dimension.name]; }).sort());
                 });
 
-                return dataParallel;
+                d3.select('#vizG').append("g")
+                    .attr("class", "background")
+                    .selectAll("path")
+                    .data(data)
+                    .enter().append("path")
+                    .attr("d", draw);
+
+                d3.select('#vizG').append("g")
+                    .attr("class", "foreground")
+                    .selectAll("path")
+                    .data(data)
+                    .enter()
+                    .append("path")
+                    .attr({
+                        fill: "none",
+                    	stroke:function(d,i){ return model.data.chartConfig.color(d.区域); },
+                        "stroke-width": "1.5px"
+                    })
+                    .transition()
+                    .delay(function(d, i) {
+                        return i * 50;
+                    })
+                    .attr("d", draw);
+
+                dimension.append("g")
+                    .attr("class", "axis")
+                    .each(function(d) { d3.select(this).call(yAxis.scale(d.scale)); })
+                    .append("text")
+                    .attr("class", "title")
+                    .attr("text-anchor", "middle")
+                    .attr("y", -9)
+                    .text(function(d) { return d.name; });
+
+                d3.select('#vizG').select(".axis").selectAll("text:not(.title)")
+                    .attr("class", "label")
+                    .data(data, function(d) { return d.name || d; });
+
+                var projection = d3.select('#vizG').selectAll('.axis text, .background path, .foreground path')
+                    .on('mouseover', mouseover)
+                    .on('mouseout', mouseout);
+
+                function mouseover(d) {
+                    d3.select('#vizG').classed('active', true);
+                    projection.classed('inactive', function(p) {
+                        return p !== d;
+                    });
+
+                    projection.filter(function(p) {
+                        return p === d;
+                    })
+                    .each(moveToFront);
+
+                    // showMouseTooltip(d);
+                }
+
+                function mouseout() {
+                    d3.select('#vizG').classed('active', false);
+                    projection.classed('inactive', false);
+
+                    hideMouseTooltip();
+                }
+
+                function moveToFront() {
+                    this.parentNode.appendChild(this);
+                }
+
+                function draw(d) {
+                    return line(dimensions.map(function(dimension) {
+                        return [x(dimension.name), dimension.scale(d[dimension.name])];
+                    }));
+                }
             }
+            // end 绘制平行坐标################
         }
         //### 绘制图表drawGraph end #########################
     });
-
-///////////////////////////////////////////////////////////////////
-// var dataSourceMode = [
-//     {mode: 'country', label: '世界各国数据'},
-//     {mode: 'province', label: '中国省份数据'},
-//     {mode: 'city', label: '中国地级市数据'},
-//     {mode: 'town', label: '中国县级数据'},
-// ];
-//
-// var countryListTemp = [
-//     {country: 'china', label: '中国'},
-//     {country: 'america', label: '美国'},
-//     {country: 'japan', label: '日本'},
-//     {country: 'thailand', label: '泰国'},
-//     {country: 'netherland', label: '荷兰'}
-// ];
-//
-//
-// var provinceList; // 省份列表，固定，无须根据国家动态抽取？
-// var cityList;
-// var twonList;
-//
-// d3.csv('data/cityProvince.csv', function(data) {
-//     // console.log(data);
-//     var place = d3.nest()
-//         .key(function(d) {
-//             return d.province;
-//         })
-//         .entries(data);
-//     // console.log(place);
-//     provinceList = place.map(function(d) {
-//         return d.key;
-//     });
-//     // console.log(provinceList);
-//
-//     var model = {
-//         data: {
-//             geo: {
-//                 countryList: '',
-//                 provinceList: provinceList,
-//                 cityList: '',
-//                 twonList: ''
-//             },
-//             dataPath: {
-//                 country:'',
-//                 province: 'data/data-province.csv',
-//                 city: '',
-//                 town: ''
-//             },
-//             dataSourceMode: dataSourceMode,
-//             place: place,
-//             selectedSourceMode: '',
-//             selectedCountry: '',
-//             selectedProvince: [],
-//             selectedCity: '',
-//             selectedTown: '',
-//             //control the available state of each select via class 'disable', with boolean value 1 or 0
-//             selectionDisabledState: {
-//                 mode: false,
-//                 country: false,
-//                 province: false,
-//                 city: false,
-//                 town: false
-//             },
-//             panelVisibility: {
-//                 country: true,
-//                 province: false,
-//                 city: false,
-//                 town: false
-//             }
-//         },
-//         methods: {
-//             testUpdateButton: function() {
-//                 console.log(this.selectedProvince);
-//                 console.log(this.selectedSourceMode);
-//             },
-//             resetCityList: function() {
-//                 this.selectedCity = '';
-//                 return this.selectedCity;
-//             },
-//             showPanel: function(mode) {
-//                 for (key in this.panelVisibility) {
-//                     // console.log(this.panelVisibility[key]);
-//                     this.panelVisibility[key] = false;
-//                 }
-//
-//                 this.panelVisibility[mode] = true;
-//                 // console.log(this.panelVisibility);
-//                 // 确定选择数据源模式
-//                 this.selectedSourceMode = mode;
-//             },
-//             drawGraph: drawGraph //绘制图表
-//         },
-//         computed: {
-//             getCountryList: function() {
-//                 var countryList = countryListTemp;
-//                 return countryList;
-//             },
-//             getProvinceList: function() {
-//                 // var provinceList = '';
-//                 // var dataSourceMode = this.selectedSourceMode;
-//                 // if (dataSourceMode == 'city') {
-//                 //     provinceList = this.place;
-//                 //     this.selectionDisabledState.province = false;
-//                 // } else if (dataSourceMode == 'province') {
-//                 //     provinceList = this.place;
-//                 //     this.selectionDisabledState.province = false;
-//                 // } else if (dataSourceMode == 'country') {
-//                 //     this.selectionDisabledState.province = true;
-//                 // }
-//
-//                 return provinceList;
-//             },
-//             getCityList: function() {
-//                 var cityList = '';
-//                 // console.log(this.selectedProvince);
-//                 var targetProvence = this.selectedProvince;
-//                 this.place.forEach(function(d) {
-//                     // console.log(d.province);
-//                     // console.log(targetProvence);
-//                     if (d.key == targetProvence) {
-//                         cityList = d.values;
-//                         // return cityList;
-//                     }
-//                 });
-//                 return cityList;
-//             },
-//             test: function() {
-//                 // return this.selectedProvince + 'selected';
-//
-//             },
-//             countryPanelVisibility: function() {
-//                 return this.panelVisibility.country;
-//             },
-//             provincePanelVisibility: function() {
-//                 return this.panelVisibility.province;
-//             }
-//         }
-//     };
-//
-//     var vm = new Vue({
-//         el: '#app',
-//         data: model.data,
-//         methods: model.methods,
-//         computed: model.computed
-//     });
-//
-// });
-//
-// function drawGraph(mode, selectedPlace, selectedIndex) {
-//     var dataPath = 'data/data-' + mode + '.csv';
-//     d3.csv(dataPath, function(data) {
-//         console.log(data);
-//         console.log(selectedPlace);
-//         console.log(selectedIndex);
-//     });
-// }
