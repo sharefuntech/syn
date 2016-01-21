@@ -15,17 +15,35 @@
 	<script src="lib/queue.js"></script>
 	<script src="lib/bootstrap/js/jquery-1.12.0.js"></script>
 	<script src="lib/bootstrap/js/bootstrap.js"></script>
+    <style media="screen">
+        .redBox {
+            background-color: #ccc;
+            height: 200px;
+        }
+
+        .blueBox {
+            background-color: teal;
+            height: 200px;
+        }
+
+        .yellowBox {
+            background-color: yellow;
+            height: 200px;
+        }
+    </style>
 </head>
 <body>
-    <!-- <div class="container-fluid">
+    <div class="container-fluid">
         <div class="row">
-            <button type="button" class="btn btn-default btn-primary">Click</button>
+            <div class="redBox col-xs-12 col-sm-4 col-md-4 col-lg-2"></div>
+            <div class="blueBox col-xs-12 col-sm-8 col-md-8 col-lg-10"></div>
         </div>
-    </div> -->
-    <div id='imgBox'><img src="image/dog.jpg" alt=""></div>
+    </div>
+
+
     <script type="text/javascript">
-        console.log(document.getElementById('imgBox').offsetWidth);
-        console.log(document.getElementById('imgBox').offsetHeight);
+        // console.log(document.getElementById('imgBox').offsetWidth);
+        // console.log(document.getElementById('imgBox').offsetHeight);
     // queue()
     //     .defer(d3.csv, 'data/list-province-city.csv')
     //     .defer(d3.csv, 'data/data-province.csv')

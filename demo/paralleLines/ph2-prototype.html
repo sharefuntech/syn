@@ -62,10 +62,12 @@
 	### start container
 	################################################################ -->
 	<div class="container-fluid">
+	<!-- <div class="container"> -->
 		<div class="row">
 			<!-- *****************************************
 			*** start side bar ***************************-->
-			<div class="col-sm-3 col-md-2 sidebar">
+			<!-- <div class="col-sm-3 col-md-3 col-lg-2 sidebar"> -->
+			<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 sidebar">
 				<!-- === start app ======================= -->
 				<div id="app">
 					<div class="btn-group btn-group-justified" role="group" aria-label="...">
@@ -326,38 +328,6 @@
 						<button type="button" class="btn btn-success" @click='drawGraph'><span class="glyphicon glyphicon-camera" aria-hidden="true"></span> 更新图表</button>
 	                </div>
 					<!-- end 更新图表按钮 -->
-
-					<!-- //////////////////// -->
-					<!-- use disabled="true" to disable select and option -->
-					<!-- <div>
-						<span>请选择数据源：</span>
-						<select v-model="selectedSourceMode" class="form-control" >
-							<option v-for="mode in dataSourceMode" v-bind:value="mode.mode">
-								{{ mode.label}}
-							</option>
-						</select>
-					</div> -->
-
-					<!-- //////////////////// -->
-					<!-- use disabled="true" to disable select and option -->
-					<!-- <div>
-						<span>请选择国家：</span>
-						<select v-model="selectedCountry" class="form-control" v-bind:disabled=selectionDisabledState.country>
-							<option v-for="country in getCountryList" v-bind:value="country.country">
-								{{ country.label}}
-							</option>
-						</select>
-					</div> -->
-
-					<!-- //////////////////// -->
-					<!-- <div>
-						<span>请选择省份：</span>
-						<select v-model="selectedProvince" class="form-control" v-bind:disabled=selectionDisabledState.province>
-							<option v-for="province in getProvinceList" v-bind:value="province.key">
-								{{ province.key}}
-							</option>
-						</select>
-					</div> -->
 				<!-- === end app ======================= -->
 				</div>
 			</div>
@@ -365,18 +335,8 @@
 
 			<!-- *****************************************
 			*** start main container ***************************-->
-			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-				<!-- <div id='testTooltip'>
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<h5 class="panel-title">2016</h3>
-							<h4>浙江</h4>
-						</div>
-						<div class="panel-body">
-							Panel content
-						</div>
-					</div>
-				</div> -->
+			<!-- <div class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 col-lg-10 col-lg-offset-2 main"> -->
+			<div class="col-xs-12 col-sm-8 col-sm-offset-4 col-md-9 col-md-offset-3 col-lg-10 col-lg-offset-2 main">
 				<div id="vizContainer"></div>
 			</div>
 			<!-- *** end main container ***************************** -->

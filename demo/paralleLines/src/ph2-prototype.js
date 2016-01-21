@@ -132,12 +132,12 @@ queue()
                 city: '',
                 town: ''
             },
-            placeList: { //存储地点list，用于菜单展开
-                countryList: '',
-                provinceList: '',
-                cityList: '',
-                townList: ''
-            },
+            // placeList: { //存储地点list，用于菜单展开
+            //     countryList: '',
+            //     provinceList: '',
+            //     cityList: '',
+            //     townList: ''
+            // },
             dataSourceMode:['country', 'province', 'city', 'town'], //数据源选项
             selectedStatus: { //选中的菜单项，
                 selectedDataSourceMode: 'country',
