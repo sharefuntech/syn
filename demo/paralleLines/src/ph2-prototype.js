@@ -132,12 +132,6 @@ queue()
                 city: '',
                 town: ''
             },
-            // placeList: { //存储地点list，用于菜单展开
-            //     countryList: '',
-            //     provinceList: '',
-            //     cityList: '',
-            //     townList: ''
-            // },
             dataSourceMode:['country', 'province', 'city', 'town'], //数据源选项
             selectedStatus: { //选中的菜单项，
                 selectedDataSourceMode: 'country',
@@ -390,51 +384,68 @@ queue()
         //绘制图表
         //### 绘制图表drawGraph start #########################
         function drawGraph() {
-            // console.log(this.selectedStatus);
-            // 获取数据来源模式
-            // var mode = this.selectedStatus.selectedDataSourceMode;
-            // // 根据模式获取对应数据源
-            // var data = this.geoData[mode];
-            // // csv文件原始索引
-            // var csvIndex = [];
-            // // 转换成平行数据
-            // var paralleledData;
-            // // 指标索引
-            // var dimensionKeys = [];
             var selectedStatus = this.selectedStatus; //控制面板选择状态参数
+            console.log(selectedStatus.selectedProvinceList);
             var parallelConfig = this.parallelConfig; //平行数据参数
+            // console.log(parallelConfig.paralleledData);
             // 实例化图表设置
             var graphConfig = this.graphConfig;
             // 设置图表实例边距
-            var pageNavbarHeight = 50;
-            var containerMargin = 10;
+            var pageNavbarHeight = 0;
+            var containerVerticalMargin = 120;
+            var containerHorizontalMargin = 50;
             var svg; // 图表svg
 
             // paralleledData = parseData(data);// 平行化数据
             // dimensionKeys = getDimensionKeys(paralleledData); // 抽取平行数据索引
             setSvgConfig(); // 设置svg画布参数
             // 初始化svg画布
-            svg = iniSvg(graphConfig.svgWidth, graphConfig.svgHeight, '#vizContainer');
+            svg = iniSvg(graphConfig, '#vizContainer');
 
-            testDraw();
-            bootParallelGraph(svg, graphConfig, selectedStatus, parallelConfig);
+            // 上海、台湾、广西、澳门、香港 数据有问题无法筛选出来
+            var filterParalleledData = filterParalleledDataBySelectedProvinces(selectedStatus, parallelConfig);
+            console.log(filterParalleledData);
+
+            function filterParalleledDataBySelectedProvinces(selectedStatus, parallelConfig) {
+                var selectedProvinces = d3.set();
+                selectedStatus.selectedProvinceList.forEach(function(d) {
+                    selectedProvinces.add(d);
+                });
+                console.log(selectedProvinces);
+
+                // var filterParalleledData = parallelConfig.paralleledData.filter(function(d) {
+                //     selectedProvinces.has(d['区域']);
+                // });
+
+                var filterParalleledData = [];
+                parallelConfig.paralleledData.forEach(function(d) {
+                    if (selectedProvinces.has(d['区域'])) {
+                        filterParalleledData.push(d);
+                    }
+                })
+
+                return filterParalleledData;
+            }
+
+            // testDraw();
+            bootParallelGraph(svg, graphConfig, selectedStatus, filterParalleledData);
 
             //初始化svg画布################
-            function iniSvg(svgWidth, svgHeight, vizContainer) {
+            function iniSvg(graphConfig, vizContainer) {
                 if (d3.select('svg')) {
                     d3.select('svg').remove();
                 }
                 var svg = d3.select(vizContainer).append('svg')
-                    .attr('width', svgWidth)
-                    .attr('height', svgHeight);
+                    .attr('width', graphConfig.svgWidth + graphConfig.margin.left + graphConfig.margin.right)
+                    .attr('height', graphConfig.svgHeight + graphConfig.margin.top + graphConfig.margin.bottom);
 
                 return svg;
             }
 
             // 设置svg画布参数
             function setSvgConfig() {
-                graphConfig.svgWidth = document.getElementById('vizContainer').offsetWidth - containerMargin;
-                graphConfig.svgHeight = document.documentElement.clientHeight - pageNavbarHeight - containerMargin;
+                graphConfig.svgWidth = document.getElementById('vizContainer').offsetWidth - containerHorizontalMargin;
+                graphConfig.svgHeight = document.documentElement.clientHeight - pageNavbarHeight - containerVerticalMargin;
             }
 
             function testDraw() {
@@ -445,112 +456,25 @@ queue()
             }
 
             //start 生成parallel图#########
-            function bootParallelGraph(svg, graphConfig, selectedStatus, parallelConfig) {
-                var baseDimensionKey = ['年份', '区域'];
-                var availableDimensionKey = selectedStatus.selectedDimensionKeys.map(function(d) {
-                    return {
-                        name: d.value,
-                        scale: d3.scale.linear().range([graphConfig.svgHeight, 0]),
-                        type: Number,
-                        label: d.name
-                    }
-                });
-                console.log(availableDimensionKey);
-            }
-            //end 生成parallel图###########
-
-            // // csv文件原始索引
-            // function getCsvIndex(data) {
-            //     var csvIndex = [];
-            //     for (key in data[0]) {
-            //         csvIndex.push(key);
-            //     }
-            //     return csvIndex;
-            // }
-
-            // // 指标索引
-            // function getDimensionKeys(paralleledData) {
-            //     var dimensionKeys = [];
-            //     for (key in paralleledData[0]) {
-            //         dimensionKeys.push(key);
-            //     }
-            //     return dimensionKeys;
-            // }
-
-            // // 将数据转换为平行坐标格式######
-            // function parseData(data) {
-            //     // console.log(data);
-            //     var dataProcessed = [];
-            //     data.forEach(function(d) {
-            //         d.年份 = +d.年份;
-            //         d.指标值 = +d.指标值;
-            //         d[d.指标名称] = d.指标值;
-            //         var obj = {};
-            //         obj['区域'] = d.区域;
-            //         obj['年份'] = d.年份;
-            //         obj[d.指标名称] = d.指标值;
-            //         dataProcessed.push(obj);
-            //     });
-            //     // console.log(dataProcessed);
-            //
-            //     var dataNested = d3.nest()
-            //         .key(function(d) {
-            //             return d.区域;
-            //         })
-            //         .key(function(d) {
-            //             return d.年份;
-            //         })
-            //         .entries(dataProcessed);
-            //         // console.log(dataNested);
-            //
-            //     var dataParallel = [];
-            //     var keyYear = '年份';
-            //     var keyPlace = '区域';
-            //
-            //     dataNested.forEach(function(d) {
-            //         var place = d.key;
-            //         d.values.forEach(function(e) {
-            //             // console.log(e);
-            //             var year = +e.key;
-            //             var obj = {};
-            //             obj[keyYear] = year;
-            //             obj[keyPlace] = place;
-            //             e.values.forEach(function(f) {
-            //                 for(key in f) {
-            //                     if (key != keyPlace && key != keyYear) {
-            //                         // console.log(key + ': ' + f[key]);
-            //                         obj[key] = f[key];
-            //                     }
-            //                 }
-            //             });
-            //             dataParallel.push(obj);
-            //         });
-            //     });
-            //
-            //     return dataParallel;
-            // }
-            // end 将数据转换为平行坐标格式######
-
-            // start 绘制平行坐标##############
-            function drawChart(svg, graphConfig, selectedStatus, parallelConfig) {
-                var baseDimensionKey = ['年份', '区域'];
-                var availableDimensionKey = selectedStatus.selectedDimensionKeys.map(function(d) {
-                    return d.value;
-                });
-
-                var dimensions = model.data.dimensionsBase.concat(model.data.dimensionsAvailable);
+            function bootParallelGraph(svg, graphConfig, selectedStatus, filterParalleledData) {
+                var dimensions = iniDimensions(graphConfig, selectedStatus)
+                // console.log(dimensions);
+                var vizG = svg.append('g')
+                    .attr('id', 'vizG')
+                    .attr("transform", "translate(" + graphConfig.margin.left + "," + graphConfig.margin.top + ")");
 
                 var x = d3.scale.ordinal()
                     .domain(dimensions.map(function(d) { return d.name; }))
-                    .rangePoints([0, model.data.chartConfig.svgWidth]);
-
-                var line = d3.svg.line()
-                    .defined(function(d) { return !isNaN(d[1]); });
+                    .rangePoints([0, graphConfig.svgWidth]);
 
                 var yAxis = d3.svg.axis()
                     .orient("left");
 
-                var dimension = d3.select('#vizG').selectAll(".dimension")
+                var line = d3.svg.line()
+                    .defined(function(d) { return !isNaN(d[1]); });
+
+                var dimension = d3.select('#vizG')
+                    .selectAll(".dimension")
                     .data(dimensions)
                     .enter()
                     .append("g")
@@ -561,32 +485,32 @@ queue()
 
                 dimensions.forEach(function(dimension) {
                     dimension.scale.domain(dimension.type === Number
-                        ? d3.extent(data, function(d) { return +d[dimension.name]; })
-                        : data.map(function(d) { return d[dimension.name]; }).sort());
+                        ? d3.extent(filterParalleledData, function(d) { return +d[dimension.name]; })
+                        : filterParalleledData.map(function(d) { return d[dimension.name]; }).sort());
                 });
 
                 d3.select('#vizG').append("g")
                     .attr("class", "background")
                     .selectAll("path")
-                    .data(data)
+                    .data(filterParalleledData)
                     .enter().append("path")
                     .attr("d", draw);
 
                 d3.select('#vizG').append("g")
                     .attr("class", "foreground")
                     .selectAll("path")
-                    .data(data)
+                    .data(filterParalleledData)
                     .enter()
                     .append("path")
                     .attr({
                         fill: "none",
-                    	stroke:function(d,i){ return model.data.chartConfig.color(d.区域); },
+                    	stroke:function(d,i){ return graphConfig.color(d.区域); },
                         "stroke-width": "1.5px"
                     })
-                    .transition()
-                    .delay(function(d, i) {
-                        return i * 50;
-                    })
+                    // .transition()
+                    // .delay(function(d, i) {
+                    //     return i * 50;
+                    // })
                     .attr("d", draw);
 
                 dimension.append("g")
@@ -600,7 +524,7 @@ queue()
 
                 d3.select('#vizG').select(".axis").selectAll("text:not(.title)")
                     .attr("class", "label")
-                    .data(data, function(d) { return d.name || d; });
+                    .data(filterParalleledData, function(d) { return d.name || d; });
 
                 var projection = d3.select('#vizG').selectAll('.axis text, .background path, .foreground path')
                     .on('mouseover', mouseover)
@@ -624,7 +548,7 @@ queue()
                     d3.select('#vizG').classed('active', false);
                     projection.classed('inactive', false);
 
-                    hideMouseTooltip();
+                    // hideMouseTooltip();
                 }
 
                 function moveToFront() {
@@ -636,8 +560,38 @@ queue()
                         return [x(dimension.name), dimension.scale(d[dimension.name])];
                     }));
                 }
+                //start 初始化dimension===
+                function iniDimensions(graphConfig, selectedStatus) {
+                    var baseDimensionKey = [
+                        {
+                            name: "区域",
+                            scale: d3.scale.ordinal().rangePoints([0, graphConfig.svgHeight]),
+                            type: String,
+                            label: "区域"
+                        },
+                        {
+                            name: "年份",
+                            scale: d3.scale.linear().range([graphConfig.svgHeight, 0]),
+                            type: Number,
+                            label: "年份"
+                        }];
+    ;
+                    var selectedDimensionKeys = selectedStatus.selectedDimensionKeys.map(function(d) {
+                        return {
+                            name: d.value,
+                            scale: d3.scale.linear().range([graphConfig.svgHeight, 0]),
+                            type: Number,
+                            label: d.name
+                        }
+                    });
+
+                    var dimensions = baseDimensionKey.concat(selectedDimensionKeys);
+
+                    return dimensions;
+                }
+                //end 初始化dimension===
             }
-            // end 绘制平行坐标################
+            //end 生成parallel图###########
         }
         //### 绘制图表drawGraph end #########################
     });
