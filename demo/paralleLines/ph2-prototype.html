@@ -237,25 +237,25 @@
 						</div>
 						<div>
 							<span>请选择省份：</span>
-							<select class="form-control">
-								<option>
-									浙江
-								</option>
-								<option>
-									江苏
-								</option>
-							</select>
+								<select class="form-control" v-model="selectedStatus.selectedProvinceList">
+									<option v-for="province in getProvinceList"  v-bind:value="province" >{{ province}}
+									</option>
+								</select>
 						</div>
-						<div>
-							<span>请选择地市：</span>
-							<select class="form-control">
-								<option>
-									嘉兴
-								</option>
-								<option>
-									杭州
-								</option>
-							</select>
+						<div class="dropdown">
+							<span>请选择地市列表：</span>
+							<button class="btn btn-default btn-block dropdown-toggle" type="button" id="dropdownMenu31" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+							地市列表
+								<span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu" aria-labelledby="dropdownMenu31">
+								<li class='multiSelectionList'>
+									<div v-for="city in getCityList">
+										<input type="checkbox"  v-bind:value="city" v-model="selectedStatus.selectedCityList">
+										<label class='checkboxeLabel'>{{ city }}</label>
+									</div>
+								</li>
+							</ul>
 						</div>
 						<div>
 							<span>请选择县市：</span>
@@ -267,6 +267,31 @@
 									b
 								</option>
 							</select>
+						</div>
+						<div class="dropdown">
+							<span>请选择指标列表：</span>
+							<button class="btn btn-default btn-block dropdown-toggle" type="button" id="dropdownMenu32" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+							指标列表
+								<span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu" aria-labelledby="dropdownMenu32">
+								<li class='multiSelectionList'>
+									<div v-for="key in getParallelDimensionKeys">
+										<input type="checkbox"  v-bind:value="key" v-model="selectedStatus.selectedDimensionKeys">
+										<label class='checkboxeLabel'>{{ key.name }}</label>
+									</div>
+								</li>
+							</ul>
+						</div>
+						<div class="">
+							<span>已选择的地市：</span>
+							<ul class="list-group selectedInfoBox">
+								<li class="list-group-item list-group-item-success">{{selectedStatus.selectedCityList}}</li>
+							</ul>
+							<span>已选择的指标：</span>
+							<ul class="list-group selectedInfoBox">
+								<li class="list-group-item list-group-item-success">{{selectedStatus.selectedDimensionKeys | displayShortDimensionKeyName}}</li>
+							</ul>
 						</div>
 					</div>
 					<!-- end 地市模式 -->

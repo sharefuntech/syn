@@ -40,12 +40,6 @@ data: {
         city: '',
         town: ''
     },
-    placeList: { //存储地点list，用于菜单展开
-        countryList: '',
-        provinceList: '',
-        cityList: '',
-        townList: ''
-    },
     dataSourceMode:['country', 'province', 'city', 'town'], //数据源选项
     selectedStatus: { //选中的菜单项，
         selectedDataSourceMode = '',
@@ -64,10 +58,7 @@ data: {
 methods: {
      //(应该改成模式切换，不仅仅是面板显示问题，还涉及到列表状态数据的初始化)按钮点击后显示／隐藏不同模式下的控制面板 === 其实这个在computed里面处理更好，关键是mode状态
      showControlPanel,
-     enterCountryMode, //进入country模式，调用getCountryList等
-     enterProvinceMode, //进入province模式，调用getCountryList等
-     enterCityMode, //进入province模式，调用getCountryList等
-     enterTownMode, //进入province模式，调用getCountryList等
+     enterMode, //进入模式
 },
 computed: {
     getCountryList, //进入不同模式后，返回相对应的countryList
@@ -86,9 +77,11 @@ Vue.config.debug = true;
 queue()
     .defer(d3.csv, 'data/list-province-city.csv')
     .defer(d3.csv, 'data/data-province.csv')
-    .await(function(error, listProvinceCity, dataProvince) {
+    .defer(d3.csv, 'data/data-city.csv')
+    .await(function(error, listProvinceCity, dataProvince, dataCity) {
         // console.log(listProvinceCity);
         // console.log(dataProvince);
+        console.log(dataCity);
         var dataSourceMode = [
             {mode: 'country', label: '世界各国数据'},
             {mode: 'province', label: '中国省份数据'},
@@ -129,7 +122,7 @@ queue()
                 countryProvinceCityTownList: listProvinceCity, //临时省级列表
                 country: countryListTemp, //临时国家数据
                 province: dataProvince,
-                city: '',
+                city: dataCity,
                 town: ''
             },
             dataSourceMode:['country', 'province', 'city', 'town'], //数据源选项
@@ -180,7 +173,7 @@ queue()
             },
             // 重置地域选项
             resetSelectedStatus: function() {
-                this.selectedStatus.selectedCountryList = [];
+                this.selectedStatus.selectedCountryList = ['china'];
                 this.selectedStatus.selectedProvinceList = [];
                 this.selectedStatus.selectedCityList = [];
                 this.selectedStatus.selectedTownList = [];
@@ -195,6 +188,7 @@ queue()
             enterMode: function(mode) {
                 this.selectedStatus.selectedDataSourceMode = mode;
                 this.showControlPanel(mode);
+                this.resetSelectedStatus();
                 // iniSelectedStatus(mode);
             },
             //进入province模式根据国家抽取省份列表
@@ -215,7 +209,29 @@ queue()
                 return provinceList;
             },
             filterCityByProvince: function(selectedProvince) {
+                var place = d3.nest()
+                    .key(function(d) {
+                        // 使用省份索引
+                        return d.province;
+                    })
+                    .entries(this.geoData.countryProvinceCityTownList);
+                // console.log(place);
+                var cityListObj = place.filter(function(d) {
+                    return d.key == selectedProvince;
+                });
 
+                if (cityListObj[0]) {
+                    // console.log(cityListObj[0].values);
+                    var cityList = [];
+                    cityListObj[0].values.forEach(function(d) {
+                        cityList.push(d.city);
+                    });
+                    // console.log(cityList);
+                    return cityList;
+                } else {
+                    var cityList = [];
+                    return cityList;
+                }
             },
             filterTownByCity: function(selectedCity) {
 
@@ -240,6 +256,9 @@ queue()
             getProvinceList: function() {
                 if (this.selectedStatus.selectedDataSourceMode != 'country') {
                     // console.log(' I am getProvinceList');
+                    // console.log(this.selectedStatus.selectedProvinceList);
+                    // var cityList = this.filterCityByProvince(this.selectedStatus.selectedProvinceList);
+                    // console.log(cityList);
                     return this.filterProvinceByCountry(this.selectedStatus.selectedCountryList[0]);
                 } else {
                     return [];
@@ -247,7 +266,8 @@ queue()
             },
             // 用于选择国别地市菜单展开
             getCityList: function() {
-
+                // console.log(this.selectedStatus.selectedProvinceList);
+                return this.filterCityByProvince(this.selectedStatus.selectedProvinceList);
             },
             // 用于选择县级菜单展开
             getTownList: function() {
@@ -255,11 +275,13 @@ queue()
             },
             // 用于选择指标菜单展开
             getParallelDimensionKeys: function() {
-                if (this.selectedStatus.selectedDataSourceMode == 'province') { //暂时注册province模式
-                    return this.generateParallelDimensionKeys();
-                } else {
-                    return [];
-                }
+                // if (this.selectedStatus.selectedDataSourceMode == 'province') { //暂时注册province模式
+                //     return this.generateParallelDimensionKeys();
+                // } else {
+                //     return [];
+                // }
+
+                return this.generateParallelDimensionKeys();
             }
         }
         /// model end *****************************************
@@ -286,12 +308,6 @@ queue()
             var mode = this.selectedStatus.selectedDataSourceMode;
             // 根据模式获取对应数据源
             var data = this.geoData[mode];
-            // // csv文件原始索引
-            // var csvIndex = [];
-            // // 转换成平行数据
-            // var paralleledData;
-            // // 指标索引
-            // var dimensionKeys = [];
 
             this.parallelConfig.paralleledData = parseData(data);// 平行化数据
             this.parallelConfig.dimensionKeys = getDimensionKeys(this.parallelConfig.paralleledData); // 抽取平行数据索引
@@ -403,8 +419,32 @@ queue()
             svg = iniSvg(graphConfig, '#vizContainer');
 
             // 上海、台湾、广西、澳门、香港 数据有问题无法筛选出来
-            var filterParalleledData = filterParalleledDataBySelectedProvinces(selectedStatus, parallelConfig);
-            console.log(filterParalleledData);
+            // var filterParalleledData = filterParalleledDataBySelectedProvinces(selectedStatus, parallelConfig);
+            var filterParalleledData = filterParalleledDataBySelectedPlace(selectedStatus, parallelConfig);
+            // console.log(filterParalleledData);
+
+            function filterParalleledDataBySelectedPlace(selectedStatus, parallelConfig) {
+                var selectedPlace = d3.set();
+
+                if (selectedStatus.selectedDataSourceMode == 'province') {
+                    selectedStatus.selectedProvinceList.forEach(function(d) {
+                        selectedPlace.add(d);
+                    });
+                } else if (selectedStatus.selectedDataSourceMode == 'city') {
+                    selectedStatus.selectedCityList.forEach(function(d) {
+                        selectedPlace.add(d);
+                    });
+                }
+
+                var filterParalleledData = [];
+                parallelConfig.paralleledData.forEach(function(d) {
+                    if (selectedPlace.has(d['区域'])) {
+                        filterParalleledData.push(d);
+                    }
+                })
+
+                return filterParalleledData;
+            }
 
             function filterParalleledDataBySelectedProvinces(selectedStatus, parallelConfig) {
                 var selectedProvinces = d3.set();
