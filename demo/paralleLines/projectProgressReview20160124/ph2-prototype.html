@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<meta name="renderer" content="webkit">
+	<title>平行坐标项目开发</title>
+	<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.css">
+	<!-- dashboard布局的必须样式 -->
+	<link rel="stylesheet" href="lib/bootstrap/css/dashboard.css">
+	<link rel="stylesheet" href="src/style-bootstrap-vue.css" media="screen">
+	<script src="lib/vue.js"></script>
+	<script src="lib/d3.js"></script>
+	<script src="lib/queue.js"></script>
+	<script src="lib/bootstrap/js/jquery-1.12.0.js"></script>
+	<script src="lib/bootstrap/js/bootstrap.js"></script>
+</head>
+<body>
+	<!-- ################################################################
+	### vue template
+	################################################################ -->
+	<script type="text/x-template" id="">
+	</script>
+
+	<!-- ################################################################
+	### start nav
+	################################################################ -->
+	 <nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container-fluid">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#"><span class="glyphicon glyphicon-king" aria-hidden="true"> MagicDataLab</a>
+			</div>
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav navbar-right">
+					<!-- <li><a href="#">Link</a></li> -->
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">关于<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="#"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> 项目主页</a></li>
+							<li><a href="#"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> 联系方式</a></li>
+							<li><a href="#"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 作者介绍</a></li>
+							<li role="separator" class="divider"></li>
+							<li><a href="#"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> 更多资源</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div><!-- /.navbar-collapse -->
+		</div><!-- /.container-fluid -->
+	</nav>
+	<!-- ### end nav ############################################### -->
+
+	<!-- ################################################################
+	### start container
+	################################################################ -->
+	<div class="container-fluid">
+	<!-- <div class="container"> -->
+		<div class="row">
+			<!-- *****************************************
+			*** start side bar ***************************-->
+			<!-- <div class="col-sm-3 col-md-3 col-lg-2 sidebar"> -->
+			<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 sidebar">
+				<!-- === start app ======================= -->
+				<div id="app">
+					<div class="btn-group btn-group-justified" role="group" aria-label="...">
+						<div class="btn-group btn-group-sm" role="group">
+							<button type="button" class="btn btn-default" v-bind:class="{'btn-primary': controlPanelVisibility.country}" @click='enterMode("country")'>国家</button>
+						</div>
+						<div class="btn-group btn-group-sm" role="group">
+							<button type="button" class="btn btn-default" v-bind:class="{'btn-primary': controlPanelVisibility.province}"  @click='enterMode("province")'>省级</button>
+						</div>
+						<div class="btn-group btn-group-sm" role="group">
+							<button type="button" class="btn btn-default" v-bind:class="{'btn-primary': controlPanelVisibility.city}" @click='enterMode("city")'>地市</button>
+						</div>
+						<div class="btn-group btn-group-sm" role="group">
+							<button type="button" class="btn btn-default" v-bind:class="{'btn-primary': controlPanelVisibility.town}" @click='enterMode("town")'>县级</button>
+						</div>
+					</div>
+
+					<!-- /////////////////////////////// -->
+					<!-- start 国家模式 -->
+					<div v-if="controlPanelVisibility.country">
+						<div class="dropdown">
+							<span>请选择国家列表：</span>
+							<button class="btn btn-default btn-block dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+							国家列表
+								<span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+								<li  v-for="country in getCountryList"  class='multiSelectionList'>
+									<div>
+										<input type="checkbox" v-model="selectedStatus.selectedCountryList" v-bind:value="country.country">
+										<label>{{ country.label}}</label>
+									</div>
+								</li>
+							</ul>
+						</div>
+						<div>
+							<span>请选择省份：</span>
+							<select class="form-control" disabled="true">
+								<option>
+									省份
+								</option>
+								<option>
+									b
+								</option>
+							</select>
+						</div>
+						<div>
+							<span>请选择地市：</span>
+							<select class="form-control" disabled="true">
+								<option>
+									地市
+								</option>
+								<option>
+									b
+								</option>
+							</select>
+						</div>
+						<div>
+							<span>请选择县市：</span>
+							<select class="form-control" disabled="true">
+								<option>
+									县市
+								</option>
+								<option>
+									b
+								</option>
+							</select>
+						</div>
+					</div>
+					<!-- end 国家模式 -->
+
+					<!-- /////////////////////////////// -->
+					<!-- start 省份模式 -->
+					<div v-if="controlPanelVisibility.province">
+						<div>
+							<span>请选择国家：</span>
+							<select class="form-control" disabled="true">
+								<option>
+									中国
+								</option>
+								<option>
+									asia
+								</option>
+							</select>
+						</div>
+						<div class="dropdown">
+							<span>请选择省份列表：</span>
+							<button class="btn btn-default btn-block dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+							省份列表
+								<span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+								<li class='multiSelectionList'>
+									<div v-for="province in getProvinceList">
+										<input type="checkbox"  v-bind:value="province" v-model="selectedStatus.selectedProvinceList">
+										<label class='checkboxeLabel'>{{ province}}</label>
+									</div>
+								</li>
+							</ul>
+						</div>
+						<div>
+							<span>请选择地市：</span>
+							<select class="form-control" disabled="true">
+								<option>
+									地市
+								</option>
+								<option>
+									b
+								</option>
+							</select>
+						</div>
+						<div>
+							<span>请选择县市：</span>
+							<select class="form-control" disabled="true">
+								<option>
+									县市
+								</option>
+								<option>
+									b
+								</option>
+							</select>
+						</div>
+						<div class="dropdown">
+							<span>请选择指标列表：</span>
+							<button class="btn btn-default btn-block dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+							指标列表
+								<span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+								<li class='multiSelectionList'>
+									<div v-for="key in getParallelDimensionKeys">
+										<input type="checkbox"  v-bind:value="key" v-model="selectedStatus.selectedDimensionKeys">
+										<label class='checkboxeLabel'>{{ key.name }}</label>
+									</div>
+								</li>
+							</ul>
+						</div>
+						<div class="">
+							<!-- <ul class="list-group">
+								<li v-for='key in selectedStatus.selectedDimensionKeys' class="list-group-item list-group-item-info">{{key | displayShortDimensionKeyName}}</li>
+							</ul> -->
+							<span>已选择的省份：</span>
+							<ul class="list-group selectedInfoBox">
+								<li class="list-group-item list-group-item-success">{{selectedStatus.selectedProvinceList}}</li>
+								<!-- <li class="list-group-item list-group-item-info">{{selectedStatus.selectedDimensionKeys}}</li> -->
+							</ul>
+							<span>已选择的指标：</span>
+							<ul class="list-group selectedInfoBox">
+								<li class="list-group-item list-group-item-success">{{selectedStatus.selectedDimensionKeys | displayShortDimensionKeyName}}</li>
+							</ul>
+						</div>
+					</div>
+					<!-- end 省份模式 -->
+
+					<!-- /////////////////////////////// -->
+					<!-- start 地市模式 -->
+					<div v-if="controlPanelVisibility.city">
+						<div>
+							<span>请选择国家：</span>
+							<select class="form-control" disabled="true">
+								<option>
+									中国
+								</option>
+								<option>
+									asia
+								</option>
+							</select>
+						</div>
+						<div>
+							<span>请选择省份：</span>
+								<select class="form-control" v-model="selectedStatus.selectedProvinceList">
+									<option v-for="province in getProvinceList"  v-bind:value="province" >{{ province}}
+									</option>
+								</select>
+						</div>
+						<div class="dropdown">
+							<span>请选择地市列表：</span>
+							<button class="btn btn-default btn-block dropdown-toggle" type="button" id="dropdownMenu31" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+							地市列表
+								<span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu" aria-labelledby="dropdownMenu31">
+								<li class='multiSelectionList'>
+									<div v-for="city in getCityList">
+										<input type="checkbox"  v-bind:value="city" v-model="selectedStatus.selectedCityList">
+										<label class='checkboxeLabel'>{{ city }}</label>
+									</div>
+								</li>
+							</ul>
+						</div>
+						<div>
+							<span>请选择县市：</span>
+							<select class="form-control" disabled="true">
+								<option>
+									县市
+								</option>
+								<option>
+									b
+								</option>
+							</select>
+						</div>
+						<div class="dropdown">
+							<span>请选择指标列表：</span>
+							<button class="btn btn-default btn-block dropdown-toggle" type="button" id="dropdownMenu32" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+							指标列表
+								<span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu" aria-labelledby="dropdownMenu32">
+								<li class='multiSelectionList'>
+									<div v-for="key in getParallelDimensionKeys">
+										<input type="checkbox"  v-bind:value="key" v-model="selectedStatus.selectedDimensionKeys">
+										<label class='checkboxeLabel'>{{ key.name }}</label>
+									</div>
+								</li>
+							</ul>
+						</div>
+						<div class="">
+							<span>已选择的地市：</span>
+							<ul class="list-group selectedInfoBox">
+								<li class="list-group-item list-group-item-success">{{selectedStatus.selectedCityList}}</li>
+							</ul>
+							<span>已选择的指标：</span>
+							<ul class="list-group selectedInfoBox">
+								<li class="list-group-item list-group-item-success">{{selectedStatus.selectedDimensionKeys | displayShortDimensionKeyName}}</li>
+							</ul>
+						</div>
+					</div>
+					<!-- end 地市模式 -->
+
+					<!-- /////////////////////////////// -->
+					<!-- start 县级模式 -->
+					<div v-if="controlPanelVisibility.town">
+						<div>
+							<span>请选择国家：</span>
+							<select class="form-control" disabled="true">
+								<option>
+									中国
+								</option>
+								<option>
+									asia
+								</option>
+							</select>
+						</div>
+						<div>
+							<span>请选择省份：</span>
+							<select class="form-control">
+								<option>
+									浙江
+								</option>
+								<option>
+									江苏
+								</option>
+							</select>
+						</div>
+						<div>
+							<span>请选择地市：</span>
+							<select class="form-control">
+								<option>
+									南京
+								</option>
+								<option>
+									常熟
+								</option>
+							</select>
+						</div>
+						<div>
+							<span>请选择县市：</span>
+							<select class="form-control">
+								<option>
+									海宁
+								</option>
+								<option>
+									桐乡
+								</option>
+							</select>
+						</div>
+						<!-- end 数据种类选择面板 -->
+					</div>
+					<!-- end 县级模式 -->
+
+					<!-- //////////////////// -->
+					<!-- start 更新图表按钮 -->
+					<div class="updateButtonContainer">
+						<button type="button" class="btn btn-success" @click='drawGraph'><span class="glyphicon glyphicon-camera" aria-hidden="true"></span> 更新图表</button>
+	                </div>
+					<!-- end 更新图表按钮 -->
+				<!-- === end app ======================= -->
+				</div>
+			</div>
+			<!-- *** end side bar ***************************** -->
+
+			<!-- *****************************************
+			*** start main container ***************************-->
+			<!-- <div class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 col-lg-10 col-lg-offset-2 main"> -->
+			<div class="col-xs-12 col-sm-8 col-sm-offset-4 col-md-9 col-md-offset-3 col-lg-10 col-lg-offset-2 main">
+				<div id="vizContainer"></div>
+			</div>
+			<!-- *** end main container ***************************** -->
+		</div>
+	</div>
+	<!-- ### end container ############################################### -->
+	<!-- <script src="src/c13-exp-bootstrap-vue.js"></script> -->
+	<script src="src/ph2-prototype.js"></script>
+</body>
+</html>
