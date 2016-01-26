@@ -33,24 +33,56 @@
     </style>
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="redBox col-xs-12 col-sm-4 col-md-4 col-lg-2"></div>
-            <div class="blueBox col-xs-12 col-sm-8 col-md-8 col-lg-10"></div>
-        </div>
-    </div>
-
 
     <script type="text/javascript">
-        // console.log(document.getElementById('imgBox').offsetWidth);
-        // console.log(document.getElementById('imgBox').offsetHeight);
-    // queue()
-    //     .defer(d3.csv, 'data/list-province-city.csv')
-    //     .defer(d3.csv, 'data/data-province.csv')
-    //     .await(function(error, listProvinceCity, dataProvince) {
-    //         console.log(listProvinceCity);
-    //         console.log(dataProvince);
+    // hsl(45, 90%, 50%)
+    // var colorBase = d3.hsl('hsl(193,90%,80%)');
+    grayColorGroup();
+    function grayColorGroup() {
+        var grayColorGroup = d3.range(20).map(function(d, i) {
+            var hslColor = 'hsl(45,' + 5*i + '%, 50%)';
+            return d3.hsl(hslColor);
+        });
+        console.log(grayColorGroup);
+        return grayColorGroup;
+    }
+    // var c = d3.scale.category20c(1);
+    // console.log(c);
+    //
+    // var colorBase = d3.hsl('hsl(193,90%,80%)');
+    // var darkedColor;
+    // var colorGroup = [];
+    // d3.range(20).map(function(d) {
+    //     darkedColor = colorBase.darker(.2);
+    //     colorBase = darkedColor;
+    //     colorGroup.push(darkedColor);
+    // });
+    // // console.log();
+    //
+    // function darkerColorGroup(colorSpaceNum, darkerSpeed, colorBase) {
+    //     // var colorBase = d3.hsl('hsl(193,90%,80%)');
+    //     //darkerSpeed = 0.2
+    //     var darkedColor;
+    //     var colorGroup = [];
+    //     d3.range(colorSpaceNum).map(function(d) {
+    //         darkedColor = colorBase.darker(darkerSpeed);
+    //         colorBase = darkedColor;
+    //         colorGroup.push(darkedColor);
     //     });
+    //     return colorGroup;
+    // }
+    //
+    // d3.select('body')
+    //     .selectAll('div')
+    //     .data(colorGroup)
+    //     .enter()
+    //     .append('div')
+    //     .attr('width', '50px')
+    //     .attr('height', '50px')
+    //     .style('background-color', function(d) {
+    //         return d;
+    //     });
+
     </script>
 </body>
 </html>

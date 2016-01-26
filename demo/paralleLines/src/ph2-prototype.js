@@ -151,8 +151,8 @@ queue()
                 },
                 color: d3.scale.category10(),
                 enableAnimation: false,
-                animationDuration: 5000, //动画持续时间
-                animationDelay: 3500
+                animationDuration: 2500, //动画持续时间
+                animationDelay: 2500
             },
             parallelConfig: { //平行数据指标，指标索引、转换后的平行数据
                 dimensionKeys: [],
@@ -574,10 +574,13 @@ queue()
                         return Math.floor(Math.random()*89) + 10;
                     }
 
-                    var soloModeColor = d3.range(20).map(function(d, i) {
-                        return '#' + randomColorTrack() + randomColorTrack() + randomColorTrack();
-                    });
-                    console.log(soloModeColor);
+                    // var soloModeColor = d3.range(20).map(function(d, i) {
+                    //     return '#' + randomColorTrack() + randomColorTrack() + randomColorTrack();
+                    // });
+                    // console.log(soloModeColor);
+                    // var soloModeColor = darkerColorGroup(20, 0.2, 'hsl(193,90%,80%)');
+                    // var soloModeColor = grayColorGroup();
+                    var soloModeColor = ['#483B97','#5C2E91', '#782B91', '#A5257C', '#D11E60', '#ED1B36', '#F14D31', '#F37022', '#F7941D', '#FDB813', '#FFD504', '#D8DF20', '#B2D233', '#61BC47', '#08B073', '#19AFB0', '#009D9E', '#3B89C9', '#105BAC', '#093A75', '#483B97'];
 
                     pathGroup
                         .attr("stroke-dasharray", function(d, i) {
@@ -614,23 +617,6 @@ queue()
                         })
                         .attr("d", draw);
                 }
-
-                // d3.select('#vizG').append("g")
-                //     .attr("class", "foreground")
-                //     .selectAll("path")
-                //     .data(filterParalleledData)
-                //     .enter()
-                //     .append("path")
-                //     .attr({
-                //         fill: "none",
-                //     	stroke:function(d,i){ return graphConfig.color(d.区域); },
-                //         "stroke-width": "1.5px"
-                //     })
-                //     .transition()
-                //     .delay(function(d, i) {
-                //         return i * 500 * graphConfig.enableAnimation;
-                //     })
-                //     .attr("d", draw);
 
                 dimension.append("g")
                     .attr("class", "axis")
@@ -714,3 +700,28 @@ queue()
         }
         //### 绘制图表drawGraph end #########################
     });
+
+//=======================================================================
+//=== independent helper ================================================
+function darkerColorGroup(colorSpaceNum, darkerSpeed, colorBase) {
+    // var colorBase = d3.hsl('hsl(193,90%,80%)');
+    //darkerSpeed = 0.2
+    var base = d3.hsl(colorBase);
+    var darkedColor;
+    var colorGroup = [];
+    d3.range(colorSpaceNum).map(function(d) {
+        darkedColor = base.darker(darkerSpeed);
+        base = darkedColor;
+        colorGroup.push(darkedColor);
+    });
+    return colorGroup;
+}
+
+function grayColorGroup() {
+    var grayColorGroup = d3.range(20).map(function(d, i) {
+        var hslColor = 'hsl(45,' + 5*i + '%, 50%)';
+        return d3.hsl(hslColor);
+    });
+    console.log(grayColorGroup);
+    return grayColorGroup;
+}
