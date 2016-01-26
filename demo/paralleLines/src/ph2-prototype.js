@@ -150,7 +150,9 @@ queue()
                     right: 50
                 },
                 color: d3.scale.category10(),
-                enableAnimation: false
+                enableAnimation: false,
+                animationDuration: 5000, //动画持续时间
+                animationDelay: 3500
             },
             parallelConfig: { //平行数据指标，指标索引、转换后的平行数据
                 dimensionKeys: [],
@@ -546,22 +548,89 @@ queue()
                     .enter().append("path")
                     .attr("d", draw);
 
-                d3.select('#vizG').append("g")
-                    .attr("class", "foreground")
-                    .selectAll("path")
-                    .data(filterParalleledData)
-                    .enter()
-                    .append("path")
-                    .attr({
-                        fill: "none",
-                    	stroke:function(d,i){ return graphConfig.color(d.区域); },
-                        "stroke-width": "1.5px"
-                    })
-                    .transition()
-                    .delay(function(d, i) {
-                        return i * 500 * graphConfig.enableAnimation;
-                    })
-                    .attr("d", draw);
+                if (graphConfig.enableAnimation) {
+                    //test animate curve ===========
+                    var pathGroup = d3.select('#vizG').append("g")
+                        .attr("class", "foreground")
+                        .selectAll("path")
+                        .data(filterParalleledData)
+                        .enter()
+                        .append("path")
+                        .attr("class", "soloModeLine")
+                        .attr("d", draw);
+                    // console.log(pathGroup);
+                    var pathLengthGroup = [];
+                    pathGroup[0].forEach(function(d) {
+                        // pathLengthGroup.push(d.node().getTotalLength());
+                        pathLengthGroup.push(d.getTotalLength());
+                    });
+                    // console.log(pathLengthGroup);
+
+                    var dashArrayGroup = pathLengthGroup.map(function(d) {
+                        return d + " " + d;
+                    });
+                    // console.log(dashArrayGroup);
+                    function randomColorTrack() {
+                        return Math.floor(Math.random()*89) + 10;
+                    }
+
+                    var soloModeColor = d3.range(20).map(function(d, i) {
+                        return '#' + randomColorTrack() + randomColorTrack() + randomColorTrack();
+                    });
+                    console.log(soloModeColor);
+
+                    pathGroup
+                        .attr("stroke-dasharray", function(d, i) {
+                            return dashArrayGroup[i];
+                        })
+                        .attr("stroke-dashoffset", function(d, i) {
+                            return pathLengthGroup[i];
+                        })
+                        .attr("stroke", function(d, i) {
+                            return soloModeColor[i];
+                        })
+                        .transition()
+                        .duration(graphConfig.animationDuration)
+                        .ease("linear")
+                        .attr("stroke-dashoffset", 0)
+                        .delay(function(d, i) {
+                            return i * graphConfig.animationDelay * graphConfig.enableAnimation;
+                        });
+                } else {
+                    d3.select('#vizG').append("g")
+                        .attr("class", "foreground")
+                        .selectAll("path")
+                        .data(filterParalleledData)
+                        .enter()
+                        .append("path")
+                        .attr({
+                            fill: "none",
+                        	stroke:function(d,i){ return graphConfig.color(d.区域); },
+                            "stroke-width": "1.5px"
+                        })
+                        .transition()
+                        .delay(function(d, i) {
+                            return i * 500 * graphConfig.enableAnimation;
+                        })
+                        .attr("d", draw);
+                }
+
+                // d3.select('#vizG').append("g")
+                //     .attr("class", "foreground")
+                //     .selectAll("path")
+                //     .data(filterParalleledData)
+                //     .enter()
+                //     .append("path")
+                //     .attr({
+                //         fill: "none",
+                //     	stroke:function(d,i){ return graphConfig.color(d.区域); },
+                //         "stroke-width": "1.5px"
+                //     })
+                //     .transition()
+                //     .delay(function(d, i) {
+                //         return i * 500 * graphConfig.enableAnimation;
+                //     })
+                //     .attr("d", draw);
 
                 dimension.append("g")
                     .attr("class", "axis")

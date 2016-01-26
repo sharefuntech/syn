@@ -1,0 +1,12 @@
+body {
+	background: #101420;
+}
+
+.spirograph {
+	fill: none;
+	stroke-width: 5px;
+}
+
+.rangeDiv {
+	color: #949494;
+}
