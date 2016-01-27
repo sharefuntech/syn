@@ -9,7 +9,9 @@
   },
   "dependencies": {
     "vue": "^1.0.0",
-    "vue-mdl": "^0.3.2"
+    "vue-antd": "^0.2.9",
+    "vue-mdl": "^0.3.2",
+    "vue-strap": "^1.0.7"
   },
   "devDependencies": {
     "babel-core": "^6.0.0",

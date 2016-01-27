@@ -1,0 +1,6 @@
+[{"image": ["image/work/work-mobile.png"], "link": ["work-mobile.html"], "description": ["Mobile telephone subscriptions", "Tool: d3.js"]},
+{"image": ["image/work/work-tree.jpg"], "link": ["work-tree.html"], "description": ["China Government Budget 2015", "Tool: d3.js"]},
+{"image": ["image/work/work-stock.jpg"], "link": ["work-stock.html"], "description": ["China's stock market", "Tool: d3.js"]},
+{"image": ["image/work/work-bubble.jpg"], "link": ["work-bubble.html"], "description": ["Inside China's booming car market", "Tool: d3.js"]},
+{"image": ["image/work/work-arc.jpg"], "link": ["work-arc.html"], "description": ["Arc diagram", "Tool: d3.js"]},
+{"image": ["image/sample.png"], "link": ["http://www.annaflagg.com/work/superweeds"], "description": ["The Rise of the Superweeds", "Personal"]}]

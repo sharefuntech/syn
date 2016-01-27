@@ -1,0 +1,48 @@
+{'latitude': 48.2, 'country': u'Austria', 'longitude': 16.367, 'country_code': u'AT'}
+{'latitude': 37.57, 'country': u'Republic of Korea', 'longitude': 126.98, 'country_code': u'KR'}
+{'latitude': 59.333, 'country': u'Sweden', 'longitude': 18.05, 'country_code': u'SE'}
+{'latitude': -15.784, 'country': u'Brazil', 'longitude': -47.917, 'country_code': u'BR'}
+{'latitude': 54.617, 'country': u'United Kingdom', 'longitude': -1.07, 'country_code': u'GB'}
+{'latitude': 40.711, 'country': u'United States', 'longitude': -73.947, 'country_code': u'US'}
+{'latitude': 54.648, 'country': u'United Kingdom', 'longitude': -2.815, 'country_code': u'GB'}
+{'latitude': 14.583, 'country': u'Philippines', 'longitude': 120.967, 'country_code': u'PH'}
+{'latitude': 26.399, 'country': u'India', 'longitude': 90.272, 'country_code': u'IN'}
+{'latitude': 52.083, 'country': u'Netherlands', 'longitude': 5.083, 'country_code': u'NL'}
+{'latitude': 31.207, 'country': u'United States', 'longitude': -83.251, 'country_code': u'US'}
+{'latitude': 38, 'country': u'United States', 'longitude': -97, 'country_code': u'US'}
+{'latitude': 51.517, 'country': u'United Kingdom', 'longitude': -0.097, 'country_code': u'GB'}
+{'latitude': 20, 'country': u'India', 'longitude': 77, 'country_code': u'IN'}
+{'latitude': 41.039, 'country': u'United States', 'longitude': -96.369, 'country_code': u'US'}
+{'latitude': 14.583, 'country': u'Philippines', 'longitude': 120.967, 'country_code': u'PH'}
+{'latitude': 53.326, 'country': u'United Kingdom', 'longitude': -1.187, 'country_code': u'GB'}
+{'latitude': 32.841, 'country': u'United States', 'longitude': -80.107, 'country_code': u'US'}
+{'latitude': 39.022, 'country': u'United States', 'longitude': -94.316, 'country_code': u'US'}
+{'latitude': 38, 'country': u'United States', 'longitude': -97, 'country_code': u'US'}
+{'latitude': 20, 'country': u'India', 'longitude': 77, 'country_code': u'IN'}
+{'latitude': 52.367, 'country': u'Netherlands', 'longitude': 4.9, 'country_code': u'NL'}
+{'latitude': 20, 'country': u'India', 'longitude': 77, 'country_code': u'IN'}
+{'latitude': 50.963, 'country': u'United Kingdom', 'longitude': -0.149, 'country_code': u'GB'}
+{'latitude': 55.953, 'country': u'United Kingdom', 'longitude': -3.201, 'country_code': u'GB'}
+{'latitude': 41.292, 'country': u'United States', 'longitude': -96.172, 'country_code': u'US'}
+{'latitude': 51.217, 'country': u'Belgium', 'longitude': 3.233, 'country_code': u'BE'}
+{'latitude': 53.348, 'country': u'Ireland', 'longitude': -6.26, 'country_code': u'IE'}
+{'latitude': 44.025, 'country': u'United States', 'longitude': -88.543, 'country_code': u'US'}
+{'latitude': 41.299, 'country': u'United States', 'longitude': -96.167, 'country_code': u'US'}
+{'latitude': 20, 'country': u'India', 'longitude': 77, 'country_code': u'IN'}
+{'latitude': 45.583, 'country': u'Italy', 'longitude': 12.321, 'country_code': u'IT'}
+{'latitude': -33.931, 'country': u'South Africa', 'longitude': 18.845, 'country_code': u'ZA'}
+{'latitude': 38.825, 'country': u'United States', 'longitude': -90.729, 'country_code': u'US'}
+{'latitude': 48.2, 'country': u'Austria', 'longitude': 16.367, 'country_code': u'AT'}
+{'latitude': 28.667, 'country': u'India', 'longitude': 77.217, 'country_code': u'IN'}
+{'latitude': 38, 'country': u'United States', 'longitude': -97, 'country_code': u'US'}
+{'latitude': 53.098, 'country': u'United Kingdom', 'longitude': -1.117, 'country_code': u'GB'}
+{'latitude': 20, 'country': u'India', 'longitude': 77, 'country_code': u'IN'}
+{'latitude': 51.5, 'country': u'United Kingdom', 'longitude': -0.13, 'country_code': u'GB'}
+{'latitude': 43.156, 'country': u'United States', 'longitude': -77.604, 'country_code': u'US'}
+{'latitude': 42.099, 'country': u'United States', 'longitude': -75.918, 'country_code': u'US'}
+{'latitude': 38, 'country': u'United States', 'longitude': -97, 'country_code': u'US'}
+{'latitude': 51.652, 'country': u'United Kingdom', 'longitude': -3.232, 'country_code': u'GB'}
+{'latitude': 37.35, 'country': u'United States', 'longitude': -121.986, 'country_code': u'US'}
+{'latitude': 57.444, 'country': u'Denmark', 'longitude': 10.547, 'country_code': u'DK'}
+{'latitude': 29.548, 'country': u'United States', 'longitude': -98.292, 'country_code': u'US'}
+{'latitude': 47.483, 'country': u'Austria', 'longitude': 16.483, 'country_code': u'AT'}
