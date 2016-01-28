@@ -581,6 +581,8 @@ queue()
                     // var soloModeColor = darkerColorGroup(20, 0.2, 'hsl(193,90%,80%)');
                     // var soloModeColor = grayColorGroup();
                     var soloModeColor = ['#483B97','#5C2E91', '#782B91', '#A5257C', '#D11E60', '#ED1B36', '#F14D31', '#F37022', '#F7941D', '#FDB813', '#FFD504', '#D8DF20', '#B2D233', '#61BC47', '#08B073', '#19AFB0', '#009D9E', '#3B89C9', '#105BAC', '#093A75', '#483B97'];
+                    //创建高斯模糊
+                    var filter = createGaussianBlurFilter(svg, 'glow');
 
                     pathGroup
                         .attr("stroke-dasharray", function(d, i) {
@@ -592,14 +594,19 @@ queue()
                         .attr("stroke", function(d, i) {
                             return soloModeColor[i];
                         })
+                        // .style('filter', 'url(#glow)') //高斯模糊,放这里太影响性能
                         .transition()
                         .duration(graphConfig.animationDuration)
                         .ease("linear")
                         .attr("stroke-dashoffset", 0)
+                        .style('filter', 'url(#glow)')
                         .delay(function(d, i) {
                             return i * graphConfig.animationDelay * graphConfig.enableAnimation;
                         });
                 } else {
+                    //创建高斯模糊，选中单条高亮，跑不动了
+                    // var filter = createGaussianBlurFilter(svg, 'glow');
+
                     d3.select('#vizG').append("g")
                         .attr("class", "foreground")
                         .selectAll("path")
@@ -612,6 +619,7 @@ queue()
                             "stroke-width": "1.5px"
                         })
                         .transition()
+                        // .style('filter', 'url(#glow)') //不能开，跑不动
                         .delay(function(d, i) {
                             return i * 500 * graphConfig.enableAnimation;
                         })
@@ -724,4 +732,23 @@ function grayColorGroup() {
     });
     console.log(grayColorGroup);
     return grayColorGroup;
+}
+
+//高斯模糊
+function createGaussianBlurFilter(svg, id) {
+    var g = svg.append('g');
+
+    var filter = g.append('defs')
+        .append('filter')
+        .attr('id', id);
+
+    var feGaussianBlur = filter.append('feGaussianBlur')
+        .attr('stdDeviation', '2.5')
+        .attr('result', 'coloredBlur');
+
+    var feMerge = filter.append('feMerge');
+    var feMergeNode_1 = feMerge.append('feMergeNode')
+        .attr('in', 'coloredBlur');
+    var feMergeNode_2 = feMerge.append('feMergeNode')
+        .attr('in', 'SourceGraphic');
 }

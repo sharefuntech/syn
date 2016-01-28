@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="lib/d3.js"></script>
+</head>
+<body>
+    <script type="text/javascript">
+    var cfg = {
+        w: 600,
+        h: 600,
+        margin: {
+            top: 20,
+            right: 20,
+            bottom: 20,
+            left: 20
+        },
+        levels: 3,
+        maxValue: 0,
+        labelFactor: 1.25,
+        wrapWidth: 60,
+        opacityArea: 0.35,
+        dotRadius: 4,
+        opacityCircles: 0.1,
+        strokeWidth: 2,
+        roundStrokes: false,
+        color: d3.scale.category10()
+    }
+
+    var svg = d3.select('body').append('svg')
+        .attr('width', cfg.w + cfg.margin.left + cfg.margin.right)
+        .attr('height', cfg.h + cfg.margin.top + cfg.margin.bottom);
+
+    var filter = createGaussianBlurFilter(svg, 'glow');
+
+    // var g = svg.append('g');
+    //
+    // var filter = g.append('defs')
+    //     .append('filter')
+    //     .attr('id', 'glow');
+    //
+    // var feGaussianBlur = filter.append('feGaussianBlur')
+    //     .attr('stdDeviation', '2.5')
+    //     .attr('result', 'coloredBlur');
+    //
+    // var feMerge = filter.append('feMerge');
+    // var feMergeNode_1 = feMerge.append('feMergeNode')
+    //     .attr('in', 'coloredBlur');
+    // var feMergeNode_2 = feMerge.append('feMergeNode')
+    //     .attr('in', 'SourceGraphic');
+    //
+    var cubeG = svg.append('g')
+        .attr('transform', 'translate(' + (cfg.w/2 + cfg.margin.left)  + ',' + (cfg.h/2 + cfg.margin.top) + ')');
+    var circleG = svg.append('g')
+        .attr('transform', 'translate(' + (cfg.w/3 + cfg.margin.left)  + ',' + (cfg.h/3 + cfg.margin.top) + ')');
+
+    cubeG.append('rect')
+        .attr('width', 300)
+        .attr('height', 300)
+        .style('fill', 'teal')
+        .style('stroke', 'gray')
+        .style('fill-opacity', cfg.opacityCircles)
+        .style('filter', 'url(#glow)');
+
+    circleG.append('circle')
+        .attr('cx', 0)
+        .attr('cy', 0)
+        .attr('r', 200)
+        .style('fill', 'orange')
+        .style('stroke', 'gray')
+        .style('fill-opacity', cfg.opacityCircles)
+        .style('filter', 'url(#glow)');
+
+    function createGaussianBlurFilter(svg, id) {
+        var g = svg.append('g');
+
+        var filter = g.append('defs')
+            .append('filter')
+            .attr('id', id);
+
+        var feGaussianBlur = filter.append('feGaussianBlur')
+            .attr('stdDeviation', '2.5')
+            .attr('result', 'coloredBlur');
+
+        var feMerge = filter.append('feMerge');
+        var feMergeNode_1 = feMerge.append('feMergeNode')
+            .attr('in', 'coloredBlur');
+        var feMergeNode_2 = feMerge.append('feMergeNode')
+            .attr('in', 'SourceGraphic');
+    }
+
+
+    </script>
+</body>
+</html>

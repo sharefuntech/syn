@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>learn radar chart</title>
+    <script src="lib/d3.js"></script>
+    <style media="screen">
+
+    </style>
+</head>
+<body>
+    <script type="text/javascript">
+
+        function RadarChart(id, data, options) {
+            var cfg = {
+                w: 600,
+                h: 600,
+                margin: {
+                    top: 20,
+                    right: 20,
+                    bottom: 20,
+                    left: 20
+                },
+                levels: 3,
+                maxValue: 0,
+                labelFactor: 1.25,
+                wrapWidth: 60,
+                opacityArea: 0.35,
+                dotRadius: 4,
+                opacityCircles: 0.1,
+                strokeWidth: 2,
+                roundStrokes: false,
+                color: d3.scale.category10()
+            }
+
+            if ('undefined' !== typeof options) {
+                for (var i in options) {
+                    if ('undefined' !== typeof options[i]) {
+                        cfg[i] = options[i];
+                    }
+                }
+            }
+
+            var maxValue = Math.max(cfg.maxValue, d3.max(data, function(i) {
+                return d3.max(i.map(function(o) {
+                    return o.value;
+                }));
+            }));
+
+            var allAxis = data[0].map(function(i, j) {
+                return i.axis;
+            });
+            var total = allAxis.length;
+            var radius = Math.min(cfg.w/2, cfg.h/2);
+            var Format = d3.format('%');
+            var angleSlice = Math.PI * 2 / total;
+
+            var rScale = d3.scale.linear()
+                .range([0, radius])
+                .domain([0, maxValue]);
+
+            //#########################################################
+            d3.select(id).select('svg').remove();
+
+            var svg = d3.select(id).append('svg')
+                .attr('width', cfg.w + cfg.margin.left + cfg.margin.right)
+                .attr('height', cfg.h + cfg.margin.top + cfg.margin.bottom)
+                .attr('class', 'radar' + id);
+
+            var g = svg.append('g')
+                .attr('transform', 'translate(' + (cfg.w/2 + cfg.margin.left)  + ',' + (cfg.h/2 + cfg.margin.top) + ')');
+
+            //here we got the spicy jucie of outside filter!!
+            var filter = g.append('defs')
+                .append('filter')
+                .attr('id', 'glow');
+
+            var feGaussianBlur = filter.append('feGaussianBlur')
+                .attr('stdDeviation', '2.5')
+                .attr('result', 'coloredBlur');
+
+            var feMerge = filter.append('feMerge');
+            var feMergeNode_1 = feMerge.append('feMergeNode')
+                .attr('in', 'coloredBlur');
+            var feMergeNode_2 = feMerge.append('feMergeNode')
+                .attr('in', 'SourceGraphic');
+
+            //draw circular grid
+            var axisGrid = g.append('g')
+                .attr('class', 'axisWrapper');
+
+            axisGrid.selectAll('.levels')
+                .data(d3.range(1, (cfg.levels+1)).reverse())
+                .enter()
+                .append('circle')
+                .attr('class', 'gridCircle')
+                .attr('r', function(d, i) {
+                    return radius / cfg.levels * d;
+                })
+                .style('fill', '#cdcdcd')
+                .style('stroke', '#cdcdcd')
+                .style('fill-opacity', cfg.opacityCircles)
+                .style('filter', 'url(#glow)');
+
+            axisGrid.selectAll('.axisLabel')
+                .data(d3.range(1, (cfg.levels+1)).reverse())
+                .enter()
+                .append('text')
+                .attr('class', 'axisLabel')
+                .attr('x', 4)
+                .attr('y', function(d) {
+                    return -d * radius / cfg.levels;
+                })
+                .attr('dy', '0.4em')
+                .style('fill', '#737373')
+                .style('font-size', '10px')
+                .text(function(d, i) {
+                    return Format(maxValue * d / cfg.levels);
+                });
+
+            var axis = axisGrid.selectAll('.axis')
+                .data(allAxis)
+                .enter()
+                .append('g')
+                .attr('class', 'axis');
+
+            axis.append('line')
+                .attr('x1', 0)
+                .attr('y1', 0)
+                .attr('x2', function(d, i) {
+                    return rScale(maxValue*1.1) * Math.cos(angleSlice*i - Math.PI/2);
+                })
+                .attr('y2', function(d, i) {
+                    return rScale(maxValue*1.1) * Math.sin(angleSlice*i - Math.PI/2);
+                })
+                .attr('class', 'line')
+                .style('stroke', 'white')
+                .style('stroke-width', '2px');
+
+            axis.append('text')
+                .attr('class', 'legend')
+                .attr('text-anchor', 'middle')
+                .attr('dy', '0.35em')
+                .attr('x', function(d, i) {
+                    return rScale(maxValue*cfg.labelFactor) * Math.cos(angleSlice*i - Math.PI/2);
+                })
+                .attr('y', function(d, i) {
+                    return rScale(maxValue*cfg.labelFactor) * Math.sin(angleSlice*i - Math.PI/2);
+                })
+                .style('font-size', '10px')
+                .text(function(d) {
+                    return d;
+                })
+                .call(wrap, cfg.wrapWidth);
+        }
+    </script>
+</body>
+</html>
