@@ -205,6 +205,13 @@ svg {
     stroke-width: 1px;
 }
 
+.soloModeLine {
+    fill: none;
+    /*stroke: orange;*/
+    stroke-opacity: .5;
+	stroke-width: 5px;
+}
+
 /****tooltip style****/
 div.mouseTooltip {
     position: absolute;

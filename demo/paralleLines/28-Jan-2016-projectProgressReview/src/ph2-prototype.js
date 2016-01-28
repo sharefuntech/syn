@@ -150,7 +150,9 @@ queue()
                     right: 50
                 },
                 color: d3.scale.category10(),
-                enableAnimation: false
+                enableAnimation: false,
+                animationDuration: 2500, //动画持续时间
+                animationDelay: 2500
             },
             parallelConfig: { //平行数据指标，指标索引、转换后的平行数据
                 dimensionKeys: [],
@@ -546,22 +548,83 @@ queue()
                     .enter().append("path")
                     .attr("d", draw);
 
-                d3.select('#vizG').append("g")
-                    .attr("class", "foreground")
-                    .selectAll("path")
-                    .data(filterParalleledData)
-                    .enter()
-                    .append("path")
-                    .attr({
-                        fill: "none",
-                    	stroke:function(d,i){ return graphConfig.color(d.区域); },
-                        "stroke-width": "1.5px"
-                    })
-                    .transition()
-                    .delay(function(d, i) {
-                        return i * 500 * graphConfig.enableAnimation;
-                    })
-                    .attr("d", draw);
+                if (graphConfig.enableAnimation) {
+                    //test animate curve ===========
+                    var pathGroup = d3.select('#vizG').append("g")
+                        .attr("class", "foreground")
+                        .selectAll("path")
+                        .data(filterParalleledData)
+                        .enter()
+                        .append("path")
+                        .attr("class", "soloModeLine")
+                        .attr("d", draw);
+                    // console.log(pathGroup);
+                    var pathLengthGroup = [];
+                    pathGroup[0].forEach(function(d) {
+                        // pathLengthGroup.push(d.node().getTotalLength());
+                        pathLengthGroup.push(d.getTotalLength());
+                    });
+                    // console.log(pathLengthGroup);
+
+                    var dashArrayGroup = pathLengthGroup.map(function(d) {
+                        return d + " " + d;
+                    });
+                    // console.log(dashArrayGroup);
+                    function randomColorTrack() {
+                        return Math.floor(Math.random()*89) + 10;
+                    }
+
+                    // var soloModeColor = d3.range(20).map(function(d, i) {
+                    //     return '#' + randomColorTrack() + randomColorTrack() + randomColorTrack();
+                    // });
+                    // console.log(soloModeColor);
+                    // var soloModeColor = darkerColorGroup(20, 0.2, 'hsl(193,90%,80%)');
+                    // var soloModeColor = grayColorGroup();
+                    var soloModeColor = ['#483B97','#5C2E91', '#782B91', '#A5257C', '#D11E60', '#ED1B36', '#F14D31', '#F37022', '#F7941D', '#FDB813', '#FFD504', '#D8DF20', '#B2D233', '#61BC47', '#08B073', '#19AFB0', '#009D9E', '#3B89C9', '#105BAC', '#093A75', '#483B97'];
+                    //创建高斯模糊
+                    var filter = createGaussianBlurFilter(svg, 'glow');
+
+                    pathGroup
+                        .attr("stroke-dasharray", function(d, i) {
+                            return dashArrayGroup[i];
+                        })
+                        .attr("stroke-dashoffset", function(d, i) {
+                            return pathLengthGroup[i];
+                        })
+                        .attr("stroke", function(d, i) {
+                            return soloModeColor[i];
+                        })
+                        // .style('filter', 'url(#glow)') //高斯模糊,放这里太影响性能
+                        .transition()
+                        .duration(graphConfig.animationDuration)
+                        .ease("linear")
+                        .attr("stroke-dashoffset", 0)
+                        .style('filter', 'url(#glow)')
+                        .delay(function(d, i) {
+                            return i * graphConfig.animationDelay * graphConfig.enableAnimation;
+                        });
+                } else {
+                    //创建高斯模糊，选中单条高亮，跑不动了
+                    // var filter = createGaussianBlurFilter(svg, 'glow');
+
+                    d3.select('#vizG').append("g")
+                        .attr("class", "foreground")
+                        .selectAll("path")
+                        .data(filterParalleledData)
+                        .enter()
+                        .append("path")
+                        .attr({
+                            fill: "none",
+                        	stroke:function(d,i){ return graphConfig.color(d.区域); },
+                            "stroke-width": "1.5px"
+                        })
+                        .transition()
+                        // .style('filter', 'url(#glow)') //不能开，跑不动
+                        .delay(function(d, i) {
+                            return i * 500 * graphConfig.enableAnimation;
+                        })
+                        .attr("d", draw);
+                }
 
                 dimension.append("g")
                     .attr("class", "axis")
@@ -645,3 +708,47 @@ queue()
         }
         //### 绘制图表drawGraph end #########################
     });
+
+//=======================================================================
+//=== independent helper ================================================
+function darkerColorGroup(colorSpaceNum, darkerSpeed, colorBase) {
+    // var colorBase = d3.hsl('hsl(193,90%,80%)');
+    //darkerSpeed = 0.2
+    var base = d3.hsl(colorBase);
+    var darkedColor;
+    var colorGroup = [];
+    d3.range(colorSpaceNum).map(function(d) {
+        darkedColor = base.darker(darkerSpeed);
+        base = darkedColor;
+        colorGroup.push(darkedColor);
+    });
+    return colorGroup;
+}
+
+function grayColorGroup() {
+    var grayColorGroup = d3.range(20).map(function(d, i) {
+        var hslColor = 'hsl(45,' + 5*i + '%, 50%)';
+        return d3.hsl(hslColor);
+    });
+    console.log(grayColorGroup);
+    return grayColorGroup;
+}
+
+//高斯模糊
+function createGaussianBlurFilter(svg, id) {
+    var g = svg.append('g');
+
+    var filter = g.append('defs')
+        .append('filter')
+        .attr('id', id);
+
+    var feGaussianBlur = filter.append('feGaussianBlur')
+        .attr('stdDeviation', '2.5')
+        .attr('result', 'coloredBlur');
+
+    var feMerge = filter.append('feMerge');
+    var feMergeNode_1 = feMerge.append('feMergeNode')
+        .attr('in', 'coloredBlur');
+    var feMergeNode_2 = feMerge.append('feMergeNode')
+        .attr('in', 'SourceGraphic');
+}
